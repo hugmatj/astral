@@ -1,0 +1,8 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
