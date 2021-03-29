@@ -4,7 +4,7 @@
   >
     <div class="grid h-full dashboard-grid">
       <!-- Nav -->
-      <div class="flex items-center px-4 bg-green-600 col-span-full">
+      <div class="flex items-center px-4 bg-brand-600 col-span-full">
         <button
           class="inline-flex items-center justify-center w-6 h-6 text-white sm:hidden"
           @click="isSidebarOpen = !isSidebarOpen"
@@ -58,7 +58,15 @@
         <!-- Stars List -->
         <ul
           class="h-full col-start-2 row-start-3 row-end-4 bg-gray-200 divide-y divide-gray-300"
-        ></ul>
+        >
+          <li
+            v-for="star in githubStars"
+            :key="star.node.id"
+            class="p-4 bg-white"
+          >
+            {{ star.node.nameWithOwner }}
+          </li>
+        </ul>
       </div>
       <!-- Selected Star Info -->
       <div
@@ -96,6 +104,7 @@
 import { computed, ref } from "vue";
 import { usePage } from "@inertiajs/inertia-vue3";
 import { useTags } from "@/composables/useTags";
+import { useGitHubStars } from "@/composables/useGitHubStars";
 import Sidebar from "@/components/sidebar/Sidebar";
 
 export default {
@@ -112,6 +121,7 @@ export default {
   setup() {
     const user = computed(() => usePage().props.value.user);
     const { setSelectedTag } = useTags();
+    const { githubStars, fetchStars } = useGitHubStars(user.value.access_token);
     const isSidebarOpen = ref(false);
     const isReadmeOpen = ref(false);
 
@@ -120,7 +130,9 @@ export default {
       setSelectedTag(tag);
     };
 
-    return { user, isSidebarOpen, isReadmeOpen, onTagSelected };
+    fetchStars();
+
+    return { user, isSidebarOpen, isReadmeOpen, onTagSelected, githubStars };
   },
 };
 </script>

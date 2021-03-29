@@ -1,7 +1,7 @@
 <template>
   <div class="h-full p-4 bg-gray-900">
     <div class="mt-6 space-y-6">
-      <SidebarGroup title="Tags" collapsible>
+      <SidebarGroup title="Tags" collapsible class="relative">
         <form class="mt-2" @submit.prevent="addTag">
           <input
             v-model="addTagForm.name"
@@ -10,7 +10,15 @@
             class="w-full border-0 rounded-lg focus:ring-2 focus:ring-gray-500"
           />
         </form>
-        <ul class="mt-2">
+        <ul class="mt-2"></ul>
+        <transition-group
+          enter-active-class="transform-gpu"
+          enter-from-class="-translate-x-full opacity-0"
+          enter-to-class="translate-x-0 opacity-100"
+          leave-active-class="absolute transform-gpu"
+          leave-from-class="translate-x-0 opacity-100"
+          leave-to-class="-translate-x-full opacity-0"
+        >
           <SidebarTag
             v-for="tag in tags"
             :key="tag.id"
@@ -18,9 +26,10 @@
             :is-active="tagIsSelected(tag)"
             @star-dropped="onStarDropped"
             @click="$emit('tag-selected', tag)"
+            class="transition-all duration-300"
           >
           </SidebarTag>
-        </ul>
+        </transition-group>
       </SidebarGroup>
     </div>
   </div>

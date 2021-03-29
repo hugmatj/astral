@@ -14,9 +14,16 @@ class Tag extends Model
         'name',
     ];
 
+    protected $hidden = ['pivot'];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function stars()
+    {
+        return $this->belongsToMany(Star::class);
     }
 
     protected static function booted()

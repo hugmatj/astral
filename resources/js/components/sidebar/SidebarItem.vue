@@ -27,16 +27,16 @@ export default {
   computed: {
     labelClasses() {
       return this.isHighlighted
-        ? "text-white bg-green-600"
+        ? "text-white bg-brand-600"
         : this.isActive
-        ? "text-green-600"
+        ? "text-brand-600"
         : "text-gray-400";
     },
     badgeClasses() {
       return this.isHighlighted
-        ? "text-green-600 bg-white"
+        ? "text-brand-600 bg-white"
         : this.isActive
-        ? "text-white bg-green-600"
+        ? "text-white bg-brand-600"
         : "text-white bg-gray-700";
     },
   },

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TagsController;
+use App\Http\Controllers\StarTagsController;
+use Illuminate\Routing\RouteUrlGenerator;
 use Inertia\Inertia;
 
 /*
@@ -28,5 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
     Route::delete('tags/{tag}', [TagsController::class, 'destroy'])->name('tags.destroy');
+
+    Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
 });
 
