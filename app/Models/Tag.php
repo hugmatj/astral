@@ -12,6 +12,7 @@ class Tag extends Model
 
     protected $fillable = [
         'name',
+        'sort_order'
     ];
 
     protected $hidden = ['pivot'];
@@ -24,6 +25,11 @@ class Tag extends Model
     public function stars()
     {
         return $this->belongsToMany(Star::class);
+    }
+
+    public function scopeWithStarCount($query)
+    {
+        return $query->withCount('stars');
     }
 
     protected static function booted()

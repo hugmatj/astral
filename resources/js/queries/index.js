@@ -1,9 +1,9 @@
 export const fetchStarsQuery = (
   cursor = null,
-  direction = "DESC",
+  direction = 'DESC',
   perPage = 50
 ) => {
-  const cursorFilter = cursor ? `after:"${cursor}"` : "after:null";
+  const cursorFilter = cursor ? `after:"${cursor}"` : 'after:null'
   return `query {
     viewer {
     starredRepositories(first: ${perPage}, orderBy: {field: STARRED_AT, direction: ${direction}},  ${cursorFilter}) {
@@ -43,5 +43,5 @@ export const fetchStarsQuery = (
         }
     }
     }
-  }`;
-};
+  }`
+}

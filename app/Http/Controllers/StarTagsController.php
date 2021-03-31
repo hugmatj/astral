@@ -30,7 +30,9 @@ class StarTagsController extends Controller
 
         $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
 
-        $star->tags()->attach($tagId);
+        $star->tags()->syncWithoutDetaching([$tagId]);
+
+        return redirect()->route('dashboard.index');
     }
 
     /**

@@ -1,9 +1,9 @@
-import axios from "axios";
-import { fetchStarsQuery } from "@/queries";
+import axios from 'axios'
+import { fetchStarsQuery } from '@/queries'
 
-self.addEventListener("message", async ({ data }) => {
+self.addEventListener('message', async ({ data }) => {
   const result = await axios.post(
-    "https://api.github.com/graphql",
+    'https://api.github.com/graphql',
     {
       query: fetchStarsQuery(),
     },
@@ -12,8 +12,8 @@ self.addEventListener("message", async ({ data }) => {
         Authorization: `bearer ${data.token}`,
       },
     }
-  );
-  self.postMessage(result.data.data);
-});
+  )
+  self.postMessage(result.data.data)
+})
 
-export default self;
+export default self

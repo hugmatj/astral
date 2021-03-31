@@ -9,25 +9,12 @@
           class="inline-flex items-center justify-center w-6 h-6 text-white sm:hidden"
           @click="isSidebarOpen = !isSidebarOpen"
         >
-          <svg
-            class="flex-shrink-0 w-full h-full"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h8m-8 6h16"
-            />
-          </svg>
+          <MenuIcon />
         </button>
       </div>
       <!-- Sidebar -->
       <div
-        class="absolute inset-0 z-20 flex col-start-1 row-start-2 row-end-3 transition-opacity duration-300 ease-in-out bg-gray-900 sm:relative sm:pointer-events-auto"
+        class="absolute inset-0 z-20 flex col-start-1 row-start-2 row-end-3 transition-colors duration-300 ease-in-out bg-gray-900 sm:relative sm:pointer-events-auto"
         :aria-hidden="!isSidebarOpen"
         :class="{
           'bg-opacity-0 pointer-events-none': !isSidebarOpen,
@@ -45,10 +32,10 @@
         </div>
         <div v-show="isSidebarOpen" class="flex justify-center flex-grow pt-5">
           <button
-            class="inline-flex items-center justify-center w-6 h-6 text-4xl text-white"
+            class="inline-flex items-center justify-center w-10 h-10 text-4xl text-white"
             @click="isSidebarOpen = !isSidebarOpen"
           >
-            &times;
+            <CloseIcon />
           </button>
         </div>
       </div>
@@ -59,13 +46,7 @@
         <ul
           class="h-full col-start-2 row-start-3 row-end-4 bg-gray-200 divide-y divide-gray-300"
         >
-          <li
-            v-for="star in githubStars"
-            :key="star.node.id"
-            class="p-4 bg-white"
-          >
-            {{ star.node.nameWithOwner }}
-          </li>
+          <Star v-for="star in githubStars" :key="star.node.id" :star="star" />
         </ul>
       </div>
       <!-- Selected Star Info -->
@@ -80,20 +61,7 @@
           class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-5 ml-5 text-gray-700 bg-white rounded-full sm:hidden"
           @click="isReadmeOpen = false"
         >
-          <svg
-            class="flex-shrink-0 w-full h-full"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"
-            />
-          </svg>
+          <ArrowCircleLeftIcon />
         </button>
       </div>
     </div>
@@ -101,40 +69,72 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
-import { usePage } from "@inertiajs/inertia-vue3";
-import { useTags } from "@/composables/useTags";
-import { useGitHubStars } from "@/composables/useGitHubStars";
-import Sidebar from "@/components/sidebar/Sidebar";
+import { computed, ref, watch } from 'vue'
+import { usePage } from '@inertiajs/inertia-vue3'
+import { useTagsStore } from '@/store/useTagsStore'
+import { useStarsStore } from '@/store/useStarsStore'
+import Sidebar from '@/components/sidebar/Sidebar'
+import Star from '@/components/stars/Star.vue'
+import {
+  ArrowCircleLeftIcon,
+  XCircleIcon as CloseIcon,
+  MenuAlt1Icon as MenuIcon,
+} from '@heroicons/vue/outline'
 
 export default {
   components: {
     Sidebar,
+    Star,
+    ArrowCircleLeftIcon,
+    CloseIcon,
+    MenuIcon,
   },
   props: {
     tags: {
       type: Array,
       required: true,
     },
+    stars: {
+      type: Array,
+      required: true,
+    },
     errors: Object,
   },
-  setup() {
-    const user = computed(() => usePage().props.value.user);
-    const { setSelectedTag } = useTags();
-    const { githubStars, fetchStars } = useGitHubStars(user.value.access_token);
-    const isSidebarOpen = ref(false);
-    const isReadmeOpen = ref(false);
+  setup(props) {
+    const user = computed(() => usePage().props.value.user)
 
-    const onTagSelected = (tag) => {
-      isSidebarOpen.value = false;
-      setSelectedTag(tag);
-    };
+    const tagsStore = useTagsStore()
+    const starsStore = useStarsStore()
 
-    fetchStars();
+    const isSidebarOpen = ref(false)
+    const isReadmeOpen = ref(false)
 
-    return { user, isSidebarOpen, isReadmeOpen, onTagSelected, githubStars };
+    watch(
+      () => props.stars,
+      stars => {
+        starsStore.stars = stars
+      },
+      {
+        immediate: true,
+      }
+    )
+
+    const onTagSelected = tag => {
+      isSidebarOpen.value = false
+      tagsStore.setSelectedTag(tag)
+    }
+
+    starsStore.fetchStars(user.value.access_token)
+
+    return {
+      user,
+      isSidebarOpen,
+      isReadmeOpen,
+      onTagSelected,
+      githubStars: computed(() => starsStore.githubStars),
+    }
   },
-};
+}
 </script>
 
 <style>

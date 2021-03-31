@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TagsController;
+use App\Http\Controllers\TagsSortOrderController;
 use App\Http\Controllers\StarTagsController;
 use Illuminate\Routing\RouteUrlGenerator;
 use Inertia\Inertia;
@@ -24,12 +25,14 @@ Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallba
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return Inertia::render('Dashboard', [
-            'tags' => auth()->user()->tags,
+            'tags' => auth()->user()->tags()->withStarCount()->get(),
+            'stars' => auth()->user()->stars()->with('tags')->get(),
         ]);
     })->name('dashboard.index');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
     Route::delete('tags/{tag}', [TagsController::class, 'destroy'])->name('tags.destroy');
+    Route::put('tags/reorder', TagsSortOrderController::class)->name('tags.reorder');
 
     Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
 });

@@ -1847,9 +1847,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var fetchStarsQuery = function fetchStarsQuery() {
   var cursor = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "DESC";
+  var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'DESC';
   var perPage = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 50;
-  var cursorFilter = cursor ? "after:\"".concat(cursor, "\"") : "after:null";
+  var cursorFilter = cursor ? "after:\"".concat(cursor, "\"") : 'after:null';
   return "query {\n    viewer {\n    starredRepositories(first: ".concat(perPage, ", orderBy: {field: STARRED_AT, direction: ").concat(direction, "},  ").concat(cursorFilter, ") {\n        totalCount\n        edges {\n        node {\n            id\n            nameWithOwner\n            description\n            url\n            databaseId\n            isArchived\n            defaultBranchRef {\n            name\n            }\n            primaryLanguage {\n            name\n            }\n            stargazers {\n            totalCount\n            }\n            forkCount,\n            releases(first: 1, orderBy: {field: CREATED_AT, direction: DESC}) {\n                edges{\n                    node {\n                        tagName\n                    }\n                }\n            }\n        }\n        cursor\n        }\n        pageInfo {\n        startCursor\n        endCursor\n        hasNextPage\n        }\n    }\n    }\n  }");
 };
 
@@ -2134,9 +2134,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-self.addEventListener("message", async ({ data }) => {
+self.addEventListener('message', async ({ data }) => {
   const result = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(
-    "https://api.github.com/graphql",
+    'https://api.github.com/graphql',
     {
       query: (0,_queries__WEBPACK_IMPORTED_MODULE_1__.fetchStarsQuery)(),
     },
@@ -2145,9 +2145,9 @@ self.addEventListener("message", async ({ data }) => {
         Authorization: `bearer ${data.token}`,
       },
     }
-  );
-  self.postMessage(result.data.data);
-});
+  )
+  self.postMessage(result.data.data)
+})
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (self);
 

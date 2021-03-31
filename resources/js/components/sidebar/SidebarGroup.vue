@@ -6,21 +6,12 @@
       :class="{ '-ml-1': collapsible }"
       @click="toggleCollapsed"
     >
-      <svg
+      <CaretIcon
         v-if="collapsible"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
         class="relative flex-shrink-0 w-5 h-5 transform"
         :class="{ 'rotate-90': !isCollapsed }"
         style="top: -1px"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-          clip-rule="evenodd"
-        />
-      </svg>
+      />
       <h3 class="text-xs font-bold tracking-wider uppercase select-none">
         {{ title }}
       </h3>
@@ -32,7 +23,11 @@
 </template>
 
 <script>
+import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
 export default {
+  components: {
+    CaretIcon,
+  },
   props: {
     title: {
       type: String,
@@ -46,14 +41,14 @@ export default {
   data() {
     return {
       isCollapsed: false,
-    };
+    }
   },
   methods: {
     toggleCollapsed() {
       if (this.collapsible) {
-        this.isCollapsed = !this.isCollapsed;
+        this.isCollapsed = !this.isCollapsed
       }
     },
   },
-};
+}
 </script>
