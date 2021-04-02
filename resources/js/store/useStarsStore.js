@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
-import Worker from '@/workers/githubStars.worker.js'
+import { useUserStore } from '@/store/useUserStore'
+import StarsWorker from '@/workers/githubStars.worker.js'
 
 export const useStarsStore = defineStore({
   id: 'stars',
@@ -9,12 +10,14 @@ export const useStarsStore = defineStore({
       isDraggingStar: false,
       stars: [],
       githubStars: [],
-      worker: new Worker(),
+      worker: new StarsWorker(),
     }
   },
   actions: {
-    fetchStars(token) {
-      this.worker.postMessage({ token })
+    fetchStars() {
+      const userStore = useUserStore()
+
+      this.worker.postMessage({ token: userStore.user.access_token })
 
       this.worker.onmessage = ({ data }) => {
         this.githubStars = this.githubStars.concat(

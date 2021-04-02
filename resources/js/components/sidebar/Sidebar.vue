@@ -61,16 +61,6 @@ export default {
     const tagsStore = useTagsStore()
     const starsStore = useStarsStore()
 
-    watch(
-      () => props.tags,
-      tags => {
-        tagsStore.tags = tags
-      },
-      {
-        immediate: true,
-      }
-    )
-
     const onStarDropped = data =>
       starsStore.addTagToStar(data.tag.id, data.starId)
 

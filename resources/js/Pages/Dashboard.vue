@@ -71,8 +71,10 @@
 <script>
 import { computed, ref, watch } from 'vue'
 import { usePage } from '@inertiajs/inertia-vue3'
+import { useUserStore } from '@/store/useUserStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
+import { useSyncPropToStore } from '@/composables/useSyncPropToStore'
 import Sidebar from '@/components/sidebar/Sidebar'
 import Star from '@/components/stars/Star.vue'
 import {
@@ -98,40 +100,37 @@ export default {
       type: Array,
       required: true,
     },
+    user: {
+      type: Object,
+      required: true,
+    },
     errors: Object,
   },
   setup(props) {
-    const user = computed(() => usePage().props.value.user)
-
+    const userStore = useUserStore()
     const tagsStore = useTagsStore()
     const starsStore = useStarsStore()
 
+    useSyncPropToStore(() => props.user, userStore, 'user')
+    useSyncPropToStore(() => props.tags, tagsStore, 'tags')
+    useSyncPropToStore(() => props.stars, starsStore, 'stars')
+
     const isSidebarOpen = ref(false)
     const isReadmeOpen = ref(false)
-
-    watch(
-      () => props.stars,
-      stars => {
-        starsStore.stars = stars
-      },
-      {
-        immediate: true,
-      }
-    )
 
     const onTagSelected = tag => {
       isSidebarOpen.value = false
       tagsStore.setSelectedTag(tag)
     }
 
-    starsStore.fetchStars(user.value.access_token)
+    starsStore.fetchStars()
 
     return {
-      user,
+      tags: computed(() => tagsStore.tags),
+      githubStars: computed(() => starsStore.githubStars),
       isSidebarOpen,
       isReadmeOpen,
       onTagSelected,
-      githubStars: computed(() => starsStore.githubStars),
     }
   },
 }
