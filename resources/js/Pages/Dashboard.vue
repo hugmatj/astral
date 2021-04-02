@@ -28,7 +28,7 @@
             'translate-x-0': isSidebarOpen,
           }"
         >
-          <Sidebar :tags="tags" @tag-selected="onTagSelected" />
+          <Sidebar @tag-selected="onTagSelected" />
         </div>
         <div v-show="isSidebarOpen" class="flex justify-center flex-grow pt-5">
           <button
@@ -69,8 +69,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue'
-import { usePage } from '@inertiajs/inertia-vue3'
+import { computed, ref } from 'vue'
 import { useUserStore } from '@/store/useUserStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -104,7 +103,10 @@ export default {
       type: Object,
       required: true,
     },
-    errors: Object,
+    errors: {
+      type: Object,
+      default: () => {},
+    },
   },
   setup(props) {
     const userStore = useUserStore()
@@ -126,7 +128,6 @@ export default {
     starsStore.fetchStars()
 
     return {
-      tags: computed(() => tagsStore.tags),
       githubStars: computed(() => starsStore.githubStars),
       isSidebarOpen,
       isReadmeOpen,

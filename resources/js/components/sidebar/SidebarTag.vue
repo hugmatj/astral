@@ -45,9 +45,8 @@ export default {
         isHighlighted.value = true
       }
     }
-    const onDragLeave = e => {
-      isHighlighted.value = false
-    }
+    const onDragLeave = () => (isHighlighted.value = false)
+
     const onDrop = e => {
       if (starsStore.isDraggingStar) {
         const star = JSON.parse(e.dataTransfer.getData('text/plain'))

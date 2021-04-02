@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import draggable from 'vuedraggable'
@@ -48,14 +48,8 @@ export default {
     SidebarGroup,
     SidebarTag,
   },
-  props: {
-    tags: {
-      type: Array,
-      required: true,
-    },
-  },
   emits: ['tag-selected'],
-  setup(props) {
+  setup() {
     const newTag = ref('')
 
     const tagsStore = useTagsStore()

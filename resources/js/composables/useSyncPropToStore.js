@@ -1,4 +1,4 @@
-import { watch, readonly } from 'vue'
+import { watch } from 'vue'
 
 export const useSyncPropToStore = (propGetter, store, state) => {
   watch(
