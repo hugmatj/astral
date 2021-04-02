@@ -1,6 +1,7 @@
 <template>
   <li
     class="p-4 bg-white shadow-sm cursor-pointer"
+    :class="{ 'bg-gray-100 shadow-inner': isSelected }"
     draggable="true"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
@@ -44,6 +45,10 @@ export default {
       return starsStore.starsById[props.star.node.databaseId]?.tags || []
     })
 
+    const isSelected = computed(
+      () => props.star.node.databaseId === starsStore.selectedStar.databaseId
+    )
+
     let $dragImage = undefined
 
     const onDragStart = e => {
@@ -78,6 +83,7 @@ export default {
 
     return {
       tags,
+      isSelected,
       onDragStart,
       onDragEnd,
     }
