@@ -4,6 +4,7 @@
     draggable="true"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
+    @click="$emit('star-selected', star)"
   >
     <p class="font-semibold text-brand-600">{{ star.node.nameWithOwner }}</p>
     <p
@@ -12,10 +13,21 @@
     >
       {{ star.node.description }}
     </p>
+    <ul v-if="tags.length" class="inline-flex flex-wrap mt-4 space-x-2">
+      <li
+        v-for="tag in tags"
+        :key="tag.id"
+        class="text-white bg-brand-600 px-2 py-0.5 rounded-full text-xs cursor-pointer"
+        @click.stop="$emit('tag-selected', tag)"
+      >
+        {{ tag.name }}
+      </li>
+    </ul>
   </li>
 </template>
 
 <script>
+import { computed } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
 export default {
   props: {
@@ -24,8 +36,13 @@ export default {
       required: true,
     },
   },
+  emits: ['star-selected', 'tag-selected'],
   setup(props) {
     const starsStore = useStarsStore()
+
+    const tags = computed(() => {
+      return starsStore.starsById[props.star.node.databaseId]?.tags || []
+    })
 
     let $dragImage = undefined
 
@@ -60,6 +77,7 @@ export default {
     }
 
     return {
+      tags,
       onDragStart,
       onDragEnd,
     }

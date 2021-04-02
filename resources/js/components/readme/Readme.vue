@@ -1,0 +1,228 @@
+<template>
+  <div ref="readmeContainerEl" class="absolute inset-0 h-full overflow-y-auto">
+    <div
+      v-show="contents"
+      class="relative w-full h-full mt-12 bg-white sm:mt-0"
+    >
+      <!-- eslint-disable-next-line -->
+      <div ref="readmeEl" class="p-4 prose max-w-none" v-html="contents"></div>
+    </div>
+    <div
+      v-show="isReadmeLoading"
+      class="absolute inset-0 z-10 flex items-center justify-center text-center text-gray-500 bg-white"
+    >
+      Loading...
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref, watch, nextTick } from 'vue'
+import { useStarsStore } from '@/store/useStarsStore'
+export default {
+  setup() {
+    const starsStore = useStarsStore()
+
+    const contents = ref(null)
+    const isReadmeLoading = ref(false)
+
+    const readmeEl = ref(null)
+    const readmeContainerEl = ref(null)
+
+    watch(
+      () => starsStore.selectedStar,
+      async selectedStar => {
+        isReadmeLoading.value = true
+        readmeContainerEl.value.scrollTo(0, 0)
+        contents.value = await starsStore.fetchReadme(selectedStar)
+        await nextTick()
+        Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
+          if (anchor.href.replace(location.href, '').startsWith('#')) {
+            anchor.addEventListener('click', e => {
+              e.preventDefault()
+              readmeContainerEl.value.scrollTo(
+                0,
+                readmeContainerEl.value.scrollTop +
+                  e.currentTarget.getBoundingClientRect().top -
+                  readmeContainerEl.value.getBoundingClientRect().top -
+                  16
+              )
+            })
+          } else {
+            anchor.setAttribute('target', '_blank')
+          }
+        })
+        isReadmeLoading.value = false
+      }
+    )
+
+    return {
+      contents,
+      isReadmeLoading,
+      readmeEl,
+      readmeContainerEl,
+    }
+  },
+}
+</script>
+
+<style lang="postcss">
+.entry-content {
+  h1,
+  h2,
+  h3,
+  h4,
+  h4,
+  h5,
+  h6 {
+    > a.anchor {
+      margin-right: 0.3em;
+
+      svg.octicon-link {
+        display: inline;
+      }
+    }
+  }
+
+  /* Syntax highlighting */
+  .highlight {
+    margin-bottom: 16px;
+  }
+
+  .highlight pre {
+    margin-bottom: 0;
+    word-break: normal;
+    padding: 0.5rem;
+  }
+
+  /*!
+ * GitHub Dark v0.5.0
+ * Copyright (c) 2012 - 2017 GitHub, Inc.
+ * Licensed under MIT (https://github.com/primer/github-syntax-theme-generator/blob/master/LICENSE)
+ */
+
+  .pl-c /* comment, punctuation.definition.comment, string.comment */ {
+    color: #959da5;
+  }
+
+  .pl-c1 /* constant, entity.name.constant, variable.other.constant, variable.language, support, meta.property-name, support.constant, support.variable, meta.module-reference, markup.quote, markup.raw, meta.diff.header */,
+.pl-s .pl-v /* string variable */ {
+    color: #c8e1ff;
+  }
+
+  .pl-e /* entity */,
+.pl-en /* entity.name */ {
+    color: #b392f0;
+  }
+
+  .pl-smi /* variable.parameter.function, storage.modifier.package, storage.modifier.import, storage.type.java, variable.other */,
+.pl-s .pl-s1 /* string source */ {
+    color: #f6f8fa;
+  }
+
+  .pl-ent /* entity.name.tag */ {
+    color: #7bcc72;
+  }
+
+  .pl-k /* keyword, storage, storage.type */ {
+    color: #ea4a5a;
+  }
+
+  .pl-s /* string */,
+.pl-pds /* punctuation.definition.string, source.regexp, string.regexp.character-class */,
+.pl-s .pl-pse .pl-s1 /* string punctuation.section.embedded source */,
+.pl-sr /* string.regexp */,
+.pl-sr .pl-cce /* string.regexp constant.character.escape */,
+.pl-sr .pl-sre /* string.regexp source.ruby.embedded */,
+.pl-sr .pl-sra /* string.regexp string.regexp.arbitrary-repitition */ {
+    color: #79b8ff;
+  }
+
+  .pl-v /* variable */,
+.pl-ml /* markup.list, sublimelinter.mark.warning */ {
+    color: #fb8532;
+  }
+
+  .pl-bu /* invalid.broken, invalid.deprecated, invalid.unimplemented, message.error, brackethighlighter.unmatched, sublimelinter.mark.error */ {
+    color: #d73a49;
+  }
+
+  .pl-ii /* invalid.illegal */ {
+    color: #fafbfc;
+    background-color: #d73a49;
+  }
+
+  .pl-c2 /* carriage-return */ {
+    color: #fafbfc;
+    background-color: #d73a49;
+  }
+
+  .pl-c2::before /* carriage-return */ {
+    content: '^M';
+  }
+
+  .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
+    font-weight: bold;
+    color: #7bcc72;
+  }
+
+  .pl-mh /* markup.heading */,
+.pl-mh .pl-en /* markup.heading entity.name */,
+.pl-ms /* meta.separator */ {
+    font-weight: bold;
+    color: #0366d6;
+  }
+
+  .pl-mi /* markup.italic */ {
+    font-style: italic;
+    color: #f6f8fa;
+  }
+
+  .pl-mb /* markup.bold */ {
+    font-weight: bold;
+    color: #f6f8fa;
+  }
+
+  .pl-md /* markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted */ {
+    color: #b31d28;
+    background-color: #ffeef0;
+  }
+
+  .pl-mi1 /* markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted */ {
+    color: #176f2c;
+    background-color: #f0fff4;
+  }
+
+  .pl-mc /* markup.changed, punctuation.definition.changed */ {
+    color: #b08800;
+    background-color: #fffdef;
+  }
+
+  .pl-mi2 /* markup.ignored, markup.untracked */ {
+    color: #2f363d;
+    background-color: #959da5;
+  }
+
+  .pl-mdr /* meta.diff.range */ {
+    font-weight: bold;
+    color: #b392f0;
+  }
+
+  .pl-mo /* meta.output */ {
+    color: #0366d6;
+  }
+
+  .pl-ba /* brackethighlighter.tag, brackethighlighter.curly, brackethighlighter.round, brackethighlighter.square, brackethighlighter.angle, brackethighlighter.quote */ {
+    color: #ffeef0;
+  }
+
+  .pl-sg /* sublimelinter.gutter-mark */ {
+    color: #6a737d;
+  }
+
+  .pl-corl /* constant.other.reference.link, string.other.link */ {
+    text-decoration: underline;
+    color: #79b8ff;
+  }
+}
+</style>

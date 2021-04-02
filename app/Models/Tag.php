@@ -24,7 +24,7 @@ class Tag extends Model
 
     public function stars()
     {
-        return $this->belongsToMany(Star::class);
+        return $this->belongsToMany(Star::class)->withTimestamps();
     }
 
     public function scopeWithStarCount($query)

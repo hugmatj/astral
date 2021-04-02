@@ -10,9 +10,6 @@ export const useTagsStore = defineStore({
     }
   },
   actions: {
-    setSelectedTag(tag = {}) {
-      return (this.selectedTag = tag)
-    },
     addTag(tagName) {
       Inertia.post('/tags', { name: tagName })
     },

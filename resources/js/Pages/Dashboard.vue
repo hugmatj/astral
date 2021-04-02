@@ -46,7 +46,12 @@
         <ul
           class="h-full col-start-2 row-start-3 row-end-4 bg-gray-200 divide-y divide-gray-300"
         >
-          <Star v-for="star in githubStars" :key="star.node.id" :star="star" />
+          <Star
+            v-for="star in githubStars"
+            :key="star.node.id"
+            :star="star"
+            @star-selected="onStarSelected(star)"
+          />
         </ul>
       </div>
       <!-- Selected Star Info -->
@@ -63,6 +68,7 @@
         >
           <ArrowCircleLeftIcon />
         </button>
+        <Readme />
       </div>
     </div>
   </div>
@@ -76,6 +82,7 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useSyncPropToStore } from '@/composables/useSyncPropToStore'
 import Sidebar from '@/components/sidebar/Sidebar'
 import Star from '@/components/stars/Star.vue'
+import Readme from '@/components/readme/Readme.vue'
 import {
   ArrowCircleLeftIcon,
   XCircleIcon as CloseIcon,
@@ -86,6 +93,7 @@ export default {
   components: {
     Sidebar,
     Star,
+    Readme,
     ArrowCircleLeftIcon,
     CloseIcon,
     MenuIcon,
@@ -122,7 +130,12 @@ export default {
 
     const onTagSelected = tag => {
       isSidebarOpen.value = false
-      tagsStore.setSelectedTag(tag)
+      tagsStore.selectedTag = tag
+    }
+
+    const onStarSelected = star => {
+      isReadmeOpen.value = true
+      starsStore.selectedStar = star.node
     }
 
     starsStore.fetchStars()
@@ -132,6 +145,7 @@ export default {
       isSidebarOpen,
       isReadmeOpen,
       onTagSelected,
+      onStarSelected,
     }
   },
 }
