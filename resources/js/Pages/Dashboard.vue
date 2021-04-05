@@ -28,7 +28,10 @@
             'translate-x-0': isSidebarOpen,
           }"
         >
-          <Sidebar @tag-selected="onTagSelected" />
+          <Sidebar
+            @tag-selected="onTagSelected"
+            @language-selected="onLanguageSelected"
+          />
         </div>
         <div v-show="isSidebarOpen" class="flex justify-center flex-grow pt-5">
           <button
@@ -133,6 +136,11 @@ export default {
       tagsStore.selectedTag = tag
     }
 
+    const onLanguageSelected = language => {
+      isSidebarOpen.value = false
+      starsStore.selectedLanguage = language
+    }
+
     const onStarSelected = star => {
       isReadmeOpen.value = true
       starsStore.selectedStar = star.node
@@ -145,6 +153,7 @@ export default {
       isSidebarOpen,
       isReadmeOpen,
       onTagSelected,
+      onLanguageSelected,
       onStarSelected,
     }
   },

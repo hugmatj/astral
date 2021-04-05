@@ -12,12 +12,35 @@ export const useStarsStore = defineStore({
       stars: [],
       githubStars: [],
       selectedStar: {},
+      selectedLanguage: null,
       worker: new StarsWorker(),
     }
   },
   getters: {
     starsById() {
       return keyBy(this.stars, star => `${star.repo_id}`)
+    },
+    languages() {
+      return Object.entries(
+        this.githubStars
+          .map(star => {
+            return star.node.primaryLanguage || null
+          })
+          .filter(Boolean)
+          .map(repo => repo.name)
+          .reduce((totals, lang) => {
+            return { ...totals, [lang]: (totals[lang] || 0) + 1 }
+          }, {})
+      )
+        .map(language => {
+          const [name, count] = language
+
+          return {
+            name,
+            count,
+          }
+        })
+        .sort((a, b) => b.count - a.count)
     },
   },
   actions: {

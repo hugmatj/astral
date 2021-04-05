@@ -31,6 +31,18 @@
           </draggable>
         </ul>
       </SidebarGroup>
+      <SidebarGroup title="Languages" collapsible>
+        <ul class="mt-2 space-y-2">
+          <SidebarItem
+            v-for="language in languages"
+            :key="language.name"
+            :title="language.name"
+            :count="language.count"
+            :is-active="languageIsSelected(language.name)"
+            @click="$emit('language-selected', language.name)"
+          />
+        </ul>
+      </SidebarGroup>
     </div>
   </div>
 </template>
@@ -41,14 +53,16 @@ import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import draggable from 'vuedraggable'
 import SidebarGroup from '@/components/sidebar/SidebarGroup'
+import SidebarItem from '@/components/sidebar/SidebarItem'
 import SidebarTag from '@/components/sidebar/SidebarTag'
 export default {
   components: {
     draggable,
     SidebarGroup,
+    SidebarItem,
     SidebarTag,
   },
-  emits: ['tag-selected'],
+  emits: ['tag-selected', 'language-selected'],
   setup() {
     const newTag = ref('')
 
@@ -59,10 +73,13 @@ export default {
       starsStore.addTagToStar(data.tag.id, data.starId)
 
     const tagIsSelected = tag => tag.id === tagsStore.selectedTag.id
+    const languageIsSelected = language =>
+      language === starsStore.selectedLanguage
 
     return {
       newTag,
       tagIsSelected,
+      languageIsSelected,
       addTag: tagsStore.addTag,
       onStarDropped,
       tags: computed({
@@ -71,6 +88,7 @@ export default {
           tagsStore.tags = val
         },
       }),
+      languages: computed(() => starsStore.languages),
       reorderTags: tagsStore.reorderTags,
     }
   },
