@@ -33,7 +33,9 @@ export const useStarsStore = defineStore({
       const starsFilterStore = useStarsFilterStore()
       const selectedTag = starsFilterStore.selectedTag
 
-      let filteredRepos = [...this.starredRepos]
+      let filteredRepos = starsFilterStore.isFilteringByUntagged
+        ? this.untaggedStars
+        : this.allStars
 
       if (
         starsFilterStore.isFilteringByTag ||
@@ -57,10 +59,6 @@ export const useStarsStore = defineStore({
               starsFilterStore.selectedLanguage
           )
         }
-      } else {
-        filteredRepos = starsFilterStore.isFilteringByUntagged
-          ? this.untaggedStars
-          : this.allStars
       }
 
       return filteredRepos

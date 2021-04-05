@@ -24,9 +24,7 @@ export const useStarsFilterStore = defineStore({
     },
     isFilteringByUntagged() {
       return (
-        this.selectedFilter === BASE_FILTERS.UNTAGGED &&
-        !this.isFilteringByTag &&
-        !this.isFilteringByLanguage
+        this.selectedFilter === BASE_FILTERS.UNTAGGED && !this.isFilteringByTag
       )
     },
     isFilteringByTag() {
@@ -50,7 +48,6 @@ export const useStarsFilterStore = defineStore({
     },
     setFilterByUntagged() {
       this.clearSelectedTag()
-      this.clearSelectedLanguage()
       this.selectedFilter = BASE_FILTERS.UNTAGGED
     },
   },
