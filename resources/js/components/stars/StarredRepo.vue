@@ -5,14 +5,14 @@
     draggable="true"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
-    @click="$emit('star-selected', star)"
+    @click="$emit('selected', repo)"
   >
-    <p class="font-semibold text-brand-600">{{ star.node.nameWithOwner }}</p>
+    <p class="font-semibold text-brand-600">{{ repo.node.nameWithOwner }}</p>
     <p
       class="mt-2 text-sm text-gray-700 line-clamp-5"
-      :title="star.node.description"
+      :title="repo.node.description"
     >
-      {{ star.node.description }}
+      {{ repo.node.description }}
     </p>
     <ul v-if="tags.length" class="inline-flex flex-wrap mt-4 space-x-2">
       <li
@@ -32,21 +32,23 @@ import { computed } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
 export default {
   props: {
-    star: {
+    repo: {
       type: Object,
       required: true,
     },
   },
-  emits: ['star-selected', 'tag-selected'],
+  emits: ['selected', 'tag-selected'],
   setup(props) {
     const starsStore = useStarsStore()
 
     const tags = computed(() => {
-      return starsStore.starsById[props.star.node.databaseId]?.tags || []
+      return (
+        starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
+      )
     })
 
     const isSelected = computed(
-      () => props.star.node.databaseId === starsStore.selectedStar.databaseId
+      () => props.repo.node.databaseId === starsStore.selectedRepo.databaseId
     )
 
     let $dragImage = undefined
@@ -69,12 +71,12 @@ export default {
           'z-10',
         ]
       )
-      $dragImage.innerHTML = `<span>${props.star.node.nameWithOwner}</span>`
+      $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner}</span>`
       $dragImage.style.top = '-999px'
       document.body.appendChild($dragImage)
       e.dataTransfer.effectAllowed = 'copyLink'
       e.dataTransfer.setDragImage($dragImage, 0, 0)
-      e.dataTransfer.setData('text/plain', JSON.stringify(props.star.node))
+      e.dataTransfer.setData('text/plain', JSON.stringify(props.repo.node))
     }
 
     const onDragEnd = () => {

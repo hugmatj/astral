@@ -1,6 +1,28 @@
 <template>
   <div class="h-full p-4 bg-gray-900">
     <div class="mt-6 space-y-6">
+      <SidebarGroup title="Stars">
+        <ul class="mt-2 space-y-2">
+          <SidebarItem
+            title="All Stars"
+            :is-active="starsFilterStore.isFilteringByAll"
+            @click="starsFilterStore.setFilterByAll"
+          >
+            <template #icon>
+              <InboxIcon />
+            </template>
+          </SidebarItem>
+          <SidebarItem
+            title="Untagged Stars"
+            :is-active="starsFilterStore.isFilteringByUntagged"
+            @click="starsFilterStore.setFilterByUntagged"
+          >
+            <template #icon>
+              <StarIcon />
+            </template>
+          </SidebarItem>
+        </ul>
+      </SidebarGroup>
       <SidebarGroup title="Tags" collapsible class="relative">
         <form class="mt-2" @submit.prevent="addTag(newTag)">
           <input
@@ -51,33 +73,40 @@
 import { ref, computed } from 'vue'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import draggable from 'vuedraggable'
 import SidebarGroup from '@/components/sidebar/SidebarGroup'
 import SidebarItem from '@/components/sidebar/SidebarItem'
 import SidebarTag from '@/components/sidebar/SidebarTag'
+import { InboxIcon, StarIcon } from '@heroicons/vue/outline'
 export default {
   components: {
     draggable,
     SidebarGroup,
     SidebarItem,
     SidebarTag,
+    InboxIcon,
+    StarIcon,
   },
   emits: ['tag-selected', 'language-selected'],
   setup() {
-    const newTag = ref('')
-
+    const starsFilterStore = useStarsFilterStore()
     const tagsStore = useTagsStore()
     const starsStore = useStarsStore()
+
+    const newTag = ref('')
+
+    const tagIsSelected = tag => tag.id === starsFilterStore.selectedTag.id
+
+    const languageIsSelected = language =>
+      language === starsFilterStore.selectedLanguage
 
     const onStarDropped = data =>
       starsStore.addTagToStar(data.tag.id, data.starId)
 
-    const tagIsSelected = tag => tag.id === tagsStore.selectedTag.id
-    const languageIsSelected = language =>
-      language === starsStore.selectedLanguage
-
     return {
       newTag,
+      starsFilterStore,
       tagIsSelected,
       languageIsSelected,
       addTag: tagsStore.addTag,

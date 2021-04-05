@@ -6,7 +6,6 @@ export const useTagsStore = defineStore({
   state() {
     return {
       tags: [],
-      selectedTag: {},
     }
   },
   actions: {

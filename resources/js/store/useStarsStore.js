@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
 import { useUserStore } from '@/store/useUserStore'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import StarsWorker from '@/workers/githubStars.worker.js'
 import keyBy from 'lodash/keyBy'
 
@@ -9,22 +10,66 @@ export const useStarsStore = defineStore({
   state() {
     return {
       isDraggingStar: false,
-      stars: [],
-      githubStars: [],
-      selectedStar: {},
-      selectedLanguage: null,
+      userStars: [],
+      starredRepos: [],
+      selectedRepo: {},
       worker: new StarsWorker(),
     }
   },
   getters: {
-    starsById() {
-      return keyBy(this.stars, star => `${star.repo_id}`)
+    userStarsByRepoId() {
+      return keyBy(this.userStars, star => `${star.repo_id}`)
+    },
+    allStars() {
+      return this.starredRepos
+    },
+    untaggedStars() {
+      return this.starredRepos.filter(repo => {
+        const userStar = this.userStarsByRepoId[repo.node.databaseId]
+        return !userStar || !userStar.tags.length
+      })
+    },
+    filteredRepos() {
+      const starsFilterStore = useStarsFilterStore()
+      const selectedTag = starsFilterStore.selectedTag
+
+      let filteredRepos = [...this.starredRepos]
+
+      if (
+        starsFilterStore.isFilteringByTag ||
+        starsFilterStore.isFilteringByLanguage
+      ) {
+        if (starsFilterStore.isFilteringByTag) {
+          filteredRepos = filteredRepos.filter(repo => {
+            const userStar = this.userStarsByRepoId[repo.node.databaseId]
+
+            return (
+              !!userStar &&
+              userStar.tags.map(tag => tag.id).includes(selectedTag.id)
+            )
+          })
+        }
+
+        if (starsFilterStore.isFilteringByLanguage) {
+          filteredRepos = filteredRepos.filter(
+            repo =>
+              repo.node.primaryLanguage?.name ===
+              starsFilterStore.selectedLanguage
+          )
+        }
+      } else {
+        filteredRepos = starsFilterStore.isFilteringByUntagged
+          ? this.untaggedStars
+          : this.allStars
+      }
+
+      return filteredRepos
     },
     languages() {
       return Object.entries(
-        this.githubStars
-          .map(star => {
-            return star.node.primaryLanguage || null
+        this.starredRepos
+          .map(repo => {
+            return repo.node.primaryLanguage || null
           })
           .filter(Boolean)
           .map(repo => repo.name)
@@ -50,7 +95,7 @@ export const useStarsStore = defineStore({
       this.worker.postMessage({ token: userStore.user.access_token })
 
       this.worker.onmessage = ({ data }) => {
-        this.githubStars = this.githubStars.concat(
+        this.starredRepos = this.starredRepos.concat(
           data.viewer.starredRepositories.edges
         )
       }

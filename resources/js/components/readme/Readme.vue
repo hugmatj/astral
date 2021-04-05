@@ -30,11 +30,11 @@ export default {
     const readmeContainerEl = ref(null)
 
     watch(
-      () => starsStore.selectedStar,
-      async selectedStar => {
+      () => starsStore.selectedRepo,
+      async selectedRepo => {
         isReadmeLoading.value = true
         readmeContainerEl.value.scrollTo(0, 0)
-        contents.value = await starsStore.fetchReadme(selectedStar)
+        contents.value = await starsStore.fetchReadme(selectedRepo)
         await nextTick()
         Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
           if (anchor.href.replace(location.href, '').startsWith('#')) {

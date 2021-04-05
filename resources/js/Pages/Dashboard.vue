@@ -49,11 +49,11 @@
         <ul
           class="h-full col-start-2 row-start-3 row-end-4 bg-gray-200 divide-y divide-gray-300"
         >
-          <Star
-            v-for="star in githubStars"
-            :key="star.node.id"
-            :star="star"
-            @star-selected="onStarSelected(star)"
+          <StarredRepo
+            v-for="repo in filteredRepos"
+            :key="repo.node.id"
+            :repo="repo"
+            @selected="onRepoSelected(repo)"
           />
         </ul>
       </div>
@@ -82,9 +82,10 @@ import { computed, ref } from 'vue'
 import { useUserStore } from '@/store/useUserStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
+import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useSyncPropToStore } from '@/composables/useSyncPropToStore'
 import Sidebar from '@/components/sidebar/Sidebar'
-import Star from '@/components/stars/Star.vue'
+import StarredRepo from '@/components/stars/StarredRepo.vue'
 import Readme from '@/components/readme/Readme.vue'
 import {
   ArrowCircleLeftIcon,
@@ -95,7 +96,7 @@ import {
 export default {
   components: {
     Sidebar,
-    Star,
+    StarredRepo,
     Readme,
     ArrowCircleLeftIcon,
     CloseIcon,
@@ -123,38 +124,39 @@ export default {
     const userStore = useUserStore()
     const tagsStore = useTagsStore()
     const starsStore = useStarsStore()
+    const starsFilterStore = useStarsFilterStore()
 
     useSyncPropToStore(() => props.user, userStore, 'user')
     useSyncPropToStore(() => props.tags, tagsStore, 'tags')
-    useSyncPropToStore(() => props.stars, starsStore, 'stars')
+    useSyncPropToStore(() => props.stars, starsStore, 'userStars')
 
     const isSidebarOpen = ref(false)
     const isReadmeOpen = ref(false)
 
     const onTagSelected = tag => {
       isSidebarOpen.value = false
-      tagsStore.selectedTag = tag
+      starsFilterStore.selectedTag = tag
     }
 
     const onLanguageSelected = language => {
       isSidebarOpen.value = false
-      starsStore.selectedLanguage = language
+      starsFilterStore.selectedLanguage = language
     }
 
-    const onStarSelected = star => {
+    const onRepoSelected = repo => {
       isReadmeOpen.value = true
-      starsStore.selectedStar = star.node
+      starsStore.selectedRepo = repo.node
     }
 
     starsStore.fetchStars()
 
     return {
-      githubStars: computed(() => starsStore.githubStars),
+      filteredRepos: computed(() => starsStore.filteredRepos),
       isSidebarOpen,
       isReadmeOpen,
       onTagSelected,
       onLanguageSelected,
-      onStarSelected,
+      onRepoSelected,
     }
   },
 }
