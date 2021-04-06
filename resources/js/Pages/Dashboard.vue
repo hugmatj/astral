@@ -54,6 +54,7 @@
             :key="repo.node.id"
             :repo="repo"
             @selected="onRepoSelected(repo)"
+            @tag-selected="onTagSelected"
           />
         </ul>
       </div>

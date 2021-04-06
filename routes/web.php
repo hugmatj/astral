@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
 use App\Http\Controllers\StarTagsController;
-use Illuminate\Routing\RouteUrlGenerator;
 use Inertia\Inertia;
 
 /*
@@ -21,6 +20,8 @@ use Inertia\Inertia;
 
 Route::get('auth/github', [AuthController::class, 'redirectToProvider'])->name('github.auth');
 Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallback'])->name('github.callback');
+
+Route::redirect('/login', '/auth/github')->name('login');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {

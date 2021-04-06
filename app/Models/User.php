@@ -11,11 +11,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'github_id',
@@ -25,26 +20,39 @@ class User extends Authenticatable
         'avatar'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
-        'show_language_tags' => 'boolean',
-        'autosave_notes' => 'boolean',
+        'settings' => 'array',
     ];
 
-    public function updateFromGitHubProfile($githubUser)
+    protected $attributes = [
+        'settings' => '{"github_sponsor": false, "show_language_tags": true, "autosave_notes": true}',
+    ];
+
+    public function readSetting(string $name, $default = null)
+    {
+        if (array_key_exists($name, $this->settings)) {
+            return $this->settings[$name];
+        }
+
+        return $default;
+    }
+
+    public function writeSetting(string $name, $value, bool $save = true): self
+    {
+        $this->settings = array_merge($this->settings, [$name => $value]);
+
+        if ($save) {
+            $this->save();
+        }
+
+        return $this;
+    }
+
+    public function updateFromGitHubProfile($githubUser): self
     {
         $this->username = $githubUser->getNickname();
         $this->github_id = $githubUser->getId();
@@ -53,6 +61,13 @@ class User extends Authenticatable
             $this->name = $githubUser->getName();
         }
         $this->avatar = $githubUser->getAvatar();
+
+        return $this;
+    }
+
+    public function getIsGitHubSponsorAttribute(): bool
+    {
+        return (bool)$this->readSetting('github_sponsor', false);
     }
 
     public function tags() {

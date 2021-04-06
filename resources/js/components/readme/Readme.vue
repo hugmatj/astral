@@ -4,8 +4,11 @@
       v-show="contents"
       class="relative w-full h-full mt-12 bg-white sm:mt-0"
     >
-      <!-- eslint-disable-next-line -->
-      <div ref="readmeEl" class="p-4 prose max-w-none" v-html="contents"></div>
+      <div
+        ref="readmeEl"
+        class="p-4 prose max-w-none sm:max-w-2xl sm:mx-auto"
+        v-html="contents"
+      ></div>
     </div>
     <div
       v-show="isReadmeLoading"

@@ -12,6 +12,11 @@ export const useStarsStore = defineStore({
       isDraggingStar: false,
       userStars: [],
       starredRepos: [],
+      pageInfo: {
+        starCursor: null,
+        endCursor: null,
+      },
+      totalRepos: 0,
       selectedRepo: {},
       worker: new StarsWorker(),
     }
