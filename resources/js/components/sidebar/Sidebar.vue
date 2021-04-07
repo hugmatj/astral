@@ -69,17 +69,18 @@
   </div>
 </template>
 
-<script>
-import { ref, computed } from 'vue'
+<script lang="ts">
+import { defineComponent, ref, computed } from 'vue'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import draggable from 'vuedraggable'
-import SidebarGroup from '@/components/sidebar/SidebarGroup'
-import SidebarItem from '@/components/sidebar/SidebarItem'
-import SidebarTag from '@/components/sidebar/SidebarTag'
+import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
+import SidebarItem from '@/components/sidebar/SidebarItem.vue'
+import SidebarTag from '@/components/sidebar/SidebarTag.vue'
 import { InboxIcon, StarIcon } from '@heroicons/vue/outline'
-export default {
+
+export default defineComponent({
   components: {
     draggable,
     SidebarGroup,
@@ -96,7 +97,8 @@ export default {
 
     const newTag = ref('')
 
-    const tagIsSelected = tag => tag.id === starsFilterStore.selectedTag.id
+    const tagIsSelected = (tag: any) =>
+      tag.id === starsFilterStore.selectedTag.id
 
     const languageIsSelected = language =>
       language === starsFilterStore.selectedLanguage
@@ -121,7 +123,7 @@ export default {
       reorderTags: tagsStore.reorderTags,
     }
   },
-}
+})
 </script>
 
 <style>

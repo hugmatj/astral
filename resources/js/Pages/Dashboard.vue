@@ -78,14 +78,14 @@
   </div>
 </template>
 
-<script>
-import { computed, ref } from 'vue'
+<script lang="ts">
+import { defineComponent, computed, ref } from 'vue'
 import { useUserStore } from '@/store/useUserStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useSyncPropToStore } from '@/composables/useSyncPropToStore'
-import Sidebar from '@/components/sidebar/Sidebar'
+import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import Readme from '@/components/readme/Readme.vue'
 import {
@@ -94,7 +94,7 @@ import {
   MenuAlt1Icon as MenuIcon,
 } from '@heroicons/vue/outline'
 
-export default {
+export default defineComponent({
   components: {
     Sidebar,
     StarredRepo,
@@ -160,7 +160,7 @@ export default {
       onRepoSelected,
     }
   },
-}
+})
 </script>
 
 <style>

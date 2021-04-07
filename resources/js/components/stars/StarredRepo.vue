@@ -27,10 +27,12 @@
   </li>
 </template>
 
-<script>
-import { computed } from 'vue'
+<script lang="ts">
+import { defineComponent, computed } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
-export default {
+import { Tag } from '@/types'
+
+export default defineComponent({
   props: {
     repo: {
       type: Object,
@@ -41,17 +43,15 @@ export default {
   setup(props) {
     const starsStore = useStarsStore()
 
-    const tags = computed(() => {
-      return (
-        starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
-      )
+    const tags = computed((): Tag[] => {
+      return starsStore.userStarsByRepoId[props.repo.node.databaseId].tags
     })
 
     const isSelected = computed(
       () => props.repo.node.databaseId === starsStore.selectedRepo.databaseId
     )
 
-    let $dragImage = undefined
+    let $dragImage: HTMLElement = undefined
 
     const onDragStart = e => {
       starsStore.isDraggingStar = true
@@ -90,5 +90,5 @@ export default {
       onDragEnd,
     }
   },
-}
+})
 </script>
