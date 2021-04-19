@@ -5,7 +5,7 @@ export const useUserStore = defineStore({
   id: 'user',
   state() {
     return {
-      user: null as User,
+      user: null as Nullable<User>,
     }
   },
 })

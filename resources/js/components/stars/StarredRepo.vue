@@ -1,5 +1,5 @@
 <template>
-  <li
+  <div
     class="p-4 bg-white shadow-sm cursor-pointer"
     :class="{ 'bg-gray-100 shadow-inner': isSelected }"
     draggable="true"
@@ -24,18 +24,18 @@
         {{ tag.name }}
       </li>
     </ul>
-  </li>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, PropType } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
-import { Tag } from '@/types'
+import { GitHubRepo } from '@/types'
 
 export default defineComponent({
   props: {
     repo: {
-      type: Object,
+      type: Object as PropType<GitHubRepo>,
       required: true,
     },
   },
@@ -43,17 +43,19 @@ export default defineComponent({
   setup(props) {
     const starsStore = useStarsStore()
 
-    const tags = computed((): Tag[] => {
-      return starsStore.userStarsByRepoId[props.repo.node.databaseId].tags
+    const tags = computed(() => {
+      return (
+        starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
+      )
     })
 
     const isSelected = computed(
       () => props.repo.node.databaseId === starsStore.selectedRepo.databaseId
     )
 
-    let $dragImage: HTMLElement = undefined
+    let $dragImage: HTMLElement | undefined = undefined
 
-    const onDragStart = e => {
+    const onDragStart = (e: DragEvent) => {
       starsStore.isDraggingStar = true
       $dragImage = document.createElement('div')
       $dragImage.classList.add(
@@ -74,13 +76,18 @@ export default defineComponent({
       $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner}</span>`
       $dragImage.style.top = '-999px'
       document.body.appendChild($dragImage)
-      e.dataTransfer.effectAllowed = 'copyLink'
-      e.dataTransfer.setDragImage($dragImage, 0, 0)
-      e.dataTransfer.setData('text/plain', JSON.stringify(props.repo.node))
+
+      if (e.dataTransfer) {
+        e.dataTransfer.effectAllowed = 'copyLink'
+        e.dataTransfer.setDragImage($dragImage, 0, 0)
+        e.dataTransfer.setData('text/plain', JSON.stringify(props.repo.node))
+      }
     }
 
     const onDragEnd = () => {
-      document.body.removeChild($dragImage)
+      if ($dragImage) {
+        document.body.removeChild($dragImage)
+      }
     }
 
     return {

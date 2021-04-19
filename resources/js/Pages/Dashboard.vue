@@ -2,7 +2,7 @@
   <div
     class="absolute top-0 left-0 w-screen h-screen overflow-hidden bg-gray-50"
   >
-    <div class="grid h-full dashboard-grid">
+    <div class="grid h-screen dashboard-grid">
       <!-- Nav -->
       <div class="flex items-center px-4 bg-brand-600 col-span-full">
         <button
@@ -42,22 +42,14 @@
           </button>
         </div>
       </div>
-      <div
-        class="col-span-1 row-start-2 row-end-3 overflow-y-auto border-r border-gray-300 sm:col-start-2"
-      >
-        <!-- Stars List -->
-        <ul
-          class="h-full col-start-2 row-start-3 row-end-4 bg-gray-200 divide-y divide-gray-300"
-        >
-          <StarredRepo
-            v-for="repo in filteredRepos"
-            :key="repo.node.id"
-            :repo="repo"
-            @selected="onRepoSelected(repo)"
-            @tag-selected="onTagSelected"
-          />
-        </ul>
-      </div>
+      <!-- Starred Repo List -->
+      <StarredRepoList v-slot="{ repo }">
+        <StarredRepo
+          :repo="repo"
+          @selected="onRepoSelected(repo)"
+          @tag-selected="onTagSelected"
+        />
+      </StarredRepoList>
       <!-- Selected Star Info -->
       <div
         class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto transform-gpu sm:translate-x-0 sm:relative"
@@ -79,15 +71,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, PropType } from 'vue'
 import { useUserStore } from '@/store/useUserStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
-import { useSyncPropToStore } from '@/composables/useSyncPropToStore'
+import { useSyncValueToStore } from '@/composables/useSyncValueToStore'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
+import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import Readme from '@/components/readme/Readme.vue'
+import { GitHubRepo, Tag, UserStar, User } from '@/types'
 import {
   ArrowCircleLeftIcon,
   XCircleIcon as CloseIcon,
@@ -97,6 +91,7 @@ import {
 export default defineComponent({
   components: {
     Sidebar,
+    StarredRepoList,
     StarredRepo,
     Readme,
     ArrowCircleLeftIcon,
@@ -105,20 +100,22 @@ export default defineComponent({
   },
   props: {
     tags: {
-      type: Array,
+      type: Array as PropType<Tag[]>,
       required: true,
     },
     stars: {
-      type: Array,
+      type: Array as PropType<UserStar[]>,
       required: true,
     },
     user: {
-      type: Object,
+      type: Object as PropType<User>,
       required: true,
     },
     errors: {
       type: Object,
-      default: () => {},
+      default: () => {
+        return {}
+      },
     },
   },
   setup(props) {
@@ -127,29 +124,27 @@ export default defineComponent({
     const starsStore = useStarsStore()
     const starsFilterStore = useStarsFilterStore()
 
-    useSyncPropToStore(() => props.user, userStore, 'user')
-    useSyncPropToStore(() => props.tags, tagsStore, 'tags')
-    useSyncPropToStore(() => props.stars, starsStore, 'userStars')
+    useSyncValueToStore(() => props.user, userStore, 'user')
+    useSyncValueToStore(() => props.tags, tagsStore, 'tags')
+    useSyncValueToStore(() => props.stars, starsStore, 'userStars')
 
     const isSidebarOpen = ref(false)
     const isReadmeOpen = ref(false)
 
-    const onTagSelected = tag => {
+    const onTagSelected = (tag: Tag) => {
       isSidebarOpen.value = false
       starsFilterStore.selectedTag = tag
     }
 
-    const onLanguageSelected = language => {
+    const onLanguageSelected = (language: string) => {
       isSidebarOpen.value = false
       starsFilterStore.selectedLanguage = language
     }
 
-    const onRepoSelected = repo => {
+    const onRepoSelected = (repo: GitHubRepo) => {
       isReadmeOpen.value = true
       starsStore.selectedRepo = repo.node
     }
-
-    starsStore.fetchStars()
 
     return {
       filteredRepos: computed(() => starsStore.filteredRepos),
@@ -158,6 +153,7 @@ export default defineComponent({
       onTagSelected,
       onLanguageSelected,
       onRepoSelected,
+      starsStore,
     }
   },
 })
@@ -166,13 +162,13 @@ export default defineComponent({
 <style>
 .dashboard-grid {
   grid-template-columns: 1fr;
-  grid-template-rows: 48px 1fr;
+  grid-template-rows: 48px calc(100vh - 48px);
 }
 
 @media screen and (min-width: 640px) {
   .dashboard-grid {
     grid-template-columns: 280px 400px 1fr;
-    grid-template-rows: 72px 1fr;
+    grid-template-rows: 72px calc(100vh - 72px);
   }
 }
 </style>

@@ -13,10 +13,6 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' },
-      },
-      {
         test: /\.postcss$/,
         use: [
           'vue-style-loader',

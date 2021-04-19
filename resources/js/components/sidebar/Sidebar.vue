@@ -1,11 +1,12 @@
 <template>
-  <div class="h-full p-4 bg-gray-900">
+  <div class="h-full p-4 overflow-y-auto bg-gray-900">
     <div class="mt-6 space-y-6">
       <SidebarGroup title="Stars">
         <ul class="mt-2 space-y-2">
           <SidebarItem
             title="All Stars"
             :is-active="starsFilterStore.isFilteringByAll"
+            :count="totalRepos"
             @click="starsFilterStore.setFilterByAll"
           >
             <template #icon>
@@ -15,6 +16,7 @@
           <SidebarItem
             title="Untagged Stars"
             :is-active="starsFilterStore.isFilteringByUntagged"
+            :count="totalUntaggedRepos"
             @click="starsFilterStore.setFilterByUntagged"
           >
             <template #icon>
@@ -79,6 +81,7 @@ import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import SidebarTag from '@/components/sidebar/SidebarTag.vue'
 import { InboxIcon, StarIcon } from '@heroicons/vue/outline'
+import { Tag, StarDragDataTransferData } from '@/types'
 
 export default defineComponent({
   components: {
@@ -97,13 +100,13 @@ export default defineComponent({
 
     const newTag = ref('')
 
-    const tagIsSelected = (tag: any) =>
-      tag.id === starsFilterStore.selectedTag.id
+    const tagIsSelected = (tag: Tag): boolean =>
+      tag.id === starsFilterStore.selectedTag?.id
 
-    const languageIsSelected = language =>
+    const languageIsSelected = (language: string): boolean =>
       language === starsFilterStore.selectedLanguage
 
-    const onStarDropped = data =>
+    const onStarDropped = (data: StarDragDataTransferData) =>
       starsStore.addTagToStar(data.tag.id, data.starId)
 
     return {
@@ -119,6 +122,8 @@ export default defineComponent({
           tagsStore.tags = val
         },
       }),
+      totalRepos: computed(() => starsStore.totalRepos),
+      totalUntaggedRepos: computed(() => starsStore.untaggedStars.length),
       languages: computed(() => starsStore.languages),
       reorderTags: tagsStore.reorderTags,
     }

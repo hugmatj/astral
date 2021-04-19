@@ -4,8 +4,7 @@
     "allowJs": true,
     "target": "esnext",
     "module": "esnext",
-    "strict": false,
-    "noImplicitAny": false,
+    "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
@@ -17,7 +16,7 @@
     "paths": {
       "@/*": ["resources/js/*"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost", "webworker"]
   },
   "include": ["resources/js/**/*.ts", "resources/js/**/*.vue"],
   "exclude": ["node_modules"]

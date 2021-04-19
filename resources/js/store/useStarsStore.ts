@@ -2,9 +2,21 @@ import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
 import { useUserStore } from '@/store/useUserStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
-import StarsWorker from 'worker-loader!@/workers/githubStars.worker.js'
+import StarsWorker from 'worker-loader!@/workers/githubStars.worker'
 import keyBy from 'lodash/keyBy'
-import { UserStar, GitHubRepo, GitHubRepoNode, Tag } from '@/types'
+import {
+  UserStar,
+  GitHubRepo,
+  GitHubRepoNode,
+  RepoLanguage,
+  PaginationResponse,
+  FetchDirections,
+} from '@/types'
+
+export const FETCH_DIRECTIONS: FetchDirections = {
+  DESC: 'DESC',
+  ASC: 'ASC',
+}
 
 export const useStarsStore = defineStore({
   id: 'stars',
@@ -14,23 +26,25 @@ export const useStarsStore = defineStore({
       userStars: [] as UserStar[],
       starredRepos: [] as GitHubRepo[],
       pageInfo: {
-        starCursor: null as string,
-        endCursor: null as string,
-      },
+        startCursor: null,
+        endCursor: null,
+        hasNextPage: true,
+      } as PaginationResponse,
       totalRepos: 0,
       selectedRepo: {} as GitHubRepoNode,
       worker: new StarsWorker(),
+      hasFetchedFromStorage: false,
     }
   },
   getters: {
-    userStarsByRepoId() {
+    userStarsByRepoId(): Record<string, UserStar> {
       return keyBy(this.userStars, (star: UserStar) => `${star.repo_id}`)
     },
     allStars(): GitHubRepo[] {
       return this.starredRepos
     },
     untaggedStars(): GitHubRepo[] {
-      return (this.starredRepos as GitHubRepo[]).filter(repo => {
+      return this.allStars.filter(repo => {
         const userStar: UserStar = this.userStarsByRepoId[repo.node.databaseId]
         return !userStar || !userStar.tags.length
       })
@@ -39,7 +53,7 @@ export const useStarsStore = defineStore({
       const starsFilterStore = useStarsFilterStore()
       const selectedTag = starsFilterStore.selectedTag
 
-      let filteredRepos: GitHubRepo[] = starsFilterStore.isFilteringByUntagged
+      let filteredRepos = starsFilterStore.isFilteringByUntagged
         ? this.untaggedStars
         : this.allStars
 
@@ -49,12 +63,11 @@ export const useStarsStore = defineStore({
       ) {
         if (starsFilterStore.isFilteringByTag) {
           filteredRepos = filteredRepos.filter(repo => {
-            const userStar: UserStar = this.userStarsByRepoId[
-              repo.node.databaseId
-            ]
+            const userStar = this.userStarsByRepoId[repo.node.databaseId]
 
             return (
               !!userStar &&
+              !!selectedTag &&
               userStar.tags.map(tag => tag.id).includes(selectedTag.id)
             )
           })
@@ -71,19 +84,21 @@ export const useStarsStore = defineStore({
 
       return filteredRepos
     },
-    languages() {
+    languages(): RepoLanguage[] {
       return Object.entries(
-        this.starredRepos
-          .map((repo: GitHubRepo) => {
-            return repo.node.primaryLanguage || null
+        this.allStars
+          .map(repo => {
+            return repo.node.primaryLanguage?.name || ''
           })
           .filter(Boolean)
-          .map(repo => repo.name)
-          .reduce((totals, lang) => {
+          .reduce((totals: Record<string, number>, lang: string): Record<
+            string,
+            number
+          > => {
             return { ...totals, [lang]: (totals[lang] || 0) + 1 }
           }, {})
       )
-        .map(language => {
+        .map((language: [string, number]) => {
           const [name, count] = language
 
           return {
@@ -91,25 +106,26 @@ export const useStarsStore = defineStore({
             count,
           }
         })
-        .sort((a: any, b: any) => b.count - a.count)
+        .sort((a, b) => b.count - a.count)
     },
   },
   actions: {
-    fetchStars() {
+    fetchStars(
+      cursor: Nullable<string> = null,
+      direction: keyof FetchDirections = FETCH_DIRECTIONS.DESC
+    ) {
       const userStore = useUserStore()
 
-      this.worker.postMessage({ token: userStore.user.access_token })
-
-      this.worker.onmessage = ({ data }) => {
-        this.starredRepos = this.starredRepos.concat(
-          data.viewer.starredRepositories.edges
-        )
-      }
+      this.worker.postMessage({
+        token: userStore.user?.access_token,
+        cursor,
+        direction,
+      })
     },
-    addTagToStar(tagId, repoId) {
+    addTagToStar(tagId: number, repoId: number) {
       Inertia.post('/stars/tag', { tagId, repoId })
     },
-    async fetchReadme(repo) {
+    async fetchReadme(repo: GitHubRepoNode): Promise<string> {
       const userStore = useUserStore()
 
       const readme = await (
@@ -118,7 +134,7 @@ export const useStarsStore = defineStore({
           {
             headers: {
               Accept: 'application/vnd.github.v3.html',
-              Authorization: `bearer ${userStore.user.access_token}`,
+              Authorization: `bearer ${userStore.user?.access_token}`,
             },
           }
         )

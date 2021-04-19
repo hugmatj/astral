@@ -1,3 +1,5 @@
+import { Store, StateTree } from 'pinia'
+
 export interface User {
   access_token: string
   avatar: string
@@ -44,9 +46,7 @@ export interface GitHubRepoNode {
   id: string
   isArchived: boolean
   nameWithOwner: string
-  primaryLanguage?: {
-    name: string
-  }
+  primaryLanguage: Nullable<{ name: string }>
   releases?: {
     edges: Array<{ node: { tagName: string } }>
   }
@@ -61,5 +61,25 @@ export interface GitHubRepo {
   node: GitHubRepoNode
 }
 
-// Utility types
-export type Values<T> = T[keyof T]
+export interface RepoLanguage {
+  name: string
+  count: number
+}
+
+export interface StarDragDataTransferData {
+  tag: Tag
+  starId: number
+}
+
+export interface PaginationResponse {
+  startCursor: Nullable<string>
+  endCursor: Nullable<string>
+  hasNextPage: boolean
+}
+
+export type StoreInstance = Store<string, StateTree, unknown, unknown>
+
+export interface FetchDirections {
+  ASC: 'ASC'
+  DESC: 'DESC'
+}

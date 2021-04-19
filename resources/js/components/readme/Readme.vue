@@ -19,42 +19,49 @@
   </div>
 </template>
 
-<script>
-import { ref, watch, nextTick } from 'vue'
+<script lang="ts">
+import { defineComponent, ref, watch, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
-export default {
+export default defineComponent({
   setup() {
     const starsStore = useStarsStore()
 
-    const contents = ref(null)
+    const contents = ref<string>('')
     const isReadmeLoading = ref(false)
 
-    const readmeEl = ref(null)
-    const readmeContainerEl = ref(null)
+    const readmeEl = ref<HTMLElement>()
+    const readmeContainerEl = ref<HTMLElement>()
 
     watch(
       () => starsStore.selectedRepo,
       async selectedRepo => {
         isReadmeLoading.value = true
-        readmeContainerEl.value.scrollTo(0, 0)
-        contents.value = await starsStore.fetchReadme(selectedRepo)
-        await nextTick()
-        Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
-          if (anchor.href.replace(location.href, '').startsWith('#')) {
-            anchor.addEventListener('click', e => {
-              e.preventDefault()
-              readmeContainerEl.value.scrollTo(
-                0,
-                readmeContainerEl.value.scrollTop +
-                  e.currentTarget.getBoundingClientRect().top -
-                  readmeContainerEl.value.getBoundingClientRect().top -
-                  16
-              )
-            })
-          } else {
-            anchor.setAttribute('target', '_blank')
-          }
-        })
+        if (readmeContainerEl.value && readmeEl.value) {
+          readmeContainerEl.value.scrollTo(0, 0)
+          contents.value = await starsStore.fetchReadme(selectedRepo)
+
+          await nextTick()
+
+          Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
+            if (anchor.href.replace(location.href, '').startsWith('#')) {
+              anchor.addEventListener('click', e => {
+                e.preventDefault()
+                if (readmeContainerEl.value && readmeEl.value) {
+                  const anchorTop: number =
+                    readmeContainerEl.value.scrollTop +
+                    (e.currentTarget as HTMLElement).getBoundingClientRect()
+                      .top -
+                    readmeContainerEl.value.getBoundingClientRect().top -
+                    16
+
+                  readmeContainerEl.value.scrollTo(0, anchorTop)
+                }
+              })
+            } else {
+              anchor.setAttribute('target', '_blank')
+            }
+          })
+        }
         isReadmeLoading.value = false
       }
     )
@@ -66,7 +73,7 @@ export default {
       readmeContainerEl,
     }
   },
-}
+})
 </script>
 
 <style lang="postcss">

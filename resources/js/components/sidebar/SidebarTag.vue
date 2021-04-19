@@ -15,20 +15,21 @@
   </SidebarItem>
 </template>
 
-<script>
-import { ref } from 'vue'
-import SidebarItem from '@/components/sidebar/SidebarItem'
+<script lang="ts">
+import { defineComponent, ref, PropType } from 'vue'
+import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import { TagIcon } from '@heroicons/vue/outline'
 import { useStarsStore } from '@/store/useStarsStore'
+import { GitHubRepoNode, Tag } from '@/types'
 
-export default {
+export default defineComponent({
   components: {
     SidebarItem,
     TagIcon,
   },
   props: {
     tag: {
-      type: Object,
+      type: Object as PropType<Tag>,
       required: true,
     },
     isActive: Boolean,
@@ -39,21 +40,26 @@ export default {
 
     const starsStore = useStarsStore()
 
-    const onDragOver = e => {
+    const onDragOver = (e: DragEvent) => {
       e.preventDefault()
+
       if (starsStore.isDraggingStar) {
         isHighlighted.value = true
       }
     }
     const onDragLeave = () => (isHighlighted.value = false)
 
-    const onDrop = e => {
-      if (starsStore.isDraggingStar) {
-        const star = JSON.parse(e.dataTransfer.getData('text/plain'))
+    const onDrop = (e: DragEvent) => {
+      if (starsStore.isDraggingStar && e.dataTransfer) {
+        const star: GitHubRepoNode = JSON.parse(
+          e.dataTransfer.getData('text/plain')
+        )
+
         emit('star-dropped', { tag: props.tag, starId: star.databaseId })
         starsStore.isDraggingStar = false
         isHighlighted.value = false
       }
+
       e.preventDefault()
     }
 
@@ -64,7 +70,7 @@ export default {
       isHighlighted,
     }
   },
-}
+})
 </script>
 
 <style></style>

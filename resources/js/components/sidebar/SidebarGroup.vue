@@ -22,9 +22,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
-export default {
+export default defineComponent({
   components: {
     CaretIcon,
   },
@@ -38,17 +39,19 @@ export default {
       default: false,
     },
   },
-  data() {
+  setup(props) {
+    const isCollapsed = ref(false)
+
+    const toggleCollapsed = () => {
+      if (props.collapsible) {
+        isCollapsed.value = !isCollapsed.value
+      }
+    }
+
     return {
-      isCollapsed: false,
+      isCollapsed,
+      toggleCollapsed,
     }
   },
-  methods: {
-    toggleCollapsed() {
-      if (this.collapsible) {
-        this.isCollapsed = !this.isCollapsed
-      }
-    },
-  },
-}
+})
 </script>

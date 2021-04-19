@@ -20,7 +20,7 @@ export const useTagsStore = defineStore({
       }))
       Inertia.put('/tags/reorder', { tags: reorderedTags })
     },
-    deleteTag(id) {
+    deleteTag(id: number) {
       Inertia.delete(`/tags/${id}`)
     },
   },

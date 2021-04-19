@@ -1,7 +1,7 @@
-<script>
-import { h } from 'vue'
+<script lang="ts">
+import { defineComponent, h, computed } from 'vue'
 
-export default {
+export default defineComponent({
   props: {
     tag: {
       type: String,
@@ -24,21 +24,27 @@ export default {
       default: 0,
     },
   },
-  computed: {
-    labelClasses() {
-      return this.isHighlighted
+  setup(props) {
+    const labelClasses = computed(() => {
+      return props.isHighlighted
         ? 'text-white bg-brand-600'
-        : this.isActive
+        : props.isActive
         ? 'text-brand-600'
         : 'text-gray-400'
-    },
-    badgeClasses() {
-      return this.isHighlighted
+    })
+
+    const badgeClasses = computed(() => {
+      return props.isHighlighted
         ? 'text-brand-600 bg-white'
-        : this.isActive
+        : props.isActive
         ? 'text-white bg-brand-600'
         : 'text-white bg-gray-700'
-    },
+    })
+
+    return {
+      labelClasses,
+      badgeClasses,
+    }
   },
   render() {
     return h(
@@ -61,5 +67,5 @@ export default {
       ]
     )
   },
-}
+})
 </script>

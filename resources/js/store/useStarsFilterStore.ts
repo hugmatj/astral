@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Tag, Values } from '@/types'
+import { Tag } from '@/types'
 
 const BASE_FILTERS = {
   ALL: 'all',
@@ -13,8 +13,8 @@ export const useStarsFilterStore = defineStore({
   state() {
     return {
       selectedFilter: BASE_FILTERS.ALL as BaseFilter,
-      selectedTag: null as Tag,
-      selectedLanguage: null as string,
+      selectedTag: null as Nullable<Tag>,
+      selectedLanguage: null as Nullable<string>,
     }
   },
   getters: {
@@ -31,7 +31,7 @@ export const useStarsFilterStore = defineStore({
       )
     },
     isFilteringByTag(): boolean {
-      return !!Object.keys(this.selectedTag).length
+      return !!this.selectedTag && !!Object.keys(this.selectedTag).length
     },
     isFilteringByLanguage(): boolean {
       return !!this.selectedLanguage

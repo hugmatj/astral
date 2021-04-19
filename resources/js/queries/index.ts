@@ -1,8 +1,10 @@
+import { FetchDirections } from '@/types'
+
 export const fetchStarsQuery = (
-  cursor = null,
-  direction = 'DESC',
-  perPage = 50
-) => {
+  cursor: Nullable<string> = null,
+  direction: keyof FetchDirections = 'DESC',
+  perPage = 100
+): string => {
   const cursorFilter = cursor ? `after:"${cursor}"` : 'after:null'
   return `query {
     viewer {

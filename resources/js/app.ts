@@ -5,16 +5,18 @@ import { createPinia } from 'pinia'
 
 const el = document.getElementById('app')
 
-createApp({
-  render: () =>
-    h(App, {
-      initialPage: JSON.parse(el.dataset.page),
-      resolveComponent: name =>
-        import(`./Pages/${name}`).then(module => module.default),
-    }),
-})
-  .use(createPinia())
-  .use(inertiaPlugin)
-  .mount(el)
+if (el) {
+  createApp({
+    render: () =>
+      h(App, {
+        initialPage: JSON.parse(el?.dataset.page || '{}'),
+        resolveComponent: name =>
+          import(`./Pages/${name}`).then(module => module.default),
+      }),
+  })
+    .use(createPinia())
+    .use(inertiaPlugin)
+    .mount(el)
 
-InertiaProgress.init()
+  InertiaProgress.init()
+}
