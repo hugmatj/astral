@@ -4,13 +4,13 @@
     :items="filteredRepos"
     :min-item-size="168"
     key-field="cursor"
-    class="h-full col-span-1 row-start-2 row-end-3 border-r border-gray-300 sm:col-start-2"
+    class="h-full col-span-1 row-start-2 row-end-3 bg-white border-r border-gray-300 dark:border-gray-600 sm:col-start-2 dark:bg-gray-800"
   >
     <template #default="{ item: repo, active }">
       <DynamicScrollerItem
         :item="repo"
         :active="active"
-        class="border-b border-gray-300"
+        class="border-b border-gray-300 dark:border-gray-600"
       >
         <slot :repo="repo" />
       </DynamicScrollerItem>

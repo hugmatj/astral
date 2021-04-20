@@ -1,7 +1,7 @@
 <template>
   <div
-    class="relative p-4 bg-white shadow-sm cursor-pointer"
-    :class="{ 'bg-gray-100 shadow-inner': isSelected }"
+    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800"
+    :class="{ 'bg-gray-100 dark:bg-gray-900 shadow-inner': isSelected }"
     draggable="true"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
@@ -17,16 +17,28 @@
     ></div>
     <p class="font-semibold text-brand-600">{{ repo.node.nameWithOwner }}</p>
     <p
-      class="mt-2 text-sm text-gray-700 line-clamp-5"
+      class="mt-2 text-sm text-gray-700 line-clamp-5 dark:text-gray-300"
       :title="repo.node.description"
     >
       {{ repo.node.description }}
     </p>
-    <ul v-if="tags.length" class="inline-flex flex-wrap mt-4 space-x-2">
+    <ul
+      v-if="tags.length || repo.node.primaryLanguage?.name"
+      class="inline-flex flex-wrap mt-4 space-x-2"
+    >
+      <li
+        v-if="repo.node.primaryLanguage?.name"
+        class="text-brand-800 bg-brand-100 px-2 py-0.5 rounded-sm text-xs cursor-pointer font-semibold tracking-wide"
+        @click.stop="
+          $emit('language-selected', repo.node.primaryLanguage?.name)
+        "
+      >
+        {{ repo.node.primaryLanguage.name }}
+      </li>
       <li
         v-for="tag in tags"
         :key="tag.id"
-        class="text-white bg-brand-600 px-2 py-0.5 rounded-full text-xs cursor-pointer"
+        class="text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded-sm text-xs cursor-pointer font-semibold tracking-wide"
         @click.stop="$emit('tag-selected', tag)"
       >
         {{ tag.name }}
@@ -47,7 +59,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['selected', 'tag-selected'],
+  emits: ['selected', 'tag-selected', 'language-selected'],
   setup(props) {
     const starsStore = useStarsStore()
 

@@ -48,11 +48,12 @@
           :repo="repo"
           @selected="onRepoSelected(repo)"
           @tag-selected="onTagSelected"
+          @language-selected="onLanguageSelected"
         />
       </StarredRepoList>
       <!-- Selected Star Info -->
       <div
-        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto transform-gpu sm:translate-x-0 sm:relative"
+        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
         :class="{
           'translate-x-full pointer-events-none': !isReadmeOpen,
           'translate-x-0': isReadmeOpen,
@@ -143,7 +144,7 @@ export default defineComponent({
 
     const onRepoSelected = (repo: GitHubRepo) => {
       isReadmeOpen.value = true
-      starsStore.selectedRepo = repo.node
+      starsStore.selectedRepos = [repo.node]
     }
 
     return {

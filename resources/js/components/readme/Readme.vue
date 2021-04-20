@@ -1,9 +1,6 @@
 <template>
   <div ref="readmeContainerEl" class="absolute inset-0 h-full overflow-y-auto">
-    <div
-      v-show="contents"
-      class="relative w-full h-full mt-12 bg-white sm:mt-0"
-    >
+    <div v-show="contents" class="relative w-full h-full mt-12 sm:mt-0">
       <div
         ref="readmeEl"
         class="p-4 prose max-w-none sm:max-w-2xl sm:mx-auto"
@@ -12,7 +9,7 @@
     </div>
     <div
       v-show="isReadmeLoading"
-      class="absolute inset-0 z-10 flex items-center justify-center text-center text-gray-500 bg-white"
+      class="absolute inset-0 z-10 flex items-center justify-center text-center text-gray-500 bg-white dark:bg-gray-900"
     >
       Loading...
     </div>

@@ -9,6 +9,8 @@ module.exports = {
     './resources/js/**/*.vue',
   ],
 
+  darkMode: 'class',
+
   theme: {
     colors: {
       transparent: 'transparent',
@@ -16,6 +18,7 @@ module.exports = {
       black: colors.black,
       white: colors.white,
       gray: colors.coolGray,
+      indigo: colors.indigo,
       brand: colors.emerald,
     },
     extend: {
