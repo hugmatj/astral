@@ -83,3 +83,5 @@ export interface FetchDirections {
   ASC: 'ASC'
   DESC: 'DESC'
 }
+
+export type FetchDirection = keyof FetchDirections

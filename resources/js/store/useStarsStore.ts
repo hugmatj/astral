@@ -3,6 +3,7 @@ import { Inertia } from '@inertiajs/inertia'
 import { useUserStore } from '@/store/useUserStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import StarsWorker from 'worker-loader!@/workers/githubStars.worker'
+import { FETCH_DIRECTIONS } from '@/constants'
 import keyBy from 'lodash/keyBy'
 import {
   UserStar,
@@ -10,13 +11,8 @@ import {
   GitHubRepoNode,
   RepoLanguage,
   PaginationResponse,
-  FetchDirections,
+  FetchDirection,
 } from '@/types'
-
-export const FETCH_DIRECTIONS: FetchDirections = {
-  DESC: 'DESC',
-  ASC: 'ASC',
-}
 
 export const useStarsStore = defineStore({
   id: 'stars',
@@ -31,7 +27,7 @@ export const useStarsStore = defineStore({
         hasNextPage: true,
       } as PaginationResponse,
       totalRepos: 0,
-      selectedRepo: {} as GitHubRepoNode,
+      selectedRepos: [] as GitHubRepoNode[],
       worker: new StarsWorker(),
       hasFetchedFromStorage: false,
     }
@@ -108,11 +104,14 @@ export const useStarsStore = defineStore({
         })
         .sort((a, b) => b.count - a.count)
     },
+    selectedRepo(): GitHubRepoNode {
+      return this.selectedRepos[0] || {}
+    },
   },
   actions: {
     fetchStars(
       cursor: Nullable<string> = null,
-      direction: keyof FetchDirections = FETCH_DIRECTIONS.DESC
+      direction: FetchDirection = FETCH_DIRECTIONS.DESC
     ) {
       const userStore = useUserStore()
 

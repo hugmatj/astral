@@ -1,9 +1,10 @@
+import { FETCH_DIRECTIONS } from '@/constants'
 import { fetchStarsQuery } from '@/queries'
-import { FetchDirections } from '@/types'
+import { FetchDirection } from '@/types'
 
 self.addEventListener('message', async ({ data }) => {
   const cursor: string = data.cursor || null
-  const direction: keyof FetchDirections = data.direction || 'DESC'
+  const direction: FetchDirection = data.direction || FETCH_DIRECTIONS.DESC
 
   const result = await (
     await fetch('https://api.github.com/graphql', {

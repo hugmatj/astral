@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, PropType } from 'vue'
+import { defineComponent, ref, PropType } from 'vue'
 import { useUserStore } from '@/store/useUserStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -147,13 +147,11 @@ export default defineComponent({
     }
 
     return {
-      filteredRepos: computed(() => starsStore.filteredRepos),
       isSidebarOpen,
       isReadmeOpen,
       onTagSelected,
       onLanguageSelected,
       onRepoSelected,
-      starsStore,
     }
   },
 })

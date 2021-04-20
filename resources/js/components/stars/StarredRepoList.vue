@@ -1,23 +1,38 @@
 <template>
-  <ul
-    class="col-span-1 row-start-2 row-end-3 overflow-y-auto border-r border-gray-300 divide-y divide-gray-300 sm:col-start-2"
+  <DynamicScroller
+    v-if="filteredRepos.length"
+    :items="filteredRepos"
+    :min-item-size="168"
+    key-field="cursor"
+    class="h-full col-span-1 row-start-2 row-end-3 border-r border-gray-300 sm:col-start-2"
   >
-    <!-- Stars List -->
-    <li v-for="repo in filteredRepos" :key="repo.node.id">
-      <slot :repo="repo" />
-    </li>
-  </ul>
+    <template #default="{ item: repo, active }">
+      <DynamicScrollerItem
+        :item="repo"
+        :active="active"
+        class="border-b border-gray-300"
+      >
+        <slot :repo="repo" />
+      </DynamicScrollerItem>
+    </template>
+  </DynamicScroller>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch, computed, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default defineComponent({
+  components: {
+    DynamicScroller,
+    DynamicScrollerItem,
+  },
   setup() {
     /** Stars Fetch Lifecycle
-     * 1. fetch using whatever the end cursor is, even if it's null
+     * 1. if hasNextPage is true, fetch using whatever the end cursor is, even if it's null
      * 2. Keep fetching until `hasNextPage` is false.
      * 3. fetch any new repos in ASC order using the first repo's cursor, fetch until `hasNextPage` is false
      **/
@@ -33,7 +48,7 @@ export default defineComponent({
     })
 
     watch([reposHaveSynced, pageInfoHasSynced], async newValues => {
-      if (newValues.every(Boolean)) {
+      if (newValues.every(Boolean) && starsStore.pageInfo.hasNextPage) {
         await nextTick()
         starsStore.fetchStars(starsStore.pageInfo.endCursor)
       }

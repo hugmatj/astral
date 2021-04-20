@@ -23,6 +23,7 @@
     "lodash": "^4.17.19",
     "pinia": "^2.0.0-alpha.10",
     "vue": "^3.0.7",
+    "vue-virtual-scroller": "^2.0.0-alpha.1",
     "vuedraggable": "^4.0.1"
   },
   "devDependencies": {

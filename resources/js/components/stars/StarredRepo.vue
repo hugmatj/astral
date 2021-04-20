@@ -1,12 +1,20 @@
 <template>
   <div
-    class="p-4 bg-white shadow-sm cursor-pointer"
+    class="relative p-4 bg-white shadow-sm cursor-pointer"
     :class="{ 'bg-gray-100 shadow-inner': isSelected }"
     draggable="true"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
     @click="$emit('selected', repo)"
   >
+    <div
+      aria-hidden
+      class="absolute top-0 left-0 w-1 transition-transform transform bg-brand-600 -bottom-px"
+      :class="{
+        'translate-x-0': isSelected,
+        '-translate-x-full': !isSelected,
+      }"
+    ></div>
     <p class="font-semibold text-brand-600">{{ repo.node.nameWithOwner }}</p>
     <p
       class="mt-2 text-sm text-gray-700 line-clamp-5"
