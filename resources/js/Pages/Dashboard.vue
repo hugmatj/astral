@@ -78,6 +78,7 @@ import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useSyncValueToStore } from '@/composables/useSyncValueToStore'
+import { useListSelectionState } from '@/composables/useListSelectionState'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
@@ -129,6 +130,10 @@ export default defineComponent({
     useSyncValueToStore(() => props.tags, tagsStore, 'tags')
     useSyncValueToStore(() => props.stars, starsStore, 'userStars')
 
+    const { updateSelectedItems } = useListSelectionState(() =>
+      starsStore.starredRepos.map(repo => repo.node)
+    )
+
     const isSidebarOpen = ref(false)
     const isReadmeOpen = ref(false)
 
@@ -144,7 +149,8 @@ export default defineComponent({
 
     const onRepoSelected = (repo: GitHubRepo) => {
       isReadmeOpen.value = true
-      starsStore.selectedRepos = [repo.node]
+
+      starsStore.selectedRepos = updateSelectedItems(repo.node).value
     }
 
     return {

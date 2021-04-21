@@ -32,34 +32,38 @@ export default defineComponent({
     watch(
       () => starsStore.selectedRepo,
       async selectedRepo => {
-        isReadmeLoading.value = true
-        if (readmeContainerEl.value && readmeEl.value) {
-          readmeContainerEl.value.scrollTo(0, 0)
-          contents.value = await starsStore.fetchReadme(selectedRepo)
+        if (Object.keys(selectedRepo).length) {
+          isReadmeLoading.value = true
+          if (readmeContainerEl.value && readmeEl.value) {
+            readmeContainerEl.value.scrollTo(0, 0)
+            contents.value = await starsStore.fetchReadme(selectedRepo)
 
-          await nextTick()
+            await nextTick()
 
-          Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
-            if (anchor.href.replace(location.href, '').startsWith('#')) {
-              anchor.addEventListener('click', e => {
-                e.preventDefault()
-                if (readmeContainerEl.value && readmeEl.value) {
-                  const anchorTop: number =
-                    readmeContainerEl.value.scrollTop +
-                    (e.currentTarget as HTMLElement).getBoundingClientRect()
-                      .top -
-                    readmeContainerEl.value.getBoundingClientRect().top -
-                    16
+            Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
+              if (anchor.href.replace(location.href, '').startsWith('#')) {
+                anchor.addEventListener('click', e => {
+                  e.preventDefault()
+                  if (readmeContainerEl.value && readmeEl.value) {
+                    const anchorTop: number =
+                      readmeContainerEl.value.scrollTop +
+                      (e.currentTarget as HTMLElement).getBoundingClientRect()
+                        .top -
+                      readmeContainerEl.value.getBoundingClientRect().top -
+                      16
 
-                  readmeContainerEl.value.scrollTo(0, anchorTop)
-                }
-              })
-            } else {
-              anchor.setAttribute('target', '_blank')
-            }
-          })
+                    readmeContainerEl.value.scrollTo(0, anchorTop)
+                  }
+                })
+              } else {
+                anchor.setAttribute('target', '_blank')
+              }
+            })
+          }
+          isReadmeLoading.value = false
+        } else {
+          contents.value = ''
         }
-        isReadmeLoading.value = false
       }
     )
 

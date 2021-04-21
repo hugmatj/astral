@@ -69,8 +69,10 @@ export default defineComponent({
       )
     })
 
-    const isSelected = computed(
-      () => props.repo.node.databaseId === starsStore.selectedRepo.databaseId
+    const isSelected = computed(() =>
+      starsStore.selectedRepos
+        .map(repo => repo.databaseId)
+        .includes(props.repo.node.databaseId)
     )
 
     let $dragImage: HTMLElement | undefined = undefined

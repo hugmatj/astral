@@ -4,7 +4,7 @@
     :items="filteredRepos"
     :min-item-size="168"
     key-field="cursor"
-    class="h-full col-span-1 row-start-2 row-end-3 bg-white border-r border-gray-300 dark:border-gray-600 sm:col-start-2 dark:bg-gray-800"
+    class="h-full col-span-1 row-start-2 row-end-3 bg-white border-r border-gray-300 dark:border-brand-200 sm:col-start-2 dark:bg-gray-800"
   >
     <template #default="{ item: repo, active }">
       <DynamicScrollerItem
