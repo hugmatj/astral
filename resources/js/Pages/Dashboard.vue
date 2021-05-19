@@ -6,7 +6,7 @@
       <!-- Nav -->
       <div class="flex items-center px-4 bg-brand-600 col-span-full">
         <button
-          class="inline-flex items-center justify-center w-6 h-6 text-white sm:hidden"
+          class="inline-flex items-center justify-center w-6 h-6 text-white  sm:hidden"
           @click="isSidebarOpen = !isSidebarOpen"
         >
           <MenuIcon />
@@ -14,28 +14,30 @@
       </div>
       <!-- Sidebar -->
       <div
-        class="absolute inset-0 z-20 flex col-start-1 row-start-2 row-end-3 transition-colors duration-300 ease-in-out bg-gray-900 sm:relative sm:pointer-events-auto"
+        class="absolute inset-0 z-20 flex col-start-1 row-start-2 row-end-3 transition-colors duration-300 ease-in-out bg-gray-900  sm:relative sm:pointer-events-auto backdrop-filter"
         :aria-hidden="!isSidebarOpen"
         :class="{
           'bg-opacity-0 pointer-events-none': !isSidebarOpen,
-          'bg-opacity-75': isSidebarOpen,
+          'bg-opacity-75 backdrop-blur-sm': isSidebarOpen,
         }"
       >
         <div
-          class="w-3/4 transition-transform duration-300 ease-in-out transform-gpu sm:translate-x-0 sm:w-full"
+          class="w-3/4 transition-transform duration-300 ease-in-out  transform-gpu sm:translate-x-0 sm:w-full"
           :class="{
             '-translate-x-full': !isSidebarOpen,
             'translate-x-0': isSidebarOpen,
           }"
         >
           <Sidebar
+            @all-stars-selected="onAllStarsSelected"
+            @untagged-selected="onUntaggedSelected"
             @tag-selected="onTagSelected"
             @language-selected="onLanguageSelected"
           />
         </div>
         <div v-show="isSidebarOpen" class="flex justify-center flex-grow pt-5">
           <button
-            class="inline-flex items-center justify-center w-10 h-10 text-4xl text-white"
+            class="inline-flex items-center justify-center w-10 h-10 text-4xl text-white "
             @click="isSidebarOpen = !isSidebarOpen"
           >
             <CloseIcon />
@@ -53,14 +55,14 @@
       </StarredRepoList>
       <!-- Selected Star Info -->
       <div
-        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
+        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto  dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
         :class="{
           'translate-x-full pointer-events-none': !isReadmeOpen,
           'translate-x-0': isReadmeOpen,
         }"
       >
         <button
-          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-5 ml-5 text-gray-700 bg-white rounded-full sm:hidden"
+          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-5 ml-5 text-gray-700 bg-white rounded-full  sm:hidden"
           @click="isReadmeOpen = false"
         >
           <ArrowCircleLeftIcon />
@@ -72,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType } from 'vue'
+import { defineComponent, ref, watch, PropType } from 'vue'
 import { useUserStore } from '@/store/useUserStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -130,12 +132,22 @@ export default defineComponent({
     useSyncValueToStore(() => props.tags, tagsStore, 'tags')
     useSyncValueToStore(() => props.stars, starsStore, 'userStars')
 
-    const { updateSelectedItems } = useListSelectionState(() =>
+    const { selectItem, selectedItems } = useListSelectionState(() =>
       starsStore.starredRepos.map(repo => repo.node)
     )
 
     const isSidebarOpen = ref(false)
     const isReadmeOpen = ref(false)
+
+    const onAllStarsSelected = () => {
+      isSidebarOpen.value = false
+      starsFilterStore.setFilterByAll()
+    }
+
+    const onUntaggedSelected = () => {
+      isSidebarOpen.value = false
+      starsFilterStore.setFilterByUntagged()
+    }
 
     const onTagSelected = (tag: Tag) => {
       isSidebarOpen.value = false
@@ -149,13 +161,18 @@ export default defineComponent({
 
     const onRepoSelected = (repo: GitHubRepo) => {
       isReadmeOpen.value = true
-
-      starsStore.selectedRepos = updateSelectedItems(repo.node).value
+      selectItem(repo.node)
     }
+
+    watch(selectedItems, newVal => {
+      starsStore.selectedRepos = newVal
+    })
 
     return {
       isSidebarOpen,
       isReadmeOpen,
+      onAllStarsSelected,
+      onUntaggedSelected,
       onTagSelected,
       onLanguageSelected,
       onRepoSelected,

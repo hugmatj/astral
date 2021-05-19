@@ -9,7 +9,7 @@
   >
     <div
       aria-hidden
-      class="absolute top-0 left-0 w-1 transition-transform transform bg-brand-600 -bottom-px"
+      class="absolute top-0 left-0 w-1 transition-transform transform  bg-brand-600 -bottom-px"
       :class="{
         'translate-x-0': isSelected,
         '-translate-x-full': !isSelected,
@@ -28,7 +28,17 @@
     >
       <li
         v-if="repo.node.primaryLanguage?.name"
-        class="text-brand-800 bg-brand-100 px-2 py-0.5 rounded-sm text-xs cursor-pointer font-semibold tracking-wide"
+        class="
+          text-brand-800
+          bg-brand-100
+          px-2
+          py-0.5
+          rounded-sm
+          text-xs
+          cursor-pointer
+          font-semibold
+          tracking-wide
+        "
         @click.stop="
           $emit('language-selected', repo.node.primaryLanguage?.name)
         "
@@ -38,7 +48,17 @@
       <li
         v-for="tag in tags"
         :key="tag.id"
-        class="text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded-sm text-xs cursor-pointer font-semibold tracking-wide"
+        class="
+          text-indigo-800
+          bg-indigo-100
+          px-2
+          py-0.5
+          rounded-sm
+          text-xs
+          cursor-pointer
+          font-semibold
+          tracking-wide
+        "
         @click.stop="$emit('tag-selected', tag)"
       >
         {{ tag.name }}
@@ -79,6 +99,20 @@ export default defineComponent({
 
     const onDragStart = (e: DragEvent) => {
       starsStore.isDraggingStar = true
+
+      if (starsStore.selectedRepos.length) {
+        if (isSelected.value) {
+          starsStore.draggingRepos = [...starsStore.selectedRepos]
+        } else {
+          starsStore.draggingRepos = [
+            props.repo.node,
+            ...starsStore.selectedRepos,
+          ]
+        }
+      } else {
+        starsStore.draggingRepos = [props.repo.node]
+      }
+
       $dragImage = document.createElement('div')
       $dragImage.classList.add(
         ...[
@@ -95,14 +129,19 @@ export default defineComponent({
           'z-10',
         ]
       )
-      $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner}</span>`
+      if (starsStore.draggingRepos.length > 1) {
+        $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner} + ${
+          starsStore.draggingRepos.length - 1
+        } more</span>`
+      } else {
+        $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner}</span>`
+      }
       $dragImage.style.top = '-999px'
       document.body.appendChild($dragImage)
 
       if (e.dataTransfer) {
         e.dataTransfer.effectAllowed = 'copyLink'
         e.dataTransfer.setDragImage($dragImage, 0, 0)
-        e.dataTransfer.setData('text/plain', JSON.stringify(props.repo.node))
       }
     }
 

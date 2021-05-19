@@ -1,4 +1,4 @@
-import { Store, StateTree } from 'pinia'
+import type { Store, StateTree, GettersTree } from 'pinia'
 
 export interface User {
   access_token: string
@@ -68,7 +68,7 @@ export interface RepoLanguage {
 
 export interface StarDragDataTransferData {
   tag: Tag
-  starId: number
+  repoIds: number[]
 }
 
 export interface PaginationResponse {
@@ -76,8 +76,6 @@ export interface PaginationResponse {
   endCursor: Nullable<string>
   hasNextPage: boolean
 }
-
-export type StoreInstance = Store<string, StateTree, unknown, unknown>
 
 export interface FetchDirections {
   ASC: 'ASC'

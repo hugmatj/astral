@@ -25,12 +25,13 @@ class StarTagsController extends Controller
      */
     public function store(Request $request)
     {
-        $repoId = $request->input('repoId');
+        $repoIds = $request->input('repoIds');
         $tagId = $request->input('tagId');
 
-        $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
-
-        $star->tags()->syncWithoutDetaching([$tagId]);
+        foreach($repoIds as $repoId) {
+            $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
+            $star->tags()->syncWithoutDetaching([$tagId]);
+        }
 
         return redirect()->route('dashboard.index');
     }

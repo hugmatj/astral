@@ -34,7 +34,7 @@ export default defineComponent({
     },
     isActive: Boolean,
   },
-  emits: ['star-dropped'],
+  emits: ['stars-dropped'],
   setup(props, { emit }) {
     const isHighlighted = ref(false)
 
@@ -50,13 +50,13 @@ export default defineComponent({
     const onDragLeave = () => (isHighlighted.value = false)
 
     const onDrop = (e: DragEvent) => {
-      if (starsStore.isDraggingStar && e.dataTransfer) {
-        const star: GitHubRepoNode = JSON.parse(
-          e.dataTransfer.getData('text/plain')
-        )
-
-        emit('star-dropped', { tag: props.tag, starId: star.databaseId })
+      if (starsStore.isDraggingStar && starsStore.draggingRepos.length) {
+        emit('stars-dropped', {
+          tag: props.tag,
+          repoIds: starsStore.draggingRepos.map(repo => repo.databaseId),
+        })
         starsStore.isDraggingStar = false
+        starsStore.draggingRepos = []
         isHighlighted.value = false
       }
 

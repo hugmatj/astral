@@ -1,9 +1,9 @@
 import { watch } from 'vue'
-import { StoreInstance } from '@/types'
+import type { Store } from 'pinia'
 
 export const useSyncValueToStore = <
-  TStore extends StoreInstance,
-  TKey extends keyof TStore
+  TStore extends Store,
+  TKey extends keyof TStore['$state']
 >(
   propGetter: () => TStore[TKey],
   store: TStore,

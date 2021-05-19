@@ -13,12 +13,23 @@
     >
       Loading...
     </div>
+    <div
+      v-show="noRepoSelected"
+      class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-gray-500 bg-white dark:bg-gray-900"
+    >
+      <img
+        src="/images/readme-not-selected.svg"
+        alt="No Readme Selected"
+        class="w-full max-w-sm"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, nextTick } from 'vue'
+import { defineComponent, ref, computed, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
+import { debouncedWatch } from '@vueuse/core'
 export default defineComponent({
   setup() {
     const starsStore = useStarsStore()
@@ -29,7 +40,9 @@ export default defineComponent({
     const readmeEl = ref<HTMLElement>()
     const readmeContainerEl = ref<HTMLElement>()
 
-    watch(
+    const noRepoSelected = computed(() => !starsStore.selectedRepos.length)
+
+    debouncedWatch(
       () => starsStore.selectedRepo,
       async selectedRepo => {
         if (Object.keys(selectedRepo).length) {
@@ -64,7 +77,8 @@ export default defineComponent({
         } else {
           contents.value = ''
         }
-      }
+      },
+      { debounce: 500 }
     )
 
     return {
@@ -72,6 +86,7 @@ export default defineComponent({
       isReadmeLoading,
       readmeEl,
       readmeContainerEl,
+      noRepoSelected,
     }
   },
 })

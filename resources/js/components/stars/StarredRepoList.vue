@@ -50,7 +50,7 @@ export default defineComponent({
     watch([reposHaveSynced, pageInfoHasSynced], async newValues => {
       if (newValues.every(Boolean) && starsStore.pageInfo.hasNextPage) {
         await nextTick()
-        starsStore.fetchStars(starsStore.pageInfo.endCursor)
+        // starsStore.fetchStars(starsStore.pageInfo.endCursor)
       }
     })
 

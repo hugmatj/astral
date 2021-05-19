@@ -7,7 +7,7 @@
             title="All Stars"
             :is-active="starsFilterStore.isFilteringByAll"
             :count="totalRepos"
-            @click="starsFilterStore.setFilterByAll"
+            @click="$emit('all-stars-selected')"
           >
             <template #icon>
               <InboxIcon />
@@ -17,7 +17,7 @@
             title="Untagged Stars"
             :is-active="starsFilterStore.isFilteringByUntagged"
             :count="totalUntaggedRepos"
-            @click="starsFilterStore.setFilterByUntagged"
+            @click="$emit('untagged-selected')"
           >
             <template #icon>
               <StarIcon />
@@ -47,7 +47,7 @@
               <SidebarTag
                 :tag="tag"
                 :is-active="tagIsSelected(tag)"
-                @star-dropped="onStarDropped"
+                @stars-dropped="onStarsDropped"
                 @click="$emit('tag-selected', tag)"
               >
               </SidebarTag>
@@ -92,7 +92,12 @@ export default defineComponent({
     InboxIcon,
     StarIcon,
   },
-  emits: ['tag-selected', 'language-selected'],
+  emits: [
+    'tag-selected',
+    'language-selected',
+    'all-stars-selected',
+    'untagged-selected',
+  ],
   setup() {
     const starsFilterStore = useStarsFilterStore()
     const tagsStore = useTagsStore()
@@ -106,8 +111,8 @@ export default defineComponent({
     const languageIsSelected = (language: string): boolean =>
       language === starsFilterStore.selectedLanguage
 
-    const onStarDropped = (data: StarDragDataTransferData) =>
-      starsStore.addTagToStar(data.tag.id, data.starId)
+    const onStarsDropped = (data: StarDragDataTransferData) =>
+      starsStore.addTagToStars(data.tag.id, data.repoIds)
 
     return {
       newTag,
@@ -115,14 +120,16 @@ export default defineComponent({
       tagIsSelected,
       languageIsSelected,
       addTag: tagsStore.addTag,
-      onStarDropped,
+      onStarsDropped,
       tags: computed({
         get: () => tagsStore.tags,
         set: val => {
           tagsStore.tags = val
         },
       }),
-      totalRepos: computed(() => starsStore.totalRepos),
+      totalRepos: computed(
+        () => starsStore.totalRepos || starsStore.starredRepos.length
+      ),
       totalUntaggedRepos: computed(() => starsStore.untaggedStars.length),
       languages: computed(() => starsStore.languages),
       reorderTags: tagsStore.reorderTags,

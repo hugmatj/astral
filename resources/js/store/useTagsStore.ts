@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
-import { Tag } from '@/types'
+import type { Tag } from '@/types'
 
 export const useTagsStore = defineStore({
   id: 'tags',

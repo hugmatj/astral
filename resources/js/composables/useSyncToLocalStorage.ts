@@ -1,6 +1,6 @@
 import { watch } from 'vue'
 import localForage from 'localforage'
-import { StoreInstance } from '@/types'
+import type { Store } from 'pinia'
 
 localForage.config({
   name: 'Astral',
@@ -8,7 +8,7 @@ localForage.config({
 })
 
 export const useSyncToLocalStorage = async <
-  TStore extends StoreInstance,
+  TStore extends Store,
   TKey extends keyof TStore
 >(
   store: TStore,

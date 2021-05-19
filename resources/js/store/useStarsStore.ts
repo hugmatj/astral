@@ -5,7 +5,7 @@ import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import StarsWorker from 'worker-loader!@/workers/githubStars.worker'
 import { FETCH_DIRECTIONS } from '@/constants'
 import keyBy from 'lodash/keyBy'
-import {
+import type {
   UserStar,
   GitHubRepo,
   GitHubRepoNode,
@@ -28,6 +28,7 @@ export const useStarsStore = defineStore({
       } as PaginationResponse,
       totalRepos: 0,
       selectedRepos: [] as GitHubRepoNode[],
+      draggingRepos: [] as GitHubRepoNode[],
       worker: new StarsWorker(),
       hasFetchedFromStorage: false,
     }
@@ -121,8 +122,8 @@ export const useStarsStore = defineStore({
         direction,
       })
     },
-    addTagToStar(tagId: number, repoId: number) {
-      Inertia.post('/stars/tag', { tagId, repoId })
+    addTagToStars(tagId: number, repoIds: number[]) {
+      Inertia.post('/stars/tag', { tagId, repoIds })
     },
     async fetchReadme(repo: GitHubRepoNode): Promise<string> {
       const userStore = useUserStore()
