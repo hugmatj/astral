@@ -21,7 +21,7 @@
             class="h-6 sm:h-8"
           />
         </div>
-        <div class="flex justify-end w-1/3 pr-6 sm:w-2/3">
+        <div class="flex justify-end w-1/3 sm:pr-6 sm:w-2/3">
           <UserMenu />
         </div>
       </div>
@@ -68,14 +68,14 @@
       </StarredRepoList>
       <!-- Selected Star Info -->
       <div
-        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
+        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out pointer-events-auto bg-gray-50 dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
         :class="{
           'translate-x-full pointer-events-none': !isReadmeOpen,
           'translate-x-0': isReadmeOpen,
         }"
       >
         <button
-          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-5 ml-5 text-gray-700 bg-white rounded-full sm:hidden"
+          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-5 ml-5 text-gray-700 rounded-full bg-gray-50 sm:hidden"
           @click="isReadmeOpen = false"
         >
           <ArrowCircleLeftIcon />

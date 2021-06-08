@@ -1,9 +1,9 @@
 <template>
-  <Menu v-if="user" v-slot="{ open }" as="div" class="relative">
+  <Menu v-if="user" v-slot="{ open }" as="div" class="relative -mr-4 sm:mr-0">
     <div>
-      <MenuButton class="flex items-center px-2 py-1 text-white transition-colors rounded-md hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-brand-600 focus:ring-brand-800" :class="{ 'bg-brand-800': open }">
+      <MenuButton class="flex items-center px-2 py-1 text-white transition-colors sm:rounded-md sm:hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-brand-600 focus:ring-brand-800" :class="{ 'bg-brand-800': open }">
         <img :src="user.avatar" :alt="user.username" class="w-10 h-10 rounded-full image-rendering-crisp" />
-        <span class="ml-2 text-sm font-semibold">{{ user.username }}</span>
+        <span class="hidden ml-2 text-sm font-semibold sm:inline-block">{{ user.username }}</span>
         <SelectorIcon class="flex-shrink-0 w-5 h-5 ml-1" aria-hidden="true" />
       </MenuButton>
     </div>
@@ -15,7 +15,7 @@
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
-      <MenuItems class="absolute right-0 z-20 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      <MenuItems class="absolute z-20 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg right-2 sm:right-0 ring-1 ring-black ring-opacity-5 focus:outline-none">
         <div class="py-1">
           <MenuItem v-slot="{ active }">
             <a href="#" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">Settings</a>
@@ -30,7 +30,7 @@
             <a href="https://github.com/astralapp/astral/discussions" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">Discussions</a>
           </MenuItem>
           <MenuItem v-slot="{ active }">
-            <a href="https://github.com/astralapp/astral/issues" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">File An Issue</a>
+            <a href="https://github.com/astralapp/astral/issues" target="_blank" rel="noopener noreferrer" :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']">File an Issue</a>
           </MenuItem>
         </div>
       </MenuItems>

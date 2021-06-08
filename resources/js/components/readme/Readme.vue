@@ -9,13 +9,13 @@
     </div>
     <div
       v-show="isReadmeLoading"
-      class="absolute inset-0 z-10 flex items-center justify-center text-center text-gray-500 bg-white dark:bg-gray-900"
+      class="absolute inset-0 z-10 flex items-center justify-center text-center text-gray-500 bg-gray-50 dark:bg-gray-900"
     >
       Loading...
     </div>
     <div
       v-show="noRepoSelected"
-      class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-gray-500 bg-white dark:bg-gray-900"
+      class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-gray-500 bg-gray-50 dark:bg-gray-900"
     >
       <img
         src="/images/readme-not-selected.svg"
