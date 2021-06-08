@@ -11,6 +11,7 @@
         class="relative flex-shrink-0 w-5 h-5 transform"
         :class="{ 'rotate-90': !isCollapsed }"
         style="top: -1px"
+        aria-hidden="true"
       />
       <h3 class="text-xs font-bold tracking-wider uppercase select-none">
         {{ title }}

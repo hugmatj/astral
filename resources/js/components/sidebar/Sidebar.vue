@@ -33,13 +33,13 @@
             type="button"
             @click="showNewTagForm"
           >
-            <PlusCircleIcon class="flex-shrink-0 w-5 h-5" />
+            <PlusCircleIcon class="flex-shrink-0 w-5 h-5" aria-hidden="true" />
             <span class="ml-2">Add a tag...</span>
           </button>
           <form
             class="absolute top-0 left-0 w-full transition-opacity duration-150 opacity-0 pointer-events-none"
             :class="{ 'opacity-100 pointer-events-auto': isNewTagFormShowing }"
-            @submit.prevent="addTag(newTag)"
+            @submit.prevent="doAddTag(newTag)"
           >
             <input
               ref="newTagForm"
@@ -130,6 +130,11 @@ export default defineComponent({
       newTagForm.value?.focus()
     }
 
+    const doAddTag = () => {
+      tagsStore.addTag(newTag.value)
+      newTag.value = ''
+    }
+
     const tagIsSelected = (tag: Tag): boolean =>
       tag.id === starsFilterStore.selectedTag?.id
 
@@ -147,7 +152,7 @@ export default defineComponent({
       starsFilterStore,
       tagIsSelected,
       languageIsSelected,
-      addTag: tagsStore.addTag,
+      doAddTag,
       onStarsDropped,
       tags: computed({
         get: () => tagsStore.tags,

@@ -63,7 +63,7 @@ export default defineComponent({
         !!this.$slots.icon &&
           h(
             'div',
-            { class: `flex-shrink-0 w-5 h-5 mr-2 ${this.iconClasses}` },
+            { class: `flex-shrink-0 w-5 h-5 mr-2 ${this.iconClasses}`, ariaHidden: true },
             this.$slots.icon()
           ),
         h('span', this.title),
