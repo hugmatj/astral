@@ -1,5 +1,3 @@
-import type { Store, StateTree, GettersTree } from 'pinia'
-
 export interface User {
   access_token: string
   avatar: string
@@ -83,3 +81,13 @@ export interface FetchDirections {
 }
 
 export type FetchDirection = keyof FetchDirections
+
+export interface Abilities {
+  create_tag: boolean,
+}
+
+export type AbilityContext = keyof Abilities
+
+export interface Limits {
+  max_tags: number
+}

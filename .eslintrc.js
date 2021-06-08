@@ -12,8 +12,8 @@ module.exports = {
     // add more generic rulesets here, such as:
     'plugin:vue/vue3-recommended',
     'eslint:recommended',
-    '@vue/typescript/recommended',
     'prettier',
+    '@vue/typescript/recommended',
   ],
   rules: {
     // override/add rules settings here, such as:

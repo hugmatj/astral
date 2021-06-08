@@ -123,6 +123,9 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    // Other Stuff
+    'check_for_sponsorship' => false,
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -227,6 +230,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'GitHub' => GrahamCampbell\GitHub\Facades\GitHub::class,
 
     ],
 

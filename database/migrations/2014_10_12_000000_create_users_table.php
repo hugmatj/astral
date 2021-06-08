@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('access_token')->nullable();
             $table->string('scope')->nullable();
             $table->string('avatar')->nullable();
+            $table->boolean('is_sponsor')->default(false);
             $table->json('settings');
             $table->rememberToken();
             $table->timestamps();

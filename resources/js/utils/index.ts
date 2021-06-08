@@ -1,3 +1,5 @@
+import type { AbilityContext } from '@/types'
+
 // Taken from: https://github.com/vueuse/vueuse/blob/main/packages/core/onStartTyping/index.ts
 export const isFocusedElementEditable = (): boolean => {
   const { activeElement, body } = document
@@ -17,3 +19,7 @@ export const isFocusedElementEditable = (): boolean => {
   // Check if any other focused element id editable.
   return activeElement.hasAttribute('contenteditable')
 }
+
+export const ABILITY_CONTEXTS: Record<Uppercase<AbilityContext>, AbilityContext> = {
+  CREATE_TAG: 'create_tag'
+} as const

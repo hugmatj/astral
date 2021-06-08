@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Lib\Abilities;
 use Illuminate\Http\Request;
 
 class TagsController extends Controller
@@ -25,6 +26,10 @@ class TagsController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->cannot('tags.create')) {
+            return redirect()->route('dashboard.index')->with('sponsorship_required', Abilities::CREATE_TAG);
+        }
+
         $request->validate([
             'name' => 'bail|required|unique:tags,name,NULL,id,user_id,'.auth()->id(),
         ]);

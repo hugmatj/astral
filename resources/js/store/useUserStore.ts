@@ -7,5 +7,5 @@ export const useUserStore = defineStore({
     return {
       user: null as Nullable<User>,
     }
-  },
+  }
 })

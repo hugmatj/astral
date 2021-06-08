@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -26,10 +25,11 @@ class User extends Authenticatable
 
     protected $casts = [
         'settings' => 'array',
+        'is_sponsor' => 'boolean'
     ];
 
     protected $attributes = [
-        'settings' => '{"github_sponsor": false, "show_language_tags": true, "autosave_notes": true}',
+        'settings' => '{"show_language_tags": true, "autosave_notes": true}',
     ];
 
     public function readSetting(string $name, $default = null)
@@ -65,9 +65,12 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function getIsGitHubSponsorAttribute(): bool
-    {
-        return (bool)$this->readSetting('github_sponsor', false);
+    public function isSponsor() {
+        return (bool)$this->is_sponsor;
+    }
+
+    public function isNotSponsor() {
+        return !(bool)$this->is_sponsor;
     }
 
     public function tags() {

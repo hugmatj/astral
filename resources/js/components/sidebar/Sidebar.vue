@@ -26,15 +26,32 @@
         </ul>
       </SidebarGroup>
       <SidebarGroup title="Tags" collapsible class="relative">
-        <form class="mt-2" @submit.prevent="addTag(newTag)">
-          <input
-            v-model="newTag"
-            type="text"
-            placeholder="Add a tag..."
-            class="w-full border-0 rounded-lg focus:ring-2 focus:ring-gray-500"
-          />
-        </form>
-        <ul class="mt-4 space-y-2">
+        <div class="relative flex items-center h-10 mt-2">
+          <button
+            class="inline-flex items-center w-full text-sm font-semibold text-gray-700 transition-colors focus:outline-none hover:text-gray-500"
+            :class="{ 'pointer-events-none': isNewTagFormShowing }"
+            type="button"
+            @click="showNewTagForm"
+          >
+            <PlusCircleIcon class="flex-shrink-0 w-5 h-5" />
+            <span class="ml-2">Add a tag...</span>
+          </button>
+          <form
+            class="absolute top-0 left-0 w-full transition-opacity duration-150 opacity-0 pointer-events-none"
+            :class="{ 'opacity-100 pointer-events-auto': isNewTagFormShowing }"
+            @submit.prevent="addTag(newTag)"
+          >
+            <input
+              ref="newTagForm"
+              v-model="newTag"
+              type="text"
+              placeholder="Enter a tag name..."
+              class="w-full border-0 rounded-sm focus:ring-2 focus:ring-transparent sm:text-sm"
+              @blur="isNewTagFormShowing = false"
+            />
+          </form>
+        </div>
+        <ul class="mt-2 space-y-2">
           <draggable
             v-model="tags"
             tag="transition-group"
@@ -80,7 +97,7 @@ import draggable from 'vuedraggable'
 import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import SidebarTag from '@/components/sidebar/SidebarTag.vue'
-import { InboxIcon, StarIcon } from '@heroicons/vue/outline'
+import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
 import { Tag, StarDragDataTransferData } from '@/types'
 
 export default defineComponent({
@@ -91,6 +108,7 @@ export default defineComponent({
     SidebarTag,
     InboxIcon,
     StarIcon,
+    PlusCircleIcon,
   },
   emits: [
     'tag-selected',
@@ -103,7 +121,14 @@ export default defineComponent({
     const tagsStore = useTagsStore()
     const starsStore = useStarsStore()
 
+    const newTagForm = ref<HTMLElement>()
     const newTag = ref('')
+    const isNewTagFormShowing = ref(false)
+
+    const showNewTagForm = () => {
+      isNewTagFormShowing.value = true
+      newTagForm.value?.focus()
+    }
 
     const tagIsSelected = (tag: Tag): boolean =>
       tag.id === starsFilterStore.selectedTag?.id
@@ -115,6 +140,9 @@ export default defineComponent({
       starsStore.addTagToStars(data.tag.id, data.repoIds)
 
     return {
+      newTagForm,
+      showNewTagForm,
+      isNewTagFormShowing,
       newTag,
       starsFilterStore,
       tagIsSelected,

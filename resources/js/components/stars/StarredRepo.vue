@@ -9,7 +9,7 @@
   >
     <div
       aria-hidden
-      class="absolute top-0 left-0 w-1 transition-transform transform  bg-brand-600 -bottom-px"
+      class="absolute top-0 left-0 w-1 transition-transform transform bg-brand-600 -bottom-px"
       :class="{
         'translate-x-0': isSelected,
         '-translate-x-full': !isSelected,

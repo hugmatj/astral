@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn development",
-    "development": "mix",
+    "development": "TAILWIND=build mix",
     "watch": "mix watch",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
@@ -13,6 +13,7 @@
     "lint-fix": "eslint \"resources/js/**/*.{js,vue}\" --fix"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.2.0",
     "@heroicons/vue": "^1.0.0",
     "@inertiajs/inertia": "^0.8.5",
     "@inertiajs/inertia-vue3": "^0.3.5",
@@ -47,6 +48,7 @@
     "postcss-import": "^14.0.0",
     "postcss-loader": "^5.2.0",
     "postcss-nested": "^5.0.5",
+    "prettier": "^2.3.0",
     "tailwindcss": "^2.1.2",
     "ts-loader": "^8.1.0",
     "tsconfig-paths-webpack-plugin": "^3.5.1",
