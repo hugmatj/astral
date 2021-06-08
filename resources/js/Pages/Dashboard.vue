@@ -15,12 +15,15 @@
           </button>
         </div>
         <div class="flex items-center flex-shrink-0 w-1/3">
-        <img
-          src="/images/logo.svg"
-          alt="No Readme Selected"
-          class="h-6 sm:h-8"
-        />
-      </div>
+          <img
+            src="/images/logo.svg"
+            alt="No Readme Selected"
+            class="h-6 sm:h-8"
+          />
+        </div>
+        <div class="flex justify-end w-1/3 pr-6 sm:w-2/3">
+          <UserMenu />
+        </div>
       </div>
       <!-- Sidebar -->
       <div
@@ -99,6 +102,7 @@ import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import Readme from '@/components/readme/Readme.vue'
 import SponsorshipDialog from '@/components/dialogs/SponsorshipDialog.vue'
+import UserMenu from '@/components/UserMenu.vue'
 import { GitHubRepo, Tag, UserStar, User, Abilities, AbilityContext, Limits, } from '@/types'
 import {
   ArrowCircleLeftIcon,
@@ -113,6 +117,7 @@ export default defineComponent({
     StarredRepo,
     Readme,
     SponsorshipDialog,
+    UserMenu,
     ArrowCircleLeftIcon,
     CloseIcon,
     MenuIcon,

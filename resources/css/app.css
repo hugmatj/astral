@@ -2,7 +2,13 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-[disabled] {
+[disabled=true] {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+@layer utilities {
+  .image-rendering-crisp {
+    image-rendering: -webkit-optimize-contrast;
+  }
 }
