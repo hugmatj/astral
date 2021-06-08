@@ -25,6 +25,6 @@ class TagPolicy
             return true;
         }
 
-        return $user->tags()->count() <= config('limits.max_tags');
+        return $user->tags()->count() < config('limits.max_tags');
     }
 }
