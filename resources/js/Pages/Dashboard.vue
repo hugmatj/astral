@@ -238,7 +238,7 @@ export default defineComponent({
 @media screen and (min-width: 640px) {
   .dashboard-grid {
     grid-template-columns: 280px 400px 1fr;
-    grid-template-rows: 72px calc(100vh - 72px);
+    grid-template-rows: 64px calc(100vh - 64px);
   }
 }
 </style>

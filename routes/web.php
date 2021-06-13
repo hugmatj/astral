@@ -18,7 +18,7 @@ use App\Http\Controllers\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('auth', [AuthController::class, 'index'])->name('auth');
 Route::get('auth/github', [AuthController::class, 'redirectToProvider'])->name('github.auth');
 Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallback'])->name('github.callback');
 
@@ -33,6 +33,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
 
-    Route::get('/check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
+    Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
+
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
 

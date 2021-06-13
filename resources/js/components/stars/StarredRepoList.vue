@@ -21,7 +21,6 @@
 <script lang="ts">
 import { defineComponent, ref, watch, computed, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
-import { useUserStore } from '@/store/useUserStore'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
@@ -39,7 +38,6 @@ export default defineComponent({
      * 3. fetch any new repos in ASC order using the first repo's cursor, fetch until `hasNextPage` is false
      **/
     const starsStore = useStarsStore()
-    const userStore = useUserStore()
     const authorizationsStore = useAuthorizationsStore()
     const reposHaveSynced = ref(false)
     const pageInfoHasSynced = ref(false)
@@ -68,7 +66,7 @@ export default defineComponent({
         starredRepositories.edges
       )
       if (starsStore.pageInfo.hasNextPage) {
-        starsStore.fetchStars(starsStore.pageInfo.endCursor)
+        // starsStore.fetchStars(starsStore.pageInfo.endCursor)
       } else {
         authorizationsStore.checkForSponsorship()
       }
