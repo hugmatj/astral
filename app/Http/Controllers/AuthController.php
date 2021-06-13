@@ -8,9 +8,9 @@ use Socialite;
 
 class AuthController extends Controller
 {
-    public function __construct()
+    public function index()
     {
-        $this->middleware('auth', ['except' => ['redirectToProvider', 'handleProviderCallback']]);
+        return view('welcome');
     }
 
     public function redirectToProvider(Request $request)
@@ -43,5 +43,12 @@ class AuthController extends Controller
         auth()->login($user, true);
 
         return redirect()->route('dashboard.index');
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+
+        return redirect(route('auth'));
     }
 }
