@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent, h, computed } from 'vue'
-
 export default defineComponent({
   props: {
     tag: {
@@ -23,6 +22,10 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
+    hasContextMenu: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup(props) {
     const labelClasses = computed(() => {
@@ -34,11 +37,12 @@ export default defineComponent({
     })
 
     const badgeClasses = computed(() => {
-      return props.isHighlighted
+      return (props.isHighlighted
         ? 'text-brand-600 bg-white'
         : props.isActive
         ? 'text-white bg-brand-600'
-        : 'text-white bg-gray-700'
+        : 'text-white bg-gray-700')
+        + (props.hasContextMenu ? ' group-hover:opacity-0 group-focus-within:opacity-0' : '')
     })
 
     const iconClasses = computed(() => {
@@ -57,7 +61,7 @@ export default defineComponent({
     return h(
       this.tag,
       {
-        class: `flex items-center p-1 font-semibold cursor-pointer text-sm ${this.labelClasses}`,
+        class: `group flex items-center p-1 font-semibold cursor-pointer text-sm ${this.labelClasses}`,
       },
       [
         !!this.$slots.icon &&
@@ -67,14 +71,17 @@ export default defineComponent({
             this.$slots.icon()
           ),
         h('span', this.title),
-        !!this.count &&
-          h(
-            'div',
-            {
-              class: `text-white rounded-full px-2 py-0.5 text-xs inline-flex ml-auto flex-shrink-0 ${this.badgeClasses}`,
-            },
-            this.count
-          ),
+        h('div', { class: 'relative ml-auto' }, [
+          !!this.count &&
+            h(
+              'div',
+              {
+                class: `text-white rounded-full px-2 h-5 text-xs inline-flex items-center flex-shrink-0 ${this.badgeClasses}`,
+              },
+              this.count
+            ),
+            !!this.hasContextMenu && this.$slots.contextMenu && this.$slots.contextMenu()
+        ])
       ]
     )
   },

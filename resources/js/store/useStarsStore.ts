@@ -123,7 +123,7 @@ export const useStarsStore = defineStore({
       })
     },
     addTagToStars(tagId: number, repoIds: number[]) {
-      Inertia.post('/stars/tag', { tagId, repoIds })
+      Inertia.post('/stars/tag', { tagId, repoIds } as any)
     },
     async fetchReadme(repo: GitHubRepoNode): Promise<string> {
       const userStore = useUserStore()

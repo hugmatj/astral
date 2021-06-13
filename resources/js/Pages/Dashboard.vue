@@ -3,6 +3,7 @@
     class="absolute top-0 left-0 w-screen h-screen overflow-hidden bg-gray-50"
   >
     <SponsorshipDialog />
+    <RenameTagDialog />
     <div class="grid h-screen dashboard-grid">
       <!-- Nav -->
       <div class="flex items-center px-4 bg-brand-600 col-span-full">
@@ -104,6 +105,7 @@ import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import Readme from '@/components/readme/Readme.vue'
 import SponsorshipDialog from '@/components/dialogs/SponsorshipDialog.vue'
+import RenameTagDialog from '@/components/dialogs/RenameTagDialog.vue'
 import UserMenu from '@/components/UserMenu.vue'
 import { GitHubRepo, Tag, UserStar, User, Abilities, AbilityContext, Limits, } from '@/types'
 import {
@@ -119,6 +121,7 @@ export default defineComponent({
     StarredRepo,
     Readme,
     SponsorshipDialog,
+    RenameTagDialog,
     UserMenu,
     ArrowCircleLeftIcon,
     CloseIcon,

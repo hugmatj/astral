@@ -40,17 +40,6 @@ class TagsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Tag $tag)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -59,7 +48,15 @@ class TagsController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        //
+        $this->validate($request, [
+            'name' => 'bail|required|unique:tags,name,'.$tag->id.',id,user_id,'.auth()->id(),
+        ]);
+
+        $tag = auth()->user()->tags()->findOrFail($tag->id);
+        $tag->name = $request->input('name');
+        $tag->save();
+
+        return redirect()->route('dashboard.index');
     }
 
     /**

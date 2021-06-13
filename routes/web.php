@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
     Route::delete('tags/{tag}', [TagsController::class, 'destroy'])->name('tags.destroy');
     Route::put('tags/reorder', TagsSortOrderController::class)->name('tags.reorder');
+    Route::put('tags/{tag}', [TagsController::class, 'update'])->name('tags.update');
 
     Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
 
