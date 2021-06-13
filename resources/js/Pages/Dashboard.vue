@@ -58,6 +58,7 @@
         </div>
       </div>
       <!-- Starred Repo List -->
+      <div class="border-r border-gray-300">
       <StarredRepoList v-slot="{ repo }">
         <StarredRepo
           :repo="repo"
@@ -66,6 +67,7 @@
           @language-selected="onLanguageSelected"
         />
       </StarredRepoList>
+      </div>
       <!-- Selected Star Info -->
       <div
         class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out pointer-events-auto bg-gray-50 dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"

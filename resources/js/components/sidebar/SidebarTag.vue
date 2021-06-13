@@ -20,7 +20,7 @@ import { defineComponent, ref, PropType } from 'vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import { TagIcon } from '@heroicons/vue/outline'
 import { useStarsStore } from '@/store/useStarsStore'
-import { GitHubRepoNode, Tag } from '@/types'
+import { Tag } from '@/types'
 
 export default defineComponent({
   components: {
