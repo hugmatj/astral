@@ -65,11 +65,11 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function isSponsor() {
+    public function isSponsor(): bool {
         return (bool)$this->is_sponsor;
     }
 
-    public function isNotSponsor() {
+    public function isNotSponsor(): bool {
         return !(bool)$this->is_sponsor;
     }
 

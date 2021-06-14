@@ -54,6 +54,7 @@
                       active ? 'bg-gray-100 text-red-900' : 'text-red-700',
                       'group flex items-center px-4 py-2 text-xs w-full',
                     ]"
+                    @click.stop="deleteTag"
                   >
                     <TrashIcon
                       class="w-4 h-4 mr-2 text-red-400 group-hover:text-red-500"
@@ -78,6 +79,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { TagIcon } from '@heroicons/vue/outline'
 import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
 import { useStarsStore } from '@/store/useStarsStore'
+import { useTagsStore } from '@/store/useTagsStore'
 import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
 import { Tag } from '@/types'
 
@@ -105,6 +107,7 @@ export default defineComponent({
     const isHighlighted = ref(false)
 
     const starsStore = useStarsStore()
+    const tagsStore = useTagsStore()
     const { showDialog } = useRenameTagDialog()
 
     const onDragOver = (e: DragEvent) => {
@@ -130,12 +133,19 @@ export default defineComponent({
       e.preventDefault()
     }
 
+    const deleteTag = () => {
+      if (confirm(`Are you sure you want to delete the "${props.tag.name}" tag?`)) {
+        tagsStore.deleteTag(props.tag.id)
+      }
+    }
+
     return {
       onDragOver,
       onDragLeave,
       onDrop,
       isHighlighted,
       showDialog,
+      deleteTag,
     }
   },
 })

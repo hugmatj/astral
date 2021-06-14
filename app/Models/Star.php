@@ -21,4 +21,9 @@ class Star extends Model
     {
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
+
+    public function isOrphan(): bool
+    {
+        return !(bool)$this->notes && !$this->tags()->count();
+    }
 }
