@@ -46,7 +46,7 @@ import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } f
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { UserGroupIcon } from '@heroicons/vue/outline'
-import { ABILITY_CONTEXTS } from '@/utils'
+import { ABILITY_CONTEXTS } from '@/constants'
 import { AbilityContext } from '@/types'
 
 export default defineComponent({

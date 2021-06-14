@@ -20,6 +20,3 @@ export const isFocusedElementEditable = (): boolean => {
   return activeElement.hasAttribute('contenteditable')
 }
 
-export const ABILITY_CONTEXTS: Record<Uppercase<AbilityContext>, AbilityContext> = {
-  CREATE_TAG: 'create_tag'
-} as const

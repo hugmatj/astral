@@ -21,11 +21,15 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FETCH_DIRECTIONS": () => (/* binding */ FETCH_DIRECTIONS)
+/* harmony export */   "FETCH_DIRECTIONS": () => (/* binding */ FETCH_DIRECTIONS),
+/* harmony export */   "ABILITY_CONTEXTS": () => (/* binding */ ABILITY_CONTEXTS)
 /* harmony export */ });
 var FETCH_DIRECTIONS = {
   DESC: 'DESC',
   ASC: 'ASC'
+};
+var ABILITY_CONTEXTS = {
+  CREATE_TAG: 'create_tag'
 };
 
 /***/ }),
