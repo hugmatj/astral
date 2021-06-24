@@ -62,6 +62,8 @@ export default defineComponent({
       this.tag,
       {
         class: `group flex items-center p-1 font-semibold cursor-pointer text-sm ${this.labelClasses}`,
+        role: 'option',
+        ariaSelected: this.isActive,
       },
       [
         !!this.$slots.icon &&
@@ -70,13 +72,15 @@ export default defineComponent({
             { class: `flex-shrink-0 w-5 h-5 mr-2 ${this.iconClasses}`, ariaHidden: true },
             this.$slots.icon()
           ),
-        h('span', this.title),
+        h('span', { role: 'region', ariaLive: 'polite'}, this.title),
         h('div', { class: 'relative ml-auto' }, [
           !!this.count &&
             h(
               'div',
               {
                 class: `text-white rounded-full px-2 h-5 text-xs inline-flex items-center flex-shrink-0 ${this.badgeClasses}`,
+                role: 'region',
+                ariaLive: 'polite',
               },
               this.count
             ),

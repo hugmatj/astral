@@ -5,6 +5,9 @@
     :min-item-size="168"
     key-field="cursor"
     class="h-full col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
+    role="listbox"
+    aria-label="Stars List"
+    aria-multiselectable="true"
   >
     <template #default="{ item: repo, active }">
       <DynamicScrollerItem

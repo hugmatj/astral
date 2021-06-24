@@ -3,6 +3,8 @@
     class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800"
     :class="{ 'bg-gray-100 dark:bg-gray-900 shadow-inner': isSelected }"
     draggable="true"
+    role="option"
+    :aria-selected="isSelected"
     @dragstart="onDragStart"
     @dragend="onDragEnd"
     @click="$emit('selected', repo)"

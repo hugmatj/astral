@@ -321,29 +321,29 @@ export const useListSelectionState = <T>(
     }
   }
 
-  onKeyStroke('ArrowDown', e => {
-    if (!isFocusedElementEditable()) {
-      if (!shift.value) {
-        selectNextItem()
-      } else {
-        setSelectionStateOfNextItem()
-      }
+  // onKeyStroke('ArrowDown', e => {
+  //   if (!isFocusedElementEditable()) {
+  //     if (!shift.value) {
+  //       selectNextItem()
+  //     } else {
+  //       setSelectionStateOfNextItem()
+  //     }
 
-      e.preventDefault()
-    }
-  })
+  //     e.preventDefault()
+  //   }
+  // })
 
-  onKeyStroke('ArrowUp', e => {
-    if (!isFocusedElementEditable()) {
-      if (!shift.value) {
-        selectPrevItem()
-      } else {
-        setSelectionStateOfPrevItem()
-      }
+  // onKeyStroke('ArrowUp', e => {
+  //   if (!isFocusedElementEditable()) {
+  //     if (!shift.value) {
+  //       selectPrevItem()
+  //     } else {
+  //       setSelectionStateOfPrevItem()
+  //     }
 
-      e.preventDefault()
-    }
-  })
+  //     e.preventDefault()
+  //   }
+  // })
 
   return {
     selectItem,

@@ -2,7 +2,7 @@
   <div class="h-full p-4 overflow-y-auto bg-gray-900">
     <div class="mt-6 space-y-6">
       <SidebarGroup title="Stars">
-        <ul class="mt-2 space-y-2">
+        <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars" tabindex="0">
           <SidebarItem
             title="All Stars"
             :is-active="starsFilterStore.isFilteringByAll"
@@ -28,7 +28,7 @@
       <SidebarGroup title="Tags" collapsible class="relative">
         <div class="relative flex items-center h-10 mt-2">
           <button
-            class="inline-flex items-center w-full text-sm font-semibold text-gray-700 transition-colors focus:outline-none hover:text-gray-500"
+            class="inline-flex items-center w-full text-sm font-semibold text-gray-700 transition-colors focus:outline-none focus:text-gray-500 hover:text-gray-500"
             :class="{ 'pointer-events-none': isNewTagFormShowing }"
             type="button"
             @click="showNewTagForm"
@@ -51,7 +51,7 @@
             />
           </form>
         </div>
-        <ul class="mt-2 space-y-2">
+        <ul class="mt-2 space-y-2" role="listbox" aria-label="Tags" tabindex="0">
           <draggable
             v-model="tags"
             tag="transition-group"
@@ -73,7 +73,7 @@
         </ul>
       </SidebarGroup>
       <SidebarGroup title="Languages" collapsible>
-        <ul class="mt-2 space-y-2">
+        <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages" tabindex="0">
           <SidebarItem
             v-for="language in languages"
             :key="language.name"
