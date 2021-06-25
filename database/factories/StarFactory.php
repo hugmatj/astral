@@ -22,7 +22,7 @@ class StarFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'repo_id' => $this->faker->randomNumber(5),
         ];
     }
 }

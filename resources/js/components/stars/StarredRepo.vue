@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800"
+    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800 group"
     :class="{ 'bg-gray-100 dark:bg-gray-900 shadow-inner': isSelected }"
     draggable="true"
     role="option"
@@ -24,8 +24,9 @@
     >
       {{ repo.node.description }}
     </p>
+    <TagsEditor v-if="isEditingTags" :tags="tags" class="mt-4" @change="isEditingTags = false" />
     <ul
-      v-if="tags.length || repo.node.primaryLanguage?.name"
+      v-if="(tags.length || repo.node.primaryLanguage?.name) && !isEditingTags"
       class="inline-flex flex-wrap mt-4 space-x-2"
     >
       <li
@@ -65,16 +66,39 @@
       >
         {{ tag.name }}
       </li>
+      <li
+        class="
+          transition-opacity
+          text-gray-600
+          bg-gray-200
+          px-2
+          py-0.5
+          rounded-sm
+          text-xs
+          font-semibold
+          cursor-pointer
+          tracking-wide
+          opacity-0
+          group-hover:opacity-100
+        "
+        @click.stop="isEditingTags = true"
+      >
+      Edit Tags
+      </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from 'vue'
+import { defineComponent, computed, PropType, ref } from 'vue'
+import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
 import { useStarsStore } from '@/store/useStarsStore'
 import { GitHubRepo } from '@/types'
 
 export default defineComponent({
+  components: {
+    TagsEditor,
+  },
   props: {
     repo: {
       type: Object as PropType<GitHubRepo>,
@@ -90,6 +114,8 @@ export default defineComponent({
         starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
       )
     })
+
+    const isEditingTags = ref(false)
 
     const isSelected = computed(() =>
       starsStore.selectedRepos
@@ -158,6 +184,7 @@ export default defineComponent({
       isSelected,
       onDragStart,
       onDragEnd,
+      isEditingTags
     }
   },
 })

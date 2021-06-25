@@ -1,6 +1,7 @@
 <?php
 use App\Models\User;
 use App\Models\Tag;
+use App\Models\Star;
 
 beforeEach(function () {
     $this->user = User::factory()->has(Tag::factory()->count(1))->create();
@@ -28,4 +29,24 @@ it('can add a tag to multiple stars', function() {
     $this->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repoIds' => [25631, 49612]]);
 
     expect(auth()->user()->stars()->count())->toBe(2);
+});
+
+it('can sync multiple tags to one star', function () {
+    $star = Star::factory()->create(['user_id' => auth()->id()]);
+    $star->tags()->attach($this->tag->id);
+
+    expect($star->fresh()->tags()->count())->toBe(1);
+
+    $this->put(route('star.tags.update', ['star' => $star->id]), ['tags' => [
+        ['name' => 'JavaScript'],
+        ['name' => 'Vue'],
+        ['name' => 'Laravel'],
+        ['name' => $this->tag->name],
+    ]]);
+
+    expect($star->fresh()->tags()->count())->toBe(4);
+
+    $this->put(route('star.tags.update', ['star' => $star->id]), ['tags' => []]);
+
+    expect($star->fresh()->tags()->count())->toBe(0);
 });

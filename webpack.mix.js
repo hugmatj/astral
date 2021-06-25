@@ -1,3 +1,4 @@
+/* eslint-disable */
 const mix = require('laravel-mix')
 
 /*
@@ -13,7 +14,7 @@ const mix = require('laravel-mix')
 
 mix
   .ts('resources/js/app.ts', 'public/js')
-  .vue({ version: 3 })
+  .vue({ version: 3, runtimeOnly: true })
   .postCss('resources/css/app.css', 'public/css')
   .webpackConfig(require('./webpack.config'))
 

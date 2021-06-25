@@ -36,16 +36,6 @@ class StarTagsController extends Controller
         return redirect()->route('dashboard.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Star  $star
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Star $star)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -56,17 +46,22 @@ class StarTagsController extends Controller
      */
     public function update(Request $request, Star $star)
     {
-        //
+        $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $star->repo_id]);
+        $ids = [];
+
+        tap($request->input('tags'), function ($tags) use($star, $ids) {
+            if (empty($tags)) {
+                $star->tags()->sync([]);
+            } else {
+                foreach($tags as $tag) {
+                    $tag = auth()->user()->tags()->firstOrCreate(['name' => $tag['name']]);
+                    $ids[] = $tag->id;
+                }
+                $star->tags()->sync($ids, true);
+            }
+        });
+
+        return redirect()->route('dashboard.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Star  $star
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Star $star)
-    {
-        //
-    }
 }
