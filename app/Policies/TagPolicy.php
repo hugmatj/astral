@@ -27,4 +27,12 @@ class TagPolicy
 
         return $user->tags()->count() < config('limits.max_tags');
     }
+
+    public function sync(User $user) {
+        if ($user->isSponsor()) {
+            return true;
+        }
+
+        return $user->tags()->count() <= config('limits.max_tags');
+    }
 }

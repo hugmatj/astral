@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\Star;
+use App\Lib\Abilities;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StarTagsController extends Controller
 {
@@ -46,6 +49,8 @@ class StarTagsController extends Controller
      */
     public function update(Request $request, Star $star)
     {
+        DB::beginTransaction();
+
         $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $star->repo_id]);
         $ids = [];
 
@@ -61,6 +66,13 @@ class StarTagsController extends Controller
             }
         });
 
+        if (auth()->user()->cannot('sync', Tag::class)) {
+            DB::rollBack();
+
+            return redirect()->route('dashboard.index')->with('sponsorship_required', Abilities::CREATE_TAG);
+        }
+
+        DB::commit();
         return redirect()->route('dashboard.index');
     }
 

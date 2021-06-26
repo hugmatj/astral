@@ -16,7 +16,8 @@ class User extends Authenticatable
         'username',
         'access_token',
         'scope',
-        'avatar'
+        'avatar',
+        'is_sponsor',
     ];
 
     protected $hidden = [
