@@ -1,12 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "yarn development",
-    "development": "TAILWIND_MODE=build mix",
+    "dev": "TAILWIND_MODE=build mix",
     "watch": "TAILWIND_MODE=watch mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "prod": "yarn production",
-    "production": "mix --production",
+    "prod": "mix --production",
     "start": "yarn watch",
     "lint": "eslint \"resources/js/**/*.{js,vue}\"",
     "lint-fix": "eslint \"resources/js/**/*.{js,vue}\" --fix",

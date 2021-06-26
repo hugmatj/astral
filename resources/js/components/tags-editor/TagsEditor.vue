@@ -2,7 +2,7 @@
   <div
     class="flex items-center px-1 pt-2 pb-0 bg-white border border-gray-300 rounded-md shadow-sm ring-2 ring-transparent cursor-text focus-within:border-indigo-500 focus-within:ring-indigo-100"
     @click.stop>
-    <ul class="flex flex-wrap items-center w-full">
+    <ul class="relative flex flex-wrap items-center w-full">
       <li
         v-for="(tag, i) in mutableTags"
         :key="tag.name"
@@ -25,7 +25,7 @@
         <button class="pl-1 cursor-pointer delete-star-tag" :aria-label="`Delete tag ${tag.name}`" @click.stop="deleteTagAtIndex(i)"><XIcon class="w-3 h-3 fill-current" /></button>
       </li>
       <li class="flex-grow mx-1 mb-2 leading-none" style="flex-basis:82px">
-        <input ref="input" v-model="tagText" type="text" class="w-full min-w-0 p-0 text-base leading-none border-0 sm:text-sm focus:outline-none focus:border-0 focus:ring-0" placeholder="Add a tag..." @keydown.,.enter.prevent="pushTag" @keydown.delete="deleteLastTag" @blur="onBlur">
+        <input ref="input" v-model="tagText" type="text" class="w-full min-w-0 p-0 text-base leading-none bg-transparent border-0 sm:text-sm focus:outline-none focus:border-0 focus:ring-0" placeholder="Add a tag..." @keydown.,.prevent="pushTag" @keydown.delete="deleteLastTag" @blur="onBlur" @keydown.enter="onBlur">
       </li>
     </ul>
 
@@ -60,7 +60,7 @@ export default defineComponent({
       return mutableTags.value.map(tag => tag.name?.toLowerCase()).includes(tag.toLowerCase())
     }
     const pushTag = () => {
-      if (!tagsHasTag(tagText.value)) {
+      if (!tagsHasTag(tagText.value) && tagText.value.trim()) {
         mutableTags.value.push({ name: tagText.value })
         tagText.value = ''
       }
@@ -107,5 +107,4 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 </style>
