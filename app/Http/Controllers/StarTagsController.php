@@ -47,16 +47,23 @@ class StarTagsController extends Controller
      * @param  \App\Models\Star  $star
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Star $star)
+    public function update(Request $request)
     {
+        $request->validate([
+            'repoId' => 'required',
+            'tags' => 'array',
+            'tags.*.name' => 'required_with:tags|alpha_dash'
+        ]);
+
         DB::beginTransaction();
 
-        $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $star->repo_id]);
+        $repoId = $request->input('repoId');
+        $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
         $ids = [];
 
-        tap($request->input('tags'), function ($tags) use($star, $ids) {
+        tap($request->input('tags'), function ($tags) use($star, &$ids) {
             if (empty($tags)) {
-                $star->tags()->sync([]);
+                $star->tags()->sync([], true);
             } else {
                 foreach($tags as $tag) {
                     $tag = auth()->user()->tags()->firstOrCreate(['name' => $tag['name']]);
@@ -73,6 +80,7 @@ class StarTagsController extends Controller
         }
 
         DB::commit();
+
         return redirect()->route('dashboard.index');
     }
 

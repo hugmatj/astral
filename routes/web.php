@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('tags/{tag}', [TagsController::class, 'update'])->name('tags.update');
 
     Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
-    Route::put('stars/{star}/sync-tags', [StarTagsController::class, 'update'])->name('star.tags.update');
+    Route::put('star/sync-tags', [StarTagsController::class, 'update'])->name('star.tags.update');
 
 
 

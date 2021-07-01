@@ -59,7 +59,7 @@
         </div>
       </div>
       <!-- Starred Repo List -->
-      <div class="border-r border-gray-300">
+      <div class="border-r border-gray-300 relative">
       <StarredRepoList v-slot="{ repo }">
         <StarredRepo
           :repo="repo"

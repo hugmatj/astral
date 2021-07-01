@@ -4,7 +4,7 @@
     :items="filteredRepos"
     :min-item-size="168"
     key-field="cursor"
-    class="h-full col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
+    class="relative h-full col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
     role="listbox"
     aria-label="Stars List"
     aria-multiselectable="true"
@@ -13,7 +13,7 @@
       <DynamicScrollerItem
         :item="repo"
         :active="active"
-        class="border-b border-gray-300 dark:border-gray-600"
+        class="relative border-b border-gray-300 dark:border-gray-600"
       >
         <slot :repo="repo" />
       </DynamicScrollerItem>

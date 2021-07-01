@@ -24,10 +24,10 @@
     >
       {{ repo.node.description }}
     </p>
-    <TagsEditor v-if="isEditingTags" :tags="tags" class="mt-4" @change="isEditingTags = false" />
+    <TagsEditor v-if="isEditingTags" :tags="tags" class="mt-4" @change="syncTagsToStar(repo.node.databaseId, $event)" @blur="isEditingTags = false" />
     <ul
       v-if="(tags.length || repo.node.primaryLanguage?.name) && !isEditingTags"
-      class="inline-flex flex-wrap mt-4 space-x-2"
+      class="inline-flex flex-wrap items-start mt-4"
     >
       <li
         v-if="repo.node.primaryLanguage?.name"
@@ -41,6 +41,8 @@
           cursor-pointer
           font-semibold
           tracking-wide
+          mr-1
+          mb-1
         "
         @click.stop="
           $emit('language-selected', repo.node.primaryLanguage?.name)
@@ -61,6 +63,8 @@
           cursor-pointer
           font-semibold
           tracking-wide
+          mr-1
+          mb-1
         "
         @click.stop="$emit('tag-selected', tag)"
       >
@@ -86,18 +90,31 @@
       Edit Tags
       </li>
     </ul>
+    <div class="flex items-center mt-4 space-x-4 text-gray-500">
+      <div class="flex items-center">
+        <StarIcon class="w-4 h-4" />
+        <span class="ml-1 text-xs font-medium">{{ repo.node.stargazers.totalCount }}</span>
+      </div>
+      <div class="flex items-center">
+        <ShareIcon class="w-4 h-4" />
+        <span class="ml-1 text-xs font-medium">{{ repo.node.forkCount }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType, ref } from 'vue'
+import { defineComponent, computed, PropType, ref, Ref } from 'vue'
 import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
 import { useStarsStore } from '@/store/useStarsStore'
-import { GitHubRepo } from '@/types'
+import { StarIcon, ShareIcon } from '@heroicons/vue/outline'
+import { GitHubRepo, Tag } from '@/types'
 
 export default defineComponent({
   components: {
     TagsEditor,
+    StarIcon,
+    ShareIcon,
   },
   props: {
     repo: {
@@ -122,6 +139,11 @@ export default defineComponent({
         .map(repo => repo.databaseId)
         .includes(props.repo.node.databaseId)
     )
+
+    const syncTagsToStar = (repoId: number, tags: Ref<Pick<Tag, 'name'>[]>) => {
+      starsStore.syncTagsToStar(repoId, tags.value)
+      isEditingTags.value = false
+    }
 
     let $dragImage: HTMLElement | undefined = undefined
 
@@ -184,6 +206,7 @@ export default defineComponent({
       isSelected,
       onDragStart,
       onDragEnd,
+      syncTagsToStar,
       isEditingTags
     }
   },

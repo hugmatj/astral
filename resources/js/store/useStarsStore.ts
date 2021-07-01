@@ -12,6 +12,7 @@ import type {
   RepoLanguage,
   PaginationResponse,
   FetchDirection,
+  Tag,
 } from '@/types'
 
 export const useStarsStore = defineStore({
@@ -124,6 +125,9 @@ export const useStarsStore = defineStore({
     },
     addTagToStars(tagId: number, repoIds: number[]) {
       Inertia.post('/stars/tag', { tagId, repoIds } as any)
+    },
+    syncTagsToStar(repoId: number, tags: Partial<Tag>[]) {
+      Inertia.put(`/star/sync-tags`, { repoId, tags } as any)
     },
     async fetchReadme(repo: GitHubRepoNode): Promise<string> {
       const userStore = useUserStore()
