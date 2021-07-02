@@ -1,8 +1,8 @@
 <template>
   <teleport to="body">
-    <TransitionFade :show="isVisible">
-      <ul v-show="isVisible" class="absolute z-50 py-1 min-w-[150px] bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg" role="listbox" v-bind="$attrs">
-        <li v-for="(item, index) in visibleItems" :key="item" role="option" :aria-selected="index === currentIndex">
+    <TransitionFade :show="shouldShow" as="div">
+      <ul v-show="shouldShow" class="absolute z-50 py-1 min-w-[150px] bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg" role="combobox" v-bind="$attrs" :hidden="!shouldShow">
+        <li v-for="(item, index) in visibleItems" :key="item" role="option" :aria-selected="index === currentIndex" class="cursor-pointer" @click="selectActiveItem" @mouseenter="currentIndex = index" @mouseleave="currentIndex = -1" @mousedown.prevent>
           <div
             class="w-full px-4 py-2 text-xs"
             :class="{
@@ -14,6 +14,9 @@
           </div>
         </li>
       </ul>
+      <span class="sr-only" role="status" aria-live="assertive" aria-atomic="true" hidden>
+        {{ visibleItems.length }} {{ visibleItems.length === 1 ? 'result' : 'results' }} found
+      </span>
     </TransitionFade>
   </teleport>
 </template>
@@ -42,17 +45,18 @@ export default defineComponent({
   emits: ['select', 'show', 'hide'],
   setup (props, { emit }) {
     const currentIndex = ref(-1)
-
+    const isVisible = ref(false)
     const visibleItems = computed(() => {
       if (props.search.trim().length < 2) {
         return []
       }
 
       return props.source
-        .filter(haystack => fuzzysearch(props.search.toLowerCase(), haystack.toLowerCase()))
+        .filter(haystack => fuzzysearch(props.search.toLowerCase(), haystack.toLowerCase())).slice(0, 5)
     })
 
-    const isVisible = computed(() => !!visibleItems.value.length)
+    const hasResults = computed(() => !!visibleItems.value.length)
+    const shouldShow = computed(() => isVisible.value && hasResults.value)
 
     watch(visibleItems, (oldItems, items) => {
       if ((!oldItems.length && items.length) || (oldItems.length && !items.length)) {
@@ -60,9 +64,16 @@ export default defineComponent({
       }
     })
 
-    watch(isVisible, (visible) => {
-      emit(visible ? 'show' : 'hide')
+    watch(hasResults, (shouldShow) => {
+      isVisible.value = shouldShow
+      emit(shouldShow ? 'show' : 'hide')
     })
+
+    watch(() => props.search, () => isVisible.value = true)
+
+    const selectActiveItem = () => {
+      emit('select', visibleItems.value[currentIndex.value])
+    }
 
     onKeyStroke('ArrowDown', (e) => {
       if (isVisible.value) {
@@ -81,14 +92,21 @@ export default defineComponent({
     onKeyStroke('Enter', (e) => {
       if (isVisible.value) {
         e.preventDefault()
-        emit('select', visibleItems.value[currentIndex.value])
+        selectActiveItem()
+      }
+    })
+
+    onKeyStroke('Escape', (e) => {
+      if (isVisible.value) {
+        isVisible.value = false
       }
     })
 
     return {
       currentIndex,
       visibleItems,
-      isVisible,
+      shouldShow,
+      selectActiveItem,
     }
   }
 })

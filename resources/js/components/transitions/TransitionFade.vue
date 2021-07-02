@@ -1,6 +1,5 @@
 <template>
   <TransitionRoot
-    :show="show"
     enter="transition-opacity"
     enter-from="opacity-0"
     enter-to="opacity-100"
@@ -19,12 +18,6 @@ export default defineComponent({
   components: {
     TransitionRoot,
   },
-  props: {
-    show: {
-      type: Boolean,
-      required: true,
-    }
-  }
 })
 </script>
 

@@ -44,6 +44,7 @@
           mr-1
           mb-1
         "
+        role="button"
         @click.stop="
           $emit('language-selected', repo.node.primaryLanguage?.name)
         "
@@ -66,6 +67,7 @@
           mr-1
           mb-1
         "
+        role="button"
         @click.stop="$emit('tag-selected', tag)"
       >
         {{ tag.name }}
@@ -85,6 +87,7 @@
           opacity-0
           group-hover:opacity-100
         "
+        role="button"
         @click.stop="isEditingTags = true"
       >
       Edit Tags

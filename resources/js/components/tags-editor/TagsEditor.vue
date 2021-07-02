@@ -22,13 +22,13 @@
         "
       >
         <span>{{ tag.name }}</span>
-        <button class="pl-1 cursor-pointer delete-star-tag" :aria-label="`Delete tag ${tag.name}`" @click.stop="deleteTagAtIndex(i)"><XIcon class="w-3 h-3 fill-current" /></button>
+        <button class="pl-1 cursor-pointer delete-star-tag" :aria-label="`Delete tag ${tag.name}`" @mousedown.prevent @click.stop="deleteTagAtIndex(i)"><XIcon class="w-3 h-3 fill-current" /></button>
       </li>
       <li class="relative flex-grow mx-1 mb-2 leading-none isolate" style="flex-basis:82px">
-        <input ref="input" v-model="tagText" type="text" class="w-full min-w-0 p-0 text-base leading-none bg-transparent border-0 sm:text-sm focus:outline-none focus:border-0 focus:ring-0" placeholder="Add a tag..." role="combobox" aria-activedescendant="tags_autocomplete_list" autocomplete="off" aria-owns="tags_autocomplete_list" @keydown.,.prevent="pushTag" @keydown.delete="deleteLastTag" @blur="onBlur" @keydown.enter="onEnter">
+        <input ref="input" v-model="tagText" type="text" class="w-full min-w-0 p-0 text-base leading-none bg-transparent border-0 sm:text-sm focus:outline-none focus:border-0 focus:ring-0" placeholder="Add a tag..." role="combobox" aria-activedescendant="tags_autocomplete_list" autocomplete="off" aria-owns="tags_autocomplete_list" @keydown.,.prevent="addTagFromInput" @keydown.delete="deleteLastTag" @blur="onBlur" @keydown.enter="onEnter">
 
         <!-- Autocomplete Menu -->
-        <AutocompleteMenu id="tags_autocomplete_list" :style="{ left: inputRect.left + 'px', top: inputRect.top + inputRect.height + 'px' }" :source="autocompleteOptions" :search="tagText" @select="pushTag($event)" @show="autocompleteShowing = true" @hide="autocompleteShowing = false" />
+        <AutocompleteMenu id="tags_autocomplete_list" :style="{ left: inputRect.left + 'px', top: inputRect.top + inputRect.height + 'px' }" :source="autocompleteOptions" :search="tagText" @select="addTagWithName($event)" @show="autocompleteShowing = true" @hide="autocompleteShowing = false" />
       </li>
     </ul>
 
@@ -83,7 +83,7 @@ export default defineComponent({
     })
 
     const tagsHasTag = (tag: string) => {
-      return mutableTags.value.map(tag => tag.name?.toLowerCase()).includes(tag.toLowerCase())
+      return mutableTags.value.map(tag => tag.name?.toLowerCase()).includes(tag?.toLowerCase())
     }
 
     const tagsHaveChanged = computed(() => {
@@ -92,13 +92,15 @@ export default defineComponent({
       }))
     })
 
-    const pushTag = (tag: string) => {
-      tag ||= tagText.value.trim()
-      if (tag && !tagsHasTag(tag)) {
-        mutableTags.value.push({ name: tag })
+    const addTagWithName = (name: string) => {
+      if (name && !tagsHasTag(name)) {
+        mutableTags.value.push({ name: name })
         tagText.value = ''
         input.value?.focus()
       }
+    }
+    const addTagFromInput = () => {
+      addTagWithName(tagText.value.trim())
     }
 
     const deleteLastTag = (e: KeyboardEvent) => {
@@ -114,8 +116,8 @@ export default defineComponent({
       input.value?.focus()
     }
 
-    const onBlur = (e: FocusEvent) => {
-      if (!(e.relatedTarget as HTMLButtonElement)?.classList.contains('delete-star-tag') && tagsHaveChanged.value) {
+    const onBlur = () => {
+      if (tagsHaveChanged.value) {
         emit('change', mutableTags)
       } else {
         emit('blur')
@@ -136,7 +138,8 @@ export default defineComponent({
       allTags: computed(() => tagsStore.tags),
       mutableTags,
       tagText,
-      pushTag,
+      addTagFromInput,
+      addTagWithName,
       deleteLastTag,
       deleteTagAtIndex,
       onBlur,
