@@ -41,7 +41,6 @@ import { defineComponent, watch } from 'vue'
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
 import { useForm } from '@inertiajs/inertia-vue3'
-import { VisitOptions } from '@inertiajs/inertia'
 
 export default defineComponent({
   components: {
@@ -59,6 +58,10 @@ export default defineComponent({
     watch([currentTag, isOpen], ([tag, openState]) => {
       if (tag && openState === true) {
         form.name = tag.name
+      } else {
+        setTimeout(() => {
+          form.clearErrors()
+        }, 200)
       }
     })
 
@@ -69,7 +72,7 @@ export default defineComponent({
         .put(`/tags/${currentTag.value.id}`, {
           preserveScroll: true,
           onSuccess: () => hideDialog(),
-        } as Partial<VisitOptions>)
+        })
       }
     }
 
