@@ -53,25 +53,8 @@ export default defineComponent({
 
             await nextTick()
 
-            Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
-              if (anchor.href.replace(location.href, '').startsWith('#')) {
-                anchor.addEventListener('click', e => {
-                  e.preventDefault()
-                  if (readmeContainerEl.value && readmeEl.value) {
-                    const anchorTop: number =
-                      readmeContainerEl.value.scrollTop +
-                      (e.currentTarget as HTMLElement).getBoundingClientRect()
-                        .top -
-                      readmeContainerEl.value.getBoundingClientRect().top -
-                      16
-
-                    readmeContainerEl.value.scrollTo(0, anchorTop)
-                  }
-                })
-              } else {
-                anchor.setAttribute('target', '_blank')
-              }
-            })
+            patchReadmeAnchors()
+            patchReadmeImages()
           }
           isReadmeLoading.value = false
         } else {
@@ -81,6 +64,48 @@ export default defineComponent({
       { debounce: 500 }
     )
 
+    const patchReadmeAnchors = () => {
+      if (!readmeEl.value) {
+        return false
+      }
+
+      Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
+        if (anchor.href.replace(location.href, '').startsWith('#')) {
+          anchor.addEventListener('click', e => {
+            e.preventDefault()
+            if (readmeContainerEl.value && readmeEl.value) {
+              const anchorTop: number =
+                readmeContainerEl.value.scrollTop +
+                (e.currentTarget as HTMLElement).getBoundingClientRect()
+                  .top -
+                readmeContainerEl.value.getBoundingClientRect().top -
+                16
+
+              readmeContainerEl.value.scrollTo(0, anchorTop)
+            }
+          })
+        } else {
+          anchor.setAttribute('target', '_blank')
+        }
+      })
+    }
+
+    const patchReadmeImages = () => {
+
+      if (!readmeEl.value) {
+        return false
+      }
+
+      Array.from(readmeEl.value.querySelectorAll('img')).forEach(img => {
+        const repoName  = starsStore.selectedRepo.nameWithOwner
+        const repoBranch  = starsStore.selectedRepo.defaultBranchRef.name
+        const imgSrc = img.getAttribute('src')
+
+        if (!imgSrc?.startsWith('http')) {
+          img.src = `https://github.com/${repoName}/raw/${repoBranch}/${imgSrc}`
+        }
+      })
+    }
     return {
       contents,
       isReadmeLoading,
