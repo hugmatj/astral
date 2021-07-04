@@ -59,7 +59,7 @@
         </div>
       </div>
       <!-- Starred Repo List -->
-      <div class="border-r border-gray-300 relative">
+      <div class="relative border-r border-gray-300">
       <StarredRepoList v-slot="{ repo }">
         <StarredRepo
           :repo="repo"
@@ -100,6 +100,7 @@ import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useSyncValueToStore } from '@/composables/useSyncValueToStore'
 import { useListSelectionState } from '@/composables/useListSelectionState'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
+import { useUrlParams } from '@/composables/useUrlParams'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
@@ -166,6 +167,8 @@ export default defineComponent({
     const starsStore = useStarsStore()
     const starsFilterStore = useStarsFilterStore()
     const { showDialog } = useSponsorshipDialog()
+    const { params: urlParams, clearParams } = useUrlParams()
+
     const flash = computed(() => props.flash)
 
     useSyncValueToStore(() => props.user, userStore, 'user')
@@ -195,21 +198,25 @@ export default defineComponent({
     const onAllStarsSelected = () => {
       isSidebarOpen.value = false
       starsFilterStore.setFilterByAll()
+      clearParams()
     }
 
     const onUntaggedSelected = () => {
       isSidebarOpen.value = false
       starsFilterStore.setFilterByUntagged()
+      clearParams()
     }
 
     const onTagSelected = (tag: Tag) => {
       isSidebarOpen.value = false
       starsFilterStore.selectedTag = tag
+      urlParams.tag = tag.name
     }
 
     const onLanguageSelected = (language: string) => {
       isSidebarOpen.value = false
       starsFilterStore.selectedLanguage = language
+      urlParams.language = language
     }
 
     const onRepoSelected = (repo: GitHubRepo) => {
@@ -220,6 +227,20 @@ export default defineComponent({
     watch(selectedItems, repos => {
       starsStore.selectedRepos = repos
     })
+
+    watch(urlParams, (params) => {
+      if (params.tag) {
+        const tag = tagsStore.tags.find(tag => tag.name === params.tag)
+
+        if (tag) {
+          starsFilterStore.selectedTag = tag
+        }
+      }
+
+      if (params.language) {
+        starsFilterStore.selectedLanguage = params.language
+      }
+    }, { immediate: true })
 
     return {
       isSidebarOpen,

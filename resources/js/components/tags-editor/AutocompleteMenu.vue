@@ -46,6 +46,7 @@ export default defineComponent({
   setup (props, { emit }) {
     const currentIndex = ref(-1)
     const isVisible = ref(false)
+
     const visibleItems = computed(() => {
       if (props.search.trim().length < 2) {
         return []
@@ -54,7 +55,6 @@ export default defineComponent({
       return props.source
         .filter(haystack => fuzzysearch(props.search.toLowerCase(), haystack.toLowerCase())).slice(0, 5)
     })
-
     const hasResults = computed(() => !!visibleItems.value.length)
     const shouldShow = computed(() => isVisible.value && hasResults.value)
 
@@ -96,11 +96,7 @@ export default defineComponent({
       }
     })
 
-    onKeyStroke('Escape', (e) => {
-      if (isVisible.value) {
-        isVisible.value = false
-      }
-    })
+    onKeyStroke('Escape', () => isVisible.value = false)
 
     return {
       currentIndex,

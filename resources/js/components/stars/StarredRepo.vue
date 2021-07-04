@@ -26,7 +26,7 @@
     </p>
     <TagsEditor v-if="isEditingTags" :tags="tags" class="mt-4" @change="syncTagsToStar(repo.node.databaseId, $event)" @blur="isEditingTags = false" />
     <ul
-      v-if="(tags.length || repo.node.primaryLanguage?.name) && !isEditingTags"
+      v-if="!isEditingTags"
       class="inline-flex flex-wrap items-start mt-4"
     >
       <li
