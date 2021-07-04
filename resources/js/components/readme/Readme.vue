@@ -85,6 +85,14 @@ export default defineComponent({
             }
           })
         } else {
+          const repoName  = starsStore.selectedRepo.nameWithOwner
+          const repoBranch  = starsStore.selectedRepo.defaultBranchRef.name
+          const href = anchor.getAttribute('href')
+
+          if (!href?.startsWith('http')) {
+            anchor.href = `https://github.com/${repoName}/raw/${repoBranch}/${href}`
+          }
+
           anchor.setAttribute('target', '_blank')
         }
       })
