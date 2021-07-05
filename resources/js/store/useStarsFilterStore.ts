@@ -6,6 +6,12 @@ const BASE_FILTERS = {
   UNTAGGED: 'untagged',
 } as const
 
+interface SearchInput {
+  query: string,
+  tags: string[],
+  strings: string[],
+}
+
 type BaseFilter = Values<typeof BASE_FILTERS>
 
 export const useStarsFilterStore = defineStore({
@@ -15,9 +21,24 @@ export const useStarsFilterStore = defineStore({
       selectedFilter: BASE_FILTERS.ALL as BaseFilter,
       selectedTag: null as Nullable<Tag>,
       selectedLanguage: null as Nullable<string>,
+      searchQuery: ""
     }
   },
   getters: {
+    search(): SearchInput {
+      const queryParts = this.searchQuery
+        .trim()
+        .toLowerCase()
+        .split(':')
+      const tags = queryParts.filter(part => part.startsWith('#')).map(tag => tag.substring(1))
+      const strings = queryParts.filter(part => !part.startsWith('#'))
+
+      return {
+        query: this.searchQuery,
+        tags,
+        strings,
+      }
+    },
     isFilteringByAll(): boolean {
       return (
         this.selectedFilter === BASE_FILTERS.ALL &&
@@ -35,6 +56,9 @@ export const useStarsFilterStore = defineStore({
     },
     isFilteringByLanguage(): boolean {
       return !!this.selectedLanguage
+    },
+    isFilteringBySearch(): boolean {
+      return !!this.searchQuery
     },
   },
   actions: {

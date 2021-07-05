@@ -80,6 +80,23 @@ export const useStarsStore = defineStore({
         }
       }
 
+      if (starsFilterStore.isFilteringBySearch) {
+        const search = starsFilterStore.search
+
+        filteredRepos = filteredRepos.filter((repo: GitHubRepo) => {
+          const repoTextHaystack = [repo.node.nameWithOwner, repo.node.description].filter(Boolean).join(" ").toLowerCase()
+          const repoHasStringMatches = search.strings.every(searchString => repoTextHaystack.includes(searchString))
+          if (search.tags.length) {
+            const repoTagNames = (this.userStarsByRepoId[repo.node.databaseId]?.tags || []).map(tag => tag.name.toLowerCase())
+            const repoHasTagMatches = search.tags.every(tag => repoTagNames.includes(tag))
+
+            return repoHasTagMatches && repoHasStringMatches
+          } else {
+            return repoHasStringMatches
+          }
+        })
+      }
+
       return filteredRepos
     },
     languages(): RepoLanguage[] {

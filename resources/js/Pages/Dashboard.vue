@@ -59,7 +59,8 @@
         </div>
       </div>
       <!-- Starred Repo List -->
-      <div class="relative border-r border-gray-300">
+      <div class="relative border-r border-gray-300 flex flex-col">
+      <Galileo />
       <StarredRepoList v-slot="{ repo }">
         <StarredRepo
           :repo="repo"
@@ -108,6 +109,7 @@ import Readme from '@/components/readme/Readme.vue'
 import SponsorshipDialog from '@/components/dialogs/SponsorshipDialog.vue'
 import RenameTagDialog from '@/components/dialogs/RenameTagDialog.vue'
 import UserMenu from '@/components/UserMenu.vue'
+import Galileo from '@/components/Galileo.vue'
 import { GitHubRepo, Tag, UserStar, User, Abilities, AbilityContext, Limits, } from '@/types'
 import {
   ArrowCircleLeftIcon,
@@ -127,6 +129,7 @@ export default defineComponent({
     ArrowCircleLeftIcon,
     CloseIcon,
     MenuIcon,
+    Galileo,
   },
   props: {
     tags: {
