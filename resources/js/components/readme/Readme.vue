@@ -155,27 +155,27 @@ export default defineComponent({
   }
 
   /*!
- * GitHub Dark v0.5.0
- * Copyright (c) 2012 - 2017 GitHub, Inc.
- * Licensed under MIT (https://github.com/primer/github-syntax-theme-generator/blob/master/LICENSE)
- */
+  * GitHub Dark v0.5.0
+  * Copyright (c) 2012 - 2017 GitHub, Inc.
+  * Licensed under MIT (https://github.com/primer/github-syntax-theme-generator/blob/master/LICENSE)
+  */
 
   .pl-c /* comment, punctuation.definition.comment, string.comment */ {
     color: #959da5;
   }
 
   .pl-c1 /* constant, entity.name.constant, variable.other.constant, variable.language, support, meta.property-name, support.constant, support.variable, meta.module-reference, markup.quote, markup.raw, meta.diff.header */,
-.pl-s .pl-v /* string variable */ {
+  .pl-s .pl-v /* string variable */ {
     color: #c8e1ff;
   }
 
   .pl-e /* entity */,
-.pl-en /* entity.name */ {
+  .pl-en /* entity.name */ {
     color: #b392f0;
   }
 
   .pl-smi /* variable.parameter.function, storage.modifier.package, storage.modifier.import, storage.type.java, variable.other */,
-.pl-s .pl-s1 /* string source */ {
+  .pl-s .pl-s1 /* string source */ {
     color: #f6f8fa;
   }
 
@@ -188,17 +188,17 @@ export default defineComponent({
   }
 
   .pl-s /* string */,
-.pl-pds /* punctuation.definition.string, source.regexp, string.regexp.character-class */,
-.pl-s .pl-pse .pl-s1 /* string punctuation.section.embedded source */,
-.pl-sr /* string.regexp */,
-.pl-sr .pl-cce /* string.regexp constant.character.escape */,
-.pl-sr .pl-sre /* string.regexp source.ruby.embedded */,
-.pl-sr .pl-sra /* string.regexp string.regexp.arbitrary-repitition */ {
+  .pl-pds /* punctuation.definition.string, source.regexp, string.regexp.character-class */,
+  .pl-s .pl-pse .pl-s1 /* string punctuation.section.embedded source */,
+  .pl-sr /* string.regexp */,
+  .pl-sr .pl-cce /* string.regexp constant.character.escape */,
+  .pl-sr .pl-sre /* string.regexp source.ruby.embedded */,
+  .pl-sr .pl-sra /* string.regexp string.regexp.arbitrary-repitition */ {
     color: #79b8ff;
   }
 
   .pl-v /* variable */,
-.pl-ml /* markup.list, sublimelinter.mark.warning */ {
+  .pl-ml /* markup.list, sublimelinter.mark.warning */ {
     color: #fb8532;
   }
 
@@ -217,7 +217,7 @@ export default defineComponent({
   }
 
   .pl-c2::before /* carriage-return */ {
-    content: '^M';
+    content: "^M";
   }
 
   .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
@@ -226,8 +226,8 @@ export default defineComponent({
   }
 
   .pl-mh /* markup.heading */,
-.pl-mh .pl-en /* markup.heading entity.name */,
-.pl-ms /* meta.separator */ {
+  .pl-mh .pl-en /* markup.heading entity.name */,
+  .pl-ms /* meta.separator */ {
     font-weight: bold;
     color: #0366d6;
   }
@@ -243,13 +243,13 @@ export default defineComponent({
   }
 
   .pl-md /* markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted */ {
-    color: #b31d28;
-    background-color: #ffeef0;
+    color: #ff9491;
+    background-color: #380200;
   }
 
   .pl-mi1 /* markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted */ {
-    color: #176f2c;
-    background-color: #f0fff4;
+    color: #66b66d;
+    background-color: #334641;
   }
 
   .pl-mc /* markup.changed, punctuation.definition.changed */ {
@@ -283,5 +283,7 @@ export default defineComponent({
     text-decoration: underline;
     color: #79b8ff;
   }
+
+
 }
 </style>
