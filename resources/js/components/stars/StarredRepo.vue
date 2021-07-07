@@ -151,7 +151,7 @@ export default defineComponent({
     let $dragImage: HTMLElement | undefined = undefined
 
     const onDragStart = (e: DragEvent) => {
-      starsStore.isDraggingStar = true
+      starsStore.isDraggingRepo = true
 
       if (starsStore.selectedRepos.length) {
         if (isSelected.value) {
@@ -199,6 +199,8 @@ export default defineComponent({
     }
 
     const onDragEnd = () => {
+      starsStore.isDraggingRepo = false
+      starsStore.draggingRepos = []
       if ($dragImage) {
         document.body.removeChild($dragImage)
       }

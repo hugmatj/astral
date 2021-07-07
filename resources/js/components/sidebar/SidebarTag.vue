@@ -113,19 +113,19 @@ export default defineComponent({
     const onDragOver = (e: DragEvent) => {
       e.preventDefault()
 
-      if (starsStore.isDraggingStar) {
+      if (starsStore.isDraggingRepo) {
         isHighlighted.value = true
       }
     }
     const onDragLeave = () => (isHighlighted.value = false)
 
     const onDrop = (e: DragEvent) => {
-      if (starsStore.isDraggingStar && starsStore.draggingRepos.length) {
+      if (starsStore.isDraggingRepo && starsStore.draggingRepos.length) {
         emit('stars-dropped', {
           tag: props.tag,
           repoIds: starsStore.draggingRepos.map(repo => repo.databaseId),
         })
-        starsStore.isDraggingStar = false
+        starsStore.isDraggingRepo = false
         starsStore.draggingRepos = []
         isHighlighted.value = false
       }

@@ -19,7 +19,7 @@ export const useStarsStore = defineStore({
   id: 'stars',
   state() {
     return {
-      isDraggingStar: false,
+      isDraggingRepo: false,
       userStars: [] as UserStar[],
       starredRepos: [] as GitHubRepo[],
       pageInfo: {
