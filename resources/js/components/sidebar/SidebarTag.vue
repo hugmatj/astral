@@ -125,8 +125,6 @@ export default defineComponent({
           tag: props.tag,
           repoIds: starsStore.draggingRepos.map(repo => repo.databaseId),
         })
-        starsStore.isDraggingRepo = false
-        starsStore.draggingRepos = []
         isHighlighted.value = false
       }
 
