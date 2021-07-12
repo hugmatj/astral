@@ -8,6 +8,7 @@
     role="listbox"
     aria-label="Stars List"
     aria-multiselectable="true"
+    tabindex="0"
   >
     <template #default="{ item: repo, active }">
       <DynamicScrollerItem
@@ -57,6 +58,7 @@ export default defineComponent({
 
     watch([reposHaveSynced, pageInfoHasSynced], async newValues => {
       if (newValues.every(Boolean) && starsStore.pageInfo.hasNextPage) {
+        // We're ready to start fetching stars
         await nextTick()
         // starsStore.fetchStars(starsStore.pageInfo.endCursor)
       }

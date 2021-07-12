@@ -59,7 +59,7 @@
         </div>
       </div>
       <!-- Starred Repo List -->
-      <div class="relative border-r border-gray-300 flex flex-col">
+      <div class="relative flex flex-col border-r border-gray-300">
       <Galileo />
       <StarredRepoList v-slot="{ repo }">
         <StarredRepo
@@ -174,15 +174,13 @@ export default defineComponent({
 
     const flash = computed(() => props.flash)
 
-    useSyncValueToStore(() => props.user, userStore, 'user')
-    useSyncValueToStore(() => props.abilities, authorizationsStore, 'abilities')
-    useSyncValueToStore(() => props.limits, authorizationsStore, 'limits')
-    useSyncValueToStore(() => props.tags, tagsStore, 'tags')
-    useSyncValueToStore(() => props.stars, starsStore, 'userStars')
+    useSyncValueToStore(computed(() => props.user), userStore, 'user')
+    useSyncValueToStore(computed(() => props.abilities), authorizationsStore, 'abilities')
+    useSyncValueToStore(computed(() => props.limits), authorizationsStore, 'limits')
+    useSyncValueToStore(computed(() => props.tags), tagsStore, 'tags')
+    useSyncValueToStore(computed(() => props.stars), starsStore, 'userStars')
 
-    const { selectItem, selectedItems } = useListSelectionState(() =>
-      starsStore.starredRepos.map(repo => repo.node)
-    )
+    const { selectItem, selectedItems } = useListSelectionState(computed(() => starsStore.starredRepos.map(repo => repo.node)))
 
     /**
      * After each request finishes we check the session to see if

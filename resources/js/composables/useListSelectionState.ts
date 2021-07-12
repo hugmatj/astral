@@ -1,30 +1,30 @@
-import { useMagicKeys, onKeyStroke } from '@vueuse/core'
-import { ref, computed, Ref, isRef, watch } from 'vue'
+import { useMagicKeys, onKeyStroke, MaybeRef } from '@vueuse/core'
+import { ref, computed, Ref, isRef, watch, unref } from 'vue'
 import { isFocusedElementEditable } from '../utils'
 
 const { shift, cmd, ctrl } = useMagicKeys()
+const isHoldingMetaKey = computed(() => cmd.value || ctrl.value)
 
 interface ListSelectionStateReturnType<T> {
   selectItem(item: T): void
   selectedItems: Ref<T[]>
 }
 
-type GenericItems<T> = T[] | Ref<T[]>
+type GenericItems<T> = MaybeRef<T[]>
 
 export const useListSelectionState = <T>(
-  items: GenericItems<T> | (() => GenericItems<T>)
+  items: GenericItems<T> | (() => GenericItems<T>),
+  isEnabled = true
 ): ListSelectionStateReturnType<T> => {
   const selectedItems = ref([]) as Ref<T[]>
   const lastSelectedItem = ref(null) as Ref<Nullable<T>>
   const lastShiftSelectedItem = ref(null) as Ref<Nullable<T>>
 
-  const isHoldingMetaKey = computed(() => cmd.value || ctrl.value)
-
   const allItems = (): T[] => {
     if (typeof items === 'function') {
-      return isRef(items()) ? (items() as Ref<T[]>).value : (items() as T[])
+      return unref(items() as T[])
     } else {
-      return isRef(items) ? (items as Ref<T[]>).value : (items as T[])
+      return unref(items as T[])
     }
   }
 
@@ -205,7 +205,9 @@ export const useListSelectionState = <T>(
   }
 
   const selectItem = (item: T) => {
-    updateSelectedItems(item)
+    if (isEnabled) {
+      updateSelectedItems(item)
+    }
   }
 
   const selectNextItem = () => {
