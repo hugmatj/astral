@@ -13,7 +13,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "http-interop/http-factory-guzzle": "^1.0",
         "inertiajs/inertia-laravel": "^0.4.0",
-        "laravel/framework": "^8.12",
+        "laravel/framework": "^8.5.22",
         "laravel/socialite": "^5.2",
         "laravel/tinker": "^2.5"
     },
@@ -23,8 +23,8 @@
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
-        "pestphp/pest": "^1.0",
-        "pestphp/pest-plugin-laravel": "^1.0",
+        "pestphp/pest": "^1.11",
+        "pestphp/pest-plugin-laravel": "^1.1",
         "phpunit/phpunit": "^9.3.3",
         "sempro/phpunit-pretty-print": "^1.4"
     },

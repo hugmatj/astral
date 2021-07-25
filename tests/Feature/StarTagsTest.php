@@ -34,20 +34,26 @@ it('can add a tag to multiple stars', function() {
 
 it('can sync multiple tags to one star', function () {
     $star = Star::factory()->create(['user_id' => auth()->id()]);
+
     $star->tags()->attach($this->tag->id);
+    expect($star->tags()->count())->toBe(1);
 
-    expect($star->fresh()->tags()->count())->toBe(1);
-
-    $this->put(route('star.tags.update', ['star' => $star->id]), ['tags' => [
-        ['name' => 'JavaScript'],
-        ['name' => 'Vue'],
-        ['name' => 'Laravel'],
-        ['name' => $this->tag->name],
-    ]]);
+    $res = $this->put(route('star.tags.update'), [
+        'repoId' => $star->repo_id,
+        'tags' => [
+            ['name' => 'JavaScript'],
+            ['name' => 'Vue'],
+            ['name' => 'Laravel'],
+            ['name' => $this->tag->name],
+        ],
+    ]);
 
     expect($star->fresh()->tags()->count())->toBe(4);
 
-    $this->put(route('star.tags.update', ['star' => $star->id]), ['tags' => []]);
+    $this->put(route('star.tags.update'), [
+        'repoId' => $star->repo_id,
+        'tags' => []
+    ]);
 
     expect($star->fresh()->tags()->count())->toBe(0);
 });
@@ -56,13 +62,16 @@ it('prevents non-sponsors from going over the tag limit when syncing tags to a s
     $star = Star::factory()->create(['user_id' => auth()->id()]);
 
     $this
-        ->put(route('star.tags.update', ['star' => $star->id]), ['tags' => [
-            ['name' => 'JavaScript'],
-            ['name' => 'Vue'],
-            ['name' => 'Laravel'],
-            ['name' => 'Nuxt'],
-            ['name' => 'Gatsby'],
-        ]])
+        ->put(route('star.tags.update'), [
+            'repoId' => $star->repo_id,
+            'tags' => [
+                ['name' => 'JavaScript'],
+                ['name' => 'Vue'],
+                ['name' => 'Laravel'],
+                ['name' => 'Nuxt'],
+                ['name' => 'Gatsby'],
+            ]
+        ])
         ->assertRedirect(route('dashboard.index'))
         ->assertSessionHas('sponsorship_required', Abilities::CREATE_TAG);
 
@@ -76,13 +85,16 @@ it('allows sponsors to over the tag limit when syncing tags to a star', function
     $star = Star::factory()->create(['user_id' => auth()->id()]);
 
     $this
-        ->put(route('star.tags.update', ['star' => $star->id]), ['tags' => [
-            ['name' => 'JavaScript'],
-            ['name' => 'Vue'],
-            ['name' => 'Laravel'],
-            ['name' => 'Nuxt'],
-            ['name' => 'Gatsby'],
-        ]])
+        ->put(route('star.tags.update'), [
+            'repoId' => $star->repo_id,
+            'tags' => [
+                ['name' => 'JavaScript'],
+                ['name' => 'Vue'],
+                ['name' => 'Laravel'],
+                ['name' => 'Nuxt'],
+                ['name' => 'Gatsby'],
+            ]
+        ])
         ->assertRedirect(route('dashboard.index'));
 
     expect(auth()->user()->tags()->count())->toBe(6);

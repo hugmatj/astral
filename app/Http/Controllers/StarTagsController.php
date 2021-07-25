@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
-use App\Models\Star;
 use App\Lib\Abilities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -58,20 +57,20 @@ class StarTagsController extends Controller
         DB::beginTransaction();
 
         $repoId = $request->input('repoId');
+        $tags = $request->input('tags');
         $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
         $ids = [];
 
-        tap($request->input('tags'), function ($tags) use($star, &$ids) {
-            if (empty($tags)) {
-                $star->tags()->sync([], true);
-            } else {
-                foreach($tags as $tag) {
-                    $tag = auth()->user()->tags()->firstOrCreate(['name' => $tag['name']]);
-                    $ids[] = $tag->id;
-                }
-                $star->tags()->sync($ids, true);
+
+        if (empty($tags)) {
+            $star->tags()->sync([]);
+        } else {
+            foreach($tags as $tag) {
+                $tag = auth()->user()->tags()->firstOrCreate(['name' => $tag['name']]);
+                $ids[] = $tag->id;
             }
-        });
+            $star->tags()->sync($ids);
+        }
 
         if (auth()->user()->cannot('sync', Tag::class)) {
             DB::rollBack();
