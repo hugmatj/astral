@@ -126,6 +126,9 @@ export const useStarsStore = defineStore({
     selectedRepo(): GitHubRepoNode {
       return this.selectedRepos[0] || {}
     },
+    isAnyRepoSelected(): boolean {
+      return !!Object.keys(this.selectedRepo).length
+    },
   },
   actions: {
     fetchStars(

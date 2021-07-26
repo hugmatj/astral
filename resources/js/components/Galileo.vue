@@ -1,6 +1,6 @@
 <template>
-  <div class="p-4 border-b border-gray-300">
-    <div class="relative flex items-center py-2 pr-3 transition-colors bg-white border-2 border-gray-300 rounded-md pl-9 focus-within:border-gray-400">
+  <div class="flex items-center flex-shrink-0 h-16 px-4 border-b border-gray-300">
+    <div class="relative flex items-center w-full py-2 pr-3 transition-colors bg-white border-2 border-gray-300 rounded-md pl-9 focus-within:border-gray-400">
       <input ref="input" v-model="searchQuery" type="text" class="flex-grow w-full p-0 text-gray-500 placeholder-gray-300 border-none peer focus:ring-0" placeholder="Gaze through your telescope..." aria-keyshortcuts="/" />
       <SearchIcon class="absolute w-5 h-5 text-gray-300 transition-colors pointer-events-none left-2 peer-focus:text-gray-400" aria-hidden="true" />
       <span class="absolute px-2 py-1 text-xs font-bold text-gray-300 transition-opacity border border-gray-300 rounded-sm pointer-events-none right-2 peer-focus:opacity-0">/</span>

@@ -1,6 +1,6 @@
 <template>
-  <div ref="readmeContainerEl" class="absolute inset-0 h-full overflow-y-auto">
-    <div v-show="contents" class="relative w-full h-full mt-12 sm:mt-0">
+  <div ref="readmeContainerEl" class="relative flex-grow overflow-y-auto">
+    <div v-show="contents" class="relative w-full h-full">
       <div
         ref="readmeEl"
         class="p-4 prose max-w-none sm:max-w-2xl sm:mx-auto"

@@ -22,7 +22,7 @@
             class="h-6 sm:h-8"
           />
         </div>
-        <div class="flex justify-end w-1/3 sm:pr-6 sm:w-2/3">
+        <div class="flex justify-end w-1/3 sm:w-2/3">
           <UserMenu />
         </div>
       </div>
@@ -78,13 +78,16 @@
           'translate-x-0': isReadmeOpen,
         }"
       >
-        <button
+        <!-- <button
           class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-5 ml-5 text-gray-700 rounded-full bg-gray-50 sm:hidden"
           @click="isReadmeOpen = false"
         >
           <ArrowCircleLeftIcon />
-        </button>
-        <Readme />
+        </button> -->
+        <div class="relative flex flex-col h-full">
+          <RepoToolbar v-if="isAnyRepoSelected" />
+          <Readme />
+        </div>
       </div>
     </div>
   </div>
@@ -105,6 +108,7 @@ import { useUrlParams } from '@/composables/useUrlParams'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
+import RepoToolbar from '@/components/toolbar/RepoToolbar.vue'
 import Readme from '@/components/readme/Readme.vue'
 import SponsorshipDialog from '@/components/dialogs/SponsorshipDialog.vue'
 import RenameTagDialog from '@/components/dialogs/RenameTagDialog.vue'
@@ -112,7 +116,7 @@ import UserMenu from '@/components/UserMenu.vue'
 import Galileo from '@/components/Galileo.vue'
 import { GitHubRepo, Tag, UserStar, User, Abilities, AbilityContext, Limits, } from '@/types'
 import {
-  ArrowCircleLeftIcon,
+  // ArrowCircleLeftIcon,
   XCircleIcon as CloseIcon,
   MenuAlt1Icon as MenuIcon,
 } from '@heroicons/vue/outline'
@@ -122,11 +126,12 @@ export default defineComponent({
     Sidebar,
     StarredRepoList,
     StarredRepo,
+    RepoToolbar,
     Readme,
     SponsorshipDialog,
     RenameTagDialog,
     UserMenu,
-    ArrowCircleLeftIcon,
+    // ArrowCircleLeftIcon,
     CloseIcon,
     MenuIcon,
     Galileo,
@@ -251,6 +256,7 @@ export default defineComponent({
       onTagSelected,
       onLanguageSelected,
       onRepoSelected,
+      isAnyRepoSelected: computed(() => starsStore.isAnyRepoSelected),
     }
   },
 })
