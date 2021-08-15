@@ -60,7 +60,7 @@ export default defineComponent({
       if (newValues.every(Boolean) && starsStore.pageInfo.hasNextPage) {
         // We're ready to start fetching stars
         await nextTick()
-        // starsStore.fetchStars(starsStore.pageInfo.endCursor)
+        starsStore.fetchStars(starsStore.pageInfo.endCursor)
       }
     })
 

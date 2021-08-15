@@ -1,22 +1,21 @@
 import { createApp, h } from 'vue'
-import { App, plugin as inertiaPlugin } from '@inertiajs/inertia-vue3'
+// import { App, plugin as inertiaPlugin } from '@inertiajs/inertia-vue3'
+import { createInertiaApp } from '@inertiajs/inertia-vue3'
 import { InertiaProgress } from '@inertiajs/progress'
 import { createPinia } from 'pinia'
 
 const el = document.getElementById('app')
 
 if (el) {
-  createApp({
-    render: () =>
-      h(App, {
-        initialPage: JSON.parse(el?.dataset.page || '{}'),
-        resolveComponent: name =>
-          import(`./Pages/${name}`).then(module => module.default),
-      }),
+  createInertiaApp({
+    resolve: name => import(`./Pages/${name}`).then(module => module.default),
+    setup({ el, app, props, plugin }) {
+      createApp({ render: () => h(app, props) })
+      .use(plugin)
+      .use(createPinia())
+      .mount(el)
+    }
   })
-    .use(createPinia())
-    .use(inertiaPlugin)
-    .mount(el)
 
   InertiaProgress.init()
 }

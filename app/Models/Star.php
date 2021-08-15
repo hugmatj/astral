@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Star extends Model
 {
-    use HasFactory;
+    use HasFactory, Cachable;
 
     protected $fillable = [
         'repo_id',

@@ -5,6 +5,7 @@ import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import StarsWorker from 'worker-loader!@/workers/githubStars.worker'
 import { FETCH_DIRECTIONS } from '@/constants'
 import keyBy from 'lodash/keyBy'
+import type { Dictionary } from 'lodash';
 import type {
   UserStar,
   GitHubRepo,
@@ -35,7 +36,7 @@ export const useStarsStore = defineStore({
     }
   },
   getters: {
-    userStarsByRepoId(): Record<string, UserStar> {
+    userStarsByRepoId(): Dictionary<UserStar> {
       return keyBy(this.userStars, (star: UserStar) => `${star.repo_id}`)
     },
     allStars(): GitHubRepo[] {

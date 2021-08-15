@@ -10,9 +10,10 @@
         <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
         <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
         <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        {{-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="preload" as="style">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"> --}}
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
 
         <script src="{{ mix('/js/app.js') }}" defer></script>

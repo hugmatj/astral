@@ -17,8 +17,8 @@ export interface User {
 export interface Tag {
   readonly id: number
   name: string
-  readonly created_at: Date
-  readonly updated_at: Date
+  created_at: Date
+  updated_at: Date
   sort_order: number
   readonly stars_count: number
   readonly user_id: number

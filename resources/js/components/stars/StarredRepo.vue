@@ -87,6 +87,7 @@
           opacity-0
           group-hover:opacity-100
         "
+        :class="{'opacity-100': !tags.length && !repo.node.primaryLanguage?.name}"
         role="button"
         @click.stop="isEditingTags = true"
       >

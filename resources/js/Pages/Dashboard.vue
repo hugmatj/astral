@@ -64,7 +64,7 @@
       <StarredRepoList v-slot="{ repo }">
         <StarredRepo
           :repo="repo"
-          @selected="onRepoSelected(repo)"
+          @selected="onRepoSelected"
           @tag-selected="onTagSelected"
           @language-selected="onLanguageSelected"
         />
@@ -72,7 +72,7 @@
       </div>
       <!-- Selected Star Info -->
       <div
-        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out pointer-events-auto bg-gray-50 dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
+        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
         :class="{
           'translate-x-full pointer-events-none': !isReadmeOpen,
           'translate-x-0': isReadmeOpen,

@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center ">
     <label for="repo_clone_url" class="text-sm font-semibold text-gray-600 cursor-pointer">Clone:</label>
-    <input id="repo_clone_url" type="text" readonly :value="cloneUrl" class="px-3 py-2 ml-2 text-base text-gray-600 transition-colors bg-white border-2 border-gray-300 rounded-md w-60 sm:text-sm focus:border-gray-400 focus:ring-0" @focus="selectUrlText">
+    <input id="repo_clone_url" type="text" readonly :value="cloneUrl" class="px-3 py-2 ml-2 text-base text-gray-600 transition-colors bg-white border border-transparent rounded-md shadow ring-gray-300 ring-1 w-60 sm:text-sm focus:border-gray-400 focus:ring-gray-400" @focus="selectUrlText">
     <RadioGroup v-model="currentUrlType" class="inline-flex items-center ml-2 isolate">
       <RadioGroupLabel class="sr-only">Clone URL Type</RadioGroupLabel>
       <RadioGroupOption
@@ -36,8 +36,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed, Ref } from 'vue'
+<script setup lang="ts">
+import { ref, computed, Ref } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
 import {
   RadioGroup,
@@ -45,42 +45,20 @@ import {
   RadioGroupOption,
 } from '@headlessui/vue'
 
-export default defineComponent({
-  components: {
-    RadioGroup,
-    RadioGroupLabel,
-    RadioGroupOption,
-  },
-  setup () {
-    type CloneUrlType = 'ssh' | 'https'
+type CloneUrlType = 'ssh' | 'https'
 
-    const starsStore = useStarsStore()
+const starsStore = useStarsStore()
 
-    const currentUrlType: Ref<CloneUrlType> = ref('ssh')
+const currentUrlType: Ref<CloneUrlType> = ref('ssh')
 
-    const sshCloneUrl = computed(() => `git@github.com:${starsStore.selectedRepo?.nameWithOwner}.git`)
-    const httpsCloneUrl = computed(() => `${starsStore.selectedRepo?.url}.git`)
+const sshCloneUrl = computed(() => `git@github.com:${starsStore.selectedRepo?.nameWithOwner}.git`)
+const httpsCloneUrl = computed(() => `${starsStore.selectedRepo?.url}.git`)
 
-    const cloneUrl = computed(() => {
-      return currentUrlType.value === 'ssh' ? sshCloneUrl.value : httpsCloneUrl.value
-    })
-
-    const setCloneUrlType = (type: CloneUrlType) => currentUrlType.value = type
-
-    const selectUrlText = (e: FocusEvent) => {
-      (e?.currentTarget as HTMLInputElement)?.select()
-    }
-
-    return {
-      currentUrlType,
-      setCloneUrlType,
-      selectUrlText,
-      cloneUrl,
-    }
-  }
+const cloneUrl = computed(() => {
+  return currentUrlType.value === 'ssh' ? sshCloneUrl.value : httpsCloneUrl.value
 })
+
+const selectUrlText = (e: FocusEvent) => {
+  (e?.currentTarget as HTMLInputElement)?.select()
+}
 </script>
-
-<style scoped>
-
-</style>

@@ -2,11 +2,11 @@ import { ref, computed, Ref } from 'vue'
 import { Tag } from '@/types'
 
 const isOpen = ref(false)
-const currentTag = ref<Tag | null>(null)
+const currentTag = ref<Nullable<Tag>>(null)
 
 interface RenameTagDialogReturnType {
   isOpen: Ref<boolean>
-  currentTag: Ref<Tag | null>,
+  currentTag: Ref<Nullable<Tag>>,
   showDialog(tag: Tag): void
   hideDialog(): void
 }
