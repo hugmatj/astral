@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use Inertia\Inertia;
-use Astral\Lib\StarsJanitor;
 use Astral\Lib\Sponsorship;
+use Astral\Lib\StarsJanitor;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {

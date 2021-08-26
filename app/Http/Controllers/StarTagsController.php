@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
 use App\Lib\Abilities;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -30,14 +30,13 @@ class StarTagsController extends Controller
         $repoIds = $request->input('repoIds');
         $tagId = $request->input('tagId');
 
-        foreach($repoIds as $repoId) {
+        foreach ($repoIds as $repoId) {
             $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
             $star->tags()->syncWithoutDetaching([$tagId]);
         }
 
         return redirect()->route('dashboard.index');
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -51,7 +50,7 @@ class StarTagsController extends Controller
         $request->validate([
             'repoId' => 'required',
             'tags' => 'array',
-            'tags.*.name' => 'required_with:tags|alpha_dash'
+            'tags.*.name' => 'required_with:tags|alpha_dash',
         ]);
 
         DB::beginTransaction();
@@ -61,11 +60,10 @@ class StarTagsController extends Controller
         $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
         $ids = [];
 
-
         if (empty($tags)) {
             $star->tags()->sync([]);
         } else {
-            foreach($tags as $tag) {
+            foreach ($tags as $tag) {
                 $tag = auth()->user()->tags()->firstOrCreate(['name' => $tag['name']]);
                 $ids[] = $tag->id;
             }
@@ -82,5 +80,4 @@ class StarTagsController extends Controller
 
         return redirect()->route('dashboard.index');
     }
-
 }

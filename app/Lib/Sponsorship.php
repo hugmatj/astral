@@ -10,7 +10,7 @@ class Sponsorship
     {
         abort_unless(auth()->check(), 403);
 
-        $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "'. auth()->user()->username .'") }}';
+        $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "'.auth()->user()->username.'") }}';
 
         $client = GitHub::getFactory()->make([
             'token'  => auth()->user()->access_token,
@@ -20,6 +20,5 @@ class Sponsorship
         $result = $client->api('graphql')->execute($query);
 
         auth()->user()->update(['is_sponsor', $result['data']['user']['isSponsoredBy']]);
-
     }
 }

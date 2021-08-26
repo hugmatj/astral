@@ -4,6 +4,7 @@
   >
     <SponsorshipDialog />
     <RenameTagDialog />
+    <SettingsModal />
     <div class="grid h-screen dashboard-grid">
       <!-- Nav -->
       <div class="flex items-center px-4 bg-brand-600 col-span-full">
@@ -23,7 +24,7 @@
           />
         </div>
         <div class="flex justify-end w-1/3 sm:w-2/3">
-          <UserMenu />
+          <UserMenu @show-settings="showSettingsModal"/>
         </div>
       </div>
       <!-- Sidebar -->
@@ -104,16 +105,18 @@ import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useSyncValueToStore } from '@/composables/useSyncValueToStore'
 import { useListSelectionState } from '@/composables/useListSelectionState'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
+import { useSettingsModal } from '@/composables/useSettingsModal'
 import { useUrlParams } from '@/composables/useUrlParams'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import RepoToolbar from '@/components/toolbar/RepoToolbar.vue'
 import Readme from '@/components/readme/Readme.vue'
-import SponsorshipDialog from '@/components/dialogs/SponsorshipDialog.vue'
-import RenameTagDialog from '@/components/dialogs/RenameTagDialog.vue'
+import SponsorshipDialog from '@/components/shared/dialogs/SponsorshipDialog.vue'
+import RenameTagDialog from '@/components/shared/dialogs/RenameTagDialog.vue'
 import UserMenu from '@/components/UserMenu.vue'
 import Galileo from '@/components/Galileo.vue'
+import SettingsModal from '@/components/SettingsModal.vue'
 import { GitHubRepo, Tag, UserStar, User, Abilities, AbilityContext, Limits, } from '@/types'
 import {
   // ArrowCircleLeftIcon,
@@ -135,6 +138,7 @@ export default defineComponent({
     CloseIcon,
     MenuIcon,
     Galileo,
+    SettingsModal,
   },
   props: {
     tags: {
@@ -175,6 +179,7 @@ export default defineComponent({
     const starsStore = useStarsStore()
     const starsFilterStore = useStarsFilterStore()
     const { showDialog } = useSponsorshipDialog()
+    const { showSettingsModal } = useSettingsModal()
     const { params: urlParams, clearParams } = useUrlParams()
 
     const flash = computed(() => props.flash)
@@ -257,6 +262,7 @@ export default defineComponent({
       onLanguageSelected,
       onRepoSelected,
       isAnyRepoSelected: computed(() => starsStore.isAnyRepoSelected),
+      showSettingsModal,
     }
   },
 })

@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\User;
-use App\Models\Tag;
 use App\Lib\Abilities;
+use App\Models\Tag;
+use App\Models\User;
 
-it('can create a new tag', function() {
+it('can create a new tag', function () {
     $this
         ->login()
         ->post(route('tags.store'), ['name' => 'JavaScript'])
@@ -13,7 +13,7 @@ it('can create a new tag', function() {
     expect(auth()->user()->tags()->whereName('JavaScript')->exists())->toBeTrue();
 });
 
-it('can delete a tag', function() {
+it('can delete a tag', function () {
     $user = User::factory()->has(Tag::factory()->count(1))->create();
 
     expect($user->tags()->count())->toBe(1);
@@ -35,7 +35,7 @@ it('prevents non-sponsors from going over the tag limit when creating a tag', fu
         ->assertRedirect(route('dashboard.index'))
         ->assertSessionHas('sponsorship_required', Abilities::CREATE_TAG);
 
-        expect(auth()->user()->tags()->whereName('JavaScript')->doesntExist());
+    expect(auth()->user()->tags()->whereName('JavaScript')->doesntExist());
 });
 
 it('allows sponsors to over the tag limit when creating a tag', function () {

@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, watch } from 'vue'
-import TransitionFade from '@/components/transitions/TransitionFade.vue'
+import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
 import fuzzysearch from 'fuzzysearch'
 import { onKeyStroke } from '@vueuse/core'
 

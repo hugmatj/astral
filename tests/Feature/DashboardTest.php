@@ -1,10 +1,10 @@
 <?php
 
-use Inertia\Testing\Assert;
-use App\Models\User;
 use App\Models\Tag;
+use App\Models\User;
+use Inertia\Testing\Assert;
 
-it('renders the dashboard with the user\'s tags', function() {
+it('renders the dashboard with the user\'s tags', function () {
     $user = User::factory()->has(Tag::factory()->count(5))->create();
 
     $this

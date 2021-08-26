@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Star extends Model
 {
@@ -14,7 +14,8 @@ class Star extends Model
         'repo_id',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -25,6 +26,6 @@ class Star extends Model
 
     public function isOrphan(): bool
     {
-        return !(bool)$this->notes && !$this->tags()->count();
+        return ! (bool) $this->notes && ! $this->tags()->count();
     }
 }

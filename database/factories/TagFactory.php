@@ -13,7 +13,6 @@ class TagFactory extends Factory
      *
      * @var string
      */
-
     protected $model = Tag::class;
 
     /**

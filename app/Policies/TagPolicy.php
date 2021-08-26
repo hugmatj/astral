@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TagPolicy
@@ -20,7 +20,8 @@ class TagPolicy
         //
     }
 
-    public function create(User $user) {
+    public function create(User $user)
+    {
         if ($user->isSponsor()) {
             return true;
         }
@@ -28,7 +29,8 @@ class TagPolicy
         return $user->tags()->count() < config('limits.max_tags');
     }
 
-    public function sync(User $user) {
+    public function sync(User $user)
+    {
         if ($user->isSponsor()) {
             return true;
         }

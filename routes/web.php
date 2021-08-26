@@ -1,12 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CleanupController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StarTagsController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
-use App\Http\Controllers\StarTagsController;
-use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,10 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
     Route::put('star/sync-tags', [StarTagsController::class, 'update'])->name('star.tags.update');
 
-
-
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
-

@@ -26,7 +26,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'settings' => 'array',
-        'is_sponsor' => 'boolean'
+        'is_sponsor' => 'boolean',
     ];
 
     protected $attributes = [
@@ -66,19 +66,23 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function isSponsor(): bool {
-        return (bool)$this->is_sponsor;
+    public function isSponsor(): bool
+    {
+        return (bool) $this->is_sponsor;
     }
 
-    public function isNotSponsor(): bool {
-        return !(bool)$this->is_sponsor;
+    public function isNotSponsor(): bool
+    {
+        return ! (bool) $this->is_sponsor;
     }
 
-    public function tags() {
+    public function tags()
+    {
         return $this->hasMany(Tag::class);
     }
 
-    public function stars() {
+    public function stars()
+    {
         return $this->hasMany(Star::class);
     }
 }

@@ -1,5 +1,3 @@
-import type { AbilityContext } from '@/types'
-
 // Taken from: https://github.com/vueuse/vueuse/blob/main/packages/core/onStartTyping/index.ts
 export const isFocusedElementEditable = (): boolean => {
   const { activeElement, body } = document

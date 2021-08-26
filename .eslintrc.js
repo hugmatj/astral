@@ -21,4 +21,10 @@ module.exports = {
     'vue/no-v-html': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   },
+  globals: {
+    defineProps: "readonly",
+    defineEmits: "readonly",
+    defineExpose: "readonly",
+    withDefaults: "readonly"
+  }
 }

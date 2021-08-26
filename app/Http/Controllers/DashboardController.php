@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Abilities;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Lib\Abilities;
 
 class DashboardController extends Controller
 {

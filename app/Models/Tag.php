@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Scopes\SortOrderScope;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
@@ -13,7 +13,7 @@ class Tag extends Model
 
     protected $fillable = [
         'name',
-        'sort_order'
+        'sort_order',
     ];
 
     protected $hidden = ['pivot'];
@@ -37,11 +37,11 @@ class Tag extends Model
     {
         static::addGlobalScope(new SortOrderScope);
 
-        static::creating(function (Tag $tag) {
+        static::creating(function (self $tag) {
             $tag->sort_order = self::where('user_id', auth()->id())->count();
         });
 
-        static::deleted(function(Tag $tag) {
+        static::deleted(function (self $tag) {
             $tag->stars()->each(function (Star $star) use ($tag) {
                 $star->tags()->detach($tag->id);
 

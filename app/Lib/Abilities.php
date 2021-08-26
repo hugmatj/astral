@@ -6,4 +6,3 @@ class Abilities
 {
     const CREATE_TAG = 'create_tag';
 }
-

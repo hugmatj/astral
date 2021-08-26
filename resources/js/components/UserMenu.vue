@@ -29,19 +29,20 @@
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">
-            <a
-              href="#"
+            <button
+              type="button"
               :class="[
                 active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                'group flex items-center px-4 py-2 text-sm',
+                'group flex items-center px-4 py-2 text-sm w-full',
               ]"
+              @click="$emit('showSettings')"
             >
               <CogIcon
                 class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
                 aria-hidden="true"
               />
               <span>Settings</span>
-            </a>
+          </button>
           </MenuItem>
           <MenuItem v-slot="{ active }">
             <a
@@ -146,7 +147,7 @@ import {
   ExclamationCircleIcon,
   LogoutIcon,
 } from '@heroicons/vue/solid'
-import GitHubLogoIcon from '@/components/icons/GitHubLogoIcon.vue'
+import GitHubLogoIcon from '@/components/shared/icons/GitHubLogoIcon.vue'
 import { useUserStore } from '@/store/useUserStore'
 export default defineComponent({
   components: {
@@ -162,6 +163,7 @@ export default defineComponent({
     ExclamationCircleIcon,
     LogoutIcon,
   },
+  emits: ['showSettings'],
   setup() {
     const userStore = useUserStore()
 

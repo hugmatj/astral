@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
 use App\Lib\Abilities;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class TagsController extends Controller
@@ -31,7 +31,7 @@ class TagsController extends Controller
         }
 
         $request->validate([
-            'name' => 'bail|required|unique:tags,name,NULL,id,user_id,'.auth()->id(),
+            'name' => 'bail|required|alpha_dash|unique:tags,name,NULL,id,user_id,'.auth()->id(),
         ]);
 
         auth()->user()->tags()->create(['name' => $request->input('name')]);
@@ -49,7 +49,7 @@ class TagsController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $this->validate($request, [
-            'name' => 'bail|required|unique:tags,name,'.$tag->id.',id,user_id,'.auth()->id(),
+            'name' => 'bail|required|alpha_dash|unique:tags,name,'.$tag->id.',id,user_id,'.auth()->id(),
         ]);
 
         $tag = auth()->user()->tags()->findOrFail($tag->id);

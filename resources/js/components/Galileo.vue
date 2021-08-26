@@ -13,6 +13,7 @@ import { computed, defineComponent, ref } from 'vue'
 import { SearchIcon } from '@heroicons/vue/outline'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { onKeyStroke } from '@vueuse/core'
+import { isFocusedElementEditable } from '@/utils'
 
 export default defineComponent({
   components: { SearchIcon },
@@ -30,7 +31,7 @@ export default defineComponent({
     })
 
     onKeyStroke('/', (e) => {
-      if (document.activeElement !== input.value) {
+      if (!isFocusedElementEditable() && document.activeElement !== input.value) {
         e.preventDefault()
         input.value?.focus()
       }

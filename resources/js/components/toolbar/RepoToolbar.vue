@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import BaseButton from '@/components/core/BaseButton.vue'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
 import CloneUrlInput from '@/components/toolbar/CloneUrlInput.vue'
 
 export default defineComponent({

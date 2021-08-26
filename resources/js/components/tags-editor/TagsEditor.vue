@@ -117,7 +117,6 @@ export default defineComponent({
     }
 
     const onBlur = () => {
-      console.log(tagsHaveChanged.value)
       if (tagsHaveChanged.value) {
         emit('change', mutableTags)
       } else {

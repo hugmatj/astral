@@ -1,8 +1,9 @@
 <?php
-use App\Models\User;
-use App\Models\Tag;
-use App\Models\Star;
+
 use App\Lib\Abilities;
+use App\Models\Star;
+use App\Models\Tag;
+use App\Models\User;
 
 beforeEach(function () {
     $this->user = User::factory()->has(Tag::factory()->count(1))->create();
@@ -18,7 +19,7 @@ it('can append a tag to a star', function () {
     expect(auth()->user()->stars()->where('repo_id', 25631)->exists())->toBeTrue();
 });
 
-it('will not create a duplicate entry if the same star is dropped on a single tag', function() {
+it('will not create a duplicate entry if the same star is dropped on a single tag', function () {
     $this->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repoIds' => [25631]]);
     expect(auth()->user()->stars()->where('repo_id', 25631)->count())->toBe(1);
 
@@ -26,7 +27,7 @@ it('will not create a duplicate entry if the same star is dropped on a single ta
     expect(auth()->user()->stars()->where('repo_id', 25631)->count())->toBe(1);
 });
 
-it('can add a tag to multiple stars', function() {
+it('can add a tag to multiple stars', function () {
     $this->post(route('star.tags.store'), ['tagId' => $this->tag->id, 'repoIds' => [25631, 49612]]);
 
     expect(auth()->user()->stars()->count())->toBe(2);
@@ -52,7 +53,7 @@ it('can sync multiple tags to one star', function () {
 
     $this->put(route('star.tags.update'), [
         'repoId' => $star->repo_id,
-        'tags' => []
+        'tags' => [],
     ]);
 
     expect($star->fresh()->tags()->count())->toBe(0);
@@ -70,7 +71,7 @@ it('prevents non-sponsors from going over the tag limit when syncing tags to a s
                 ['name' => 'Laravel'],
                 ['name' => 'Nuxt'],
                 ['name' => 'Gatsby'],
-            ]
+            ],
         ])
         ->assertRedirect(route('dashboard.index'))
         ->assertSessionHas('sponsorship_required', Abilities::CREATE_TAG);
@@ -93,7 +94,7 @@ it('allows sponsors to over the tag limit when syncing tags to a star', function
                 ['name' => 'Laravel'],
                 ['name' => 'Nuxt'],
                 ['name' => 'Gatsby'],
-            ]
+            ],
         ])
         ->assertRedirect(route('dashboard.index'));
 
