@@ -61,7 +61,7 @@ it('can sync multiple tags to one star', function () {
 
 it('prevents non-sponsors from going over the tag limit when syncing tags to a star', function () {
     $star = Star::factory()->create(['user_id' => auth()->id()]);
-    // dump(auth()->user()->tags()->get());
+
     $this
         ->put(route('star.tags.update'), [
             'repoId' => $star->repo_id,
