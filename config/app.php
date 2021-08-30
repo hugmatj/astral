@@ -124,7 +124,9 @@ return [
     'cipher' => 'AES-256-CBC',
 
     // Other Stuff
-    'check_for_sponsorship' => false,
+    'github_sponsoree_login' => env('GITHUB_SPONSOREE_LOGIN', 'github'),
+
+    'check_for_sponsorship' => env('CHECK_FOR_SPONSORSHIP', false),
 
     /*
     |--------------------------------------------------------------------------

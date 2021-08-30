@@ -19,6 +19,6 @@ class Sponsorship
 
         $result = $client->api('graphql')->execute($query);
 
-        auth()->user()->update(['is_sponsor', $result['data']['user']['isSponsoredBy']]);
+        auth()->user()->setSponsorshipStatus((bool)$result['data']['user']['isSponsoredBy']);
     }
 }

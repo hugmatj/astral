@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 
 class User extends Authenticatable
 {
@@ -29,6 +30,8 @@ class User extends Authenticatable
         'is_sponsor' => 'boolean',
     ];
 
+    public const AVAILABLE_SETTINGS = ['show_language_tags', 'autosave_notes'];
+
     protected $attributes = [
         'settings' => '{"show_language_tags": true, "autosave_notes": true}',
     ];
@@ -44,6 +47,8 @@ class User extends Authenticatable
 
     public function writeSetting(string $name, $value, bool $save = true): self
     {
+        throw_if(!in_array($name, self::AVAILABLE_SETTINGS), new \Exception('Setting not available'));
+
         $this->settings = array_merge($this->settings, [$name => $value]);
 
         if ($save) {
@@ -51,6 +56,16 @@ class User extends Authenticatable
         }
 
         return $this;
+    }
+
+    public function getAccessTokenAttribute($value)
+    {
+        return $value ? Crypt::decryptString($value) : null;
+    }
+
+    public function setAccessTokenAttribute($value)
+    {
+        $this->attributes['access_token'] = Crypt::encryptString($value);
     }
 
     public function updateFromGitHubProfile($githubUser): self
@@ -74,6 +89,13 @@ class User extends Authenticatable
     public function isNotSponsor(): bool
     {
         return ! (bool) $this->is_sponsor;
+    }
+
+    public function setSponsorshipStatus(boolean $isSponsor): self
+    {
+        $this->update(['is_sponsor' => $isSponsor ? now() : null]);
+
+        return $this;
     }
 
     public function tags()

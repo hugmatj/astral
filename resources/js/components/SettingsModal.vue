@@ -13,7 +13,7 @@
             <DialogTitle class="w-full px-4 py-2 font-bold text-gray-700 bg-gray-100 border-b border-gray-200 rounded-t-lg">Settings</DialogTitle>
             <div class="flex items-center px-4 py-5">
               <p class="text-gray-700">Show Language Tags</p>
-              <BaseToggle class="ml-auto" />
+              <BaseToggle class="ml-auto" :enabled="userStore.user?.settings.show_language_tags" @change="updateUserSetting('show_language_tags', !!$event)" />
             </div>
           </div>
         </TransitionChild>
@@ -32,6 +32,13 @@
   } from "@headlessui/vue";
   import BaseToggle from "@/components/shared/core/BaseToggle.vue";
   import { useSettingsModal } from '@/composables/useSettingsModal'
+  import { useUserStore } from '@/store/useUserStore';
+  import { Inertia } from '@inertiajs/inertia'
 
   const { isOpen, hideSettingsModal } = useSettingsModal();
+  const userStore = useUserStore();
+
+  const updateUserSetting = (setting: string, enabled: boolean) => {
+    Inertia.put(`/settings`, { key: setting, enabled });
+  }
 </script>

@@ -30,7 +30,7 @@
       class="inline-flex flex-wrap items-start mt-4"
     >
       <li
-        v-if="repo.node.primaryLanguage?.name"
+        v-if="shouldShowLanguageTag && repo.node.primaryLanguage?.name"
         class="
           text-brand-800
           bg-brand-100
@@ -110,6 +110,7 @@
 <script lang="ts">
 import { defineComponent, computed, PropType, ref, Ref } from 'vue'
 import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
+import { useUserStore } from '@/store/useUserStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { StarIcon, ShareIcon } from '@heroicons/vue/outline'
 import { GitHubRepo, Tag } from '@/types'
@@ -128,6 +129,7 @@ export default defineComponent({
   },
   emits: ['selected', 'tag-selected', 'language-selected'],
   setup(props) {
+    const userStore = useUserStore()
     const starsStore = useStarsStore()
 
     const tags = computed(() => {
@@ -135,6 +137,8 @@ export default defineComponent({
         starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
       )
     })
+
+    const shouldShowLanguageTag = computed(() => !!userStore.user?.settings.show_language_tags);
 
     const isEditingTags = ref(false)
 
@@ -213,7 +217,8 @@ export default defineComponent({
       onDragStart,
       onDragEnd,
       syncTagsToStar,
-      isEditingTags
+      isEditingTags,
+      shouldShowLanguageTag,
     }
   },
 })

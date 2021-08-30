@@ -7,7 +7,6 @@ export interface User {
   scope: string
   settings: {
     autosave_notes: boolean
-    github_sponsor: boolean
     show_language_tags: boolean
   }
   created_at: Date

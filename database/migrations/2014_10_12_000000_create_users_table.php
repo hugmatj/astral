@@ -18,10 +18,10 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
             $table->integer('github_id')->unique();
             $table->string('username');
-            $table->string('access_token')->nullable();
+            $table->string('access_token', 512)->nullable();
             $table->string('scope')->nullable();
             $table->string('avatar')->nullable();
-            $table->boolean('is_sponsor')->default(false);
+            $table->timestamp('is_sponsor')->nullable();
             $table->json('settings');
             $table->rememberToken();
             $table->timestamps();

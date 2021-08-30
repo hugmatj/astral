@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StarTagsController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
+use App\Http\Controllers\UserSettingsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('star/sync-tags', [StarTagsController::class, 'update'])->name('star.tags.update');
 
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
+
+    Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
