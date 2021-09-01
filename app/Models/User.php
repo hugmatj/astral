@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
+use App\Exceptions\InvalidAccessTokenException;
 
 class User extends Authenticatable
 {
@@ -65,7 +67,7 @@ class User extends Authenticatable
 
     public function setAccessTokenAttribute($value)
     {
-        $this->attributes['access_token'] = Crypt::encryptString($value);
+        $this->attributes['access_token'] = $value ? Crypt::encryptString($value) : null;
     }
 
     public function updateFromGitHubProfile($githubUser): self
@@ -77,6 +79,24 @@ class User extends Authenticatable
             $this->name = $githubUser->getName();
         }
         $this->avatar = $githubUser->getAvatar();
+
+        return $this;
+    }
+
+    public function revokeGrant(): self
+    {
+        $clientId = config('services.github.client_id');
+        $clientSecret = config('services.github.client_secret');
+
+        $response = Http::withBasicAuth($clientId, $clientSecret)
+            ->withHeaders(['Accept' => 'application/vnd.github.v3+json'])
+            ->delete("https://api.github.com/applications/{$clientId}/grant", ['access_token' => $this->access_token]);
+
+        $this->update(['access_token' => null]);
+
+        if ($response->getStatusCode() == 404) {
+            throw new InvalidAccessTokenException();
+        }
 
         return $this;
     }

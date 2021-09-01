@@ -8,7 +8,7 @@ class Sponsorship
 {
     public function updateUserSponsorshipStatus()
     {
-        abort_unless(auth()->check(), 403);
+        throw_unless(auth()->check(), \Exception::class);
 
         $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "'.auth()->user()->username.'") }}';
 

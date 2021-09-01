@@ -40,5 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
 
+    Route::post('/revoke-grant', [AuthController::class, 'revokeGrant'])->name('revoke-grant');
+
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });

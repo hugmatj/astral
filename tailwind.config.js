@@ -6,7 +6,7 @@ module.exports = {
   mode: 'jit',
   purge: [
     './resources/js/**/*.vue',
-    './resources/views/app.blade.php',
+    './resources/views/**/*.blade.php',
   ],
 
   darkMode: 'class',

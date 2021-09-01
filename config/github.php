@@ -51,8 +51,8 @@ return [
 
         'app' => [
             'method'       => 'application',
-            'clientId'     => '',
-            'clientSecret' => '',
+            'clientId'     => env('GITHUB_CLIENT_ID'),
+            'clientSecret' => env('GITHUB_CLIENT_SECRET'),
             // 'backoff'      => false,
             // 'cache'        => false,
             // 'version'      => 'v3',

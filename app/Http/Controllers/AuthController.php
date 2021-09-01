@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Socialite;
+use Inertia\Inertia;
 
 class AuthController extends Controller
 {
@@ -43,6 +44,13 @@ class AuthController extends Controller
         auth()->login($user, true);
 
         return redirect()->route('dashboard.index');
+    }
+
+    public function revokeGrant()
+    {
+        auth()->user()->revokeGrant();
+
+        return Inertia::location(route('logout'));
     }
 
     public function logout()
