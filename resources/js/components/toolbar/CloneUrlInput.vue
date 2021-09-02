@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center ">
     <label for="repo_clone_url" class="text-sm font-semibold text-gray-600 cursor-pointer">Clone:</label>
-    <BaseTextInput id="repo_clone_url" readonly :value="cloneUrl" class="ml-2" type="text" @focus="selectUrlText" />
+    <BaseTextInput id="repo_clone_url" v-model="cloneUrl" readonly class="ml-2" type="text" @focus="selectUrlText" />
     <RadioGroup v-model="currentUrlType" class="inline-flex items-center ml-2 isolate">
       <RadioGroupLabel class="sr-only">Clone URL Type</RadioGroupLabel>
       <RadioGroupOption

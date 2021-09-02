@@ -38,6 +38,15 @@ class User extends Authenticatable
         'settings' => '{"show_language_tags": true, "autosave_notes": true}',
     ];
 
+    protected static function booted()
+    {
+        static::deleting(function (self $user) {
+            $user->revokeGrant();
+            $user->tags->each->delete();
+            $user->stars->each->delete();
+        });
+    }
+
     public function readSetting(string $name, $default = null)
     {
         if (array_key_exists($name, $this->settings)) {

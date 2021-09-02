@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StarTagsController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,7 +41,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::put('settings', [UserSettingsController::class, 'update'])->name('settings.update');
 
-    Route::post('/revoke-grant', [AuthController::class, 'revokeGrant'])->name('revoke-grant');
+    Route::post('/revoke-grant', [UserController::class, 'revokeGrant'])->name('revoke-grant');
+    Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });

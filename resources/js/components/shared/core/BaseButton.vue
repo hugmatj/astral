@@ -1,5 +1,5 @@
 <template>
-  <button type="button" class="inline-flex items-center border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2" :class="[classesForSizeProp, classesForKindProp]">
+  <button type="button" class="inline-flex items-center border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-60" :class="[classesForSizeProp, classesForKindProp]">
       <slot />
     </button>
 </template>
