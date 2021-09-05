@@ -6,6 +6,7 @@ use App\Lib\Abilities;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class StarTagsController extends Controller
 {
@@ -27,6 +28,13 @@ class StarTagsController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'repoIds' => 'required|array',
+            'tagId' => ['required', Rule::exists('tags', 'id')->where(function ($query) {
+                return $query->where('user_id', auth()->id());
+            }),],
+        ]);
+
         $repoIds = $request->input('repoIds');
         $tagId = $request->input('tagId');
 
@@ -48,7 +56,7 @@ class StarTagsController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'repoId' => 'required',
+            'repoId' => 'required|numeric',
             'tags' => 'array',
             'tags.*.name' => 'required_with:tags|alpha_dash',
         ]);

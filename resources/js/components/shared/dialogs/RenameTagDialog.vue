@@ -36,21 +36,13 @@
   </TransitionRoot>
 </template>
 
-<script lang="ts">
-import { defineComponent, watch } from 'vue'
+<script lang="ts" setup>
+import { watch } from 'vue'
 import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
 import { useForm } from '@inertiajs/inertia-vue3'
 
-export default defineComponent({
-  components: {
-    Dialog,
-    DialogOverlay,
-    TransitionChild,
-    TransitionRoot,
-  },
-  setup() {
-    const { isOpen, hideDialog, currentTag } = useRenameTagDialog()
+const { isOpen, hideDialog, currentTag } = useRenameTagDialog()
     const form = useForm({
       name: '',
     })
@@ -75,13 +67,4 @@ export default defineComponent({
         })
       }
     }
-
-    return {
-      isOpen,
-      hideDialog,
-      form,
-      renameTag
-    }
-  },
-})
 </script>

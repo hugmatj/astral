@@ -79,23 +79,24 @@
           'translate-x-0': isReadmeOpen,
         }"
       >
-        <!-- <button
-          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-5 ml-5 text-gray-700 rounded-full bg-gray-50 sm:hidden"
+        <button
+          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-20 ml-5 text-gray-700 rounded-full bg-gray-50 sm:hidden"
           @click="isReadmeOpen = false"
         >
           <ArrowCircleLeftIcon />
-        </button> -->
+        </button>
         <div class="relative flex flex-col h-full">
-          <RepoToolbar v-if="isAnyRepoSelected" />
+          <RepoToolbar v-if="starsStore.isAnyRepoSelected" />
           <Readme />
+          <NotesEditor v-if="starsStore.isAnyRepoSelected" :is-open="true" />
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch, PropType, computed } from 'vue'
+<script lang="ts" setup>
+import { ref, watch, PropType, computed } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import { useUserStore } from '@/store/useUserStore'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
@@ -111,6 +112,7 @@ import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
 import StarredRepo from '@/components/stars/StarredRepo.vue'
 import RepoToolbar from '@/components/toolbar/RepoToolbar.vue'
+import NotesEditor from '@/components/notes-editor/NotesEditor.vue'
 import Readme from '@/components/readme/Readme.vue'
 import SponsorshipDialog from '@/components/shared/dialogs/SponsorshipDialog.vue'
 import RenameTagDialog from '@/components/shared/dialogs/RenameTagDialog.vue'
@@ -119,28 +121,12 @@ import Galileo from '@/components/Galileo.vue'
 import SettingsModal from '@/components/SettingsModal.vue'
 import { GitHubRepo, Tag, UserStar, User, Abilities, AbilityContext, Limits, } from '@/types'
 import {
-  // ArrowCircleLeftIcon,
+  ArrowCircleLeftIcon,
   XCircleIcon as CloseIcon,
   MenuAlt1Icon as MenuIcon,
 } from '@heroicons/vue/outline'
 
-export default defineComponent({
-  components: {
-    Sidebar,
-    StarredRepoList,
-    StarredRepo,
-    RepoToolbar,
-    Readme,
-    SponsorshipDialog,
-    RenameTagDialog,
-    UserMenu,
-    // ArrowCircleLeftIcon,
-    CloseIcon,
-    MenuIcon,
-    Galileo,
-    SettingsModal,
-  },
-  props: {
+const props = defineProps({
     tags: {
       type: Array as PropType<Tag[]>,
       required: true,
@@ -171,9 +157,9 @@ export default defineComponent({
         return {}
       },
     },
-  },
-  setup(props) {
-    const userStore = useUserStore()
+  });
+
+const userStore = useUserStore()
     const authorizationsStore = useAuthorizationsStore()
     const tagsStore = useTagsStore()
     const starsStore = useStarsStore()
@@ -252,20 +238,6 @@ export default defineComponent({
         starsFilterStore.selectedLanguage = params.language
       }
     }, { immediate: true })
-
-    return {
-      isSidebarOpen,
-      isReadmeOpen,
-      onAllStarsSelected,
-      onUntaggedSelected,
-      onTagSelected,
-      onLanguageSelected,
-      onRepoSelected,
-      isAnyRepoSelected: computed(() => starsStore.isAnyRepoSelected),
-      showSettingsModal,
-    }
-  },
-})
 </script>
 
 <style>

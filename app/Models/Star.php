@@ -12,6 +12,7 @@ class Star extends Model
 
     protected $fillable = [
         'repo_id',
+        'notes',
     ];
 
     public function user()

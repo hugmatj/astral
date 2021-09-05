@@ -1,5 +1,6 @@
 {
   "private": true,
+  "version": "0.0.0",
   "scripts": {
     "dev": "TAILWIND_MODE=build mix",
     "watch": "TAILWIND_MODE=watch mix watch",
@@ -14,6 +15,9 @@
     "@inertiajs/inertia": "^0.10.1",
     "@inertiajs/inertia-vue3": "^0.5.2",
     "@inertiajs/progress": "^0.2.4",
+    "@tiptap/extension-typography": "^2.0.0-beta.14",
+    "@tiptap/starter-kit": "^2.0.0-beta.101",
+    "@tiptap/vue-3": "^2.0.0-beta.56",
     "@vueuse/components": "^5.0.3",
     "@vueuse/core": "^5.0.3",
     "axios": "^0.21",

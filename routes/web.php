@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CleanupController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StarTagsController;
+use App\Http\Controllers\StarNotesController;
 use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
 use App\Http\Controllers\UserController;
@@ -36,6 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('stars/tag', [StarTagsController::class, 'store'])->name('star.tags.store');
     Route::put('star/sync-tags', [StarTagsController::class, 'update'])->name('star.tags.update');
+    Route::put('star/notes', StarNotesController::class)->name('star.notes.update');
 
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
 

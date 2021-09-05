@@ -40,8 +40,8 @@
   </TransitionRoot>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, Ref } from 'vue'
+<script lang="ts" setup>
+import { computed, Ref } from 'vue'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
@@ -49,17 +49,7 @@ import { UserGroupIcon } from '@heroicons/vue/outline'
 import { ABILITY_CONTEXTS } from '@/constants'
 import { AbilityContext } from '@/types'
 
-export default defineComponent({
-  components: {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-    UserGroupIcon,
-  },
-  setup() {
-    const { isOpen, hideDialog, currentContext } = useSponsorshipDialog()
+const { isOpen, hideDialog, currentContext } = useSponsorshipDialog()
     const authorizationsStore = useAuthorizationsStore()
 
     const DIALOG_MESSAGES: Record<AbilityContext, string> = {
@@ -67,12 +57,4 @@ export default defineComponent({
     }
 
     const currentMessage: Ref<string | null> = computed(() => currentContext.value ? DIALOG_MESSAGES[currentContext.value] : null)
-
-    return {
-      isOpen,
-      hideDialog,
-      currentMessage,
-    }
-  },
-})
 </script>
