@@ -96,9 +96,11 @@ const editor = useEditor({
     }
   })],
   onUpdate: debounce(({ editor }) => {
+    const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
+
     Inertia.put('/star/notes', {
       repoId: starsStore.selectedRepo.databaseId,
-      notes: JSON.stringify(editor.getJSON()),
+      notes: notesData,
     })
   }, 1000),
 })

@@ -85,8 +85,10 @@ export const useStarsStore = defineStore({
         const search = starsFilterStore.search
 
         filteredRepos = filteredRepos.filter((repo: GitHubRepo) => {
-          const repoTextHaystack = [repo.node.nameWithOwner, repo.node.description].filter(Boolean).join(" ").toLowerCase()
+          const starNotes = this.userStarsByRepoId[repo.node.databaseId]?.notes || ''
+          const repoTextHaystack = [repo.node.nameWithOwner, repo.node.description, starNotes].filter(Boolean).join(" ").toLowerCase()
           const repoHasStringMatches = search.strings.every(searchString => repoTextHaystack.includes(searchString))
+
           if (search.tags.length) {
             const repoTagNames = (this.userStarsByRepoId[repo.node.databaseId]?.tags || []).map(tag => tag.name.toLowerCase())
             const repoHasTagMatches = search.tags.every(tag => repoTagNames.includes(tag))
