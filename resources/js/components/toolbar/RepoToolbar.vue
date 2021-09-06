@@ -21,6 +21,8 @@ import { useNotesEditor } from '@/composables/useNotesEditor'
 import EmptyNoteIcon from '@/components/shared/icons/notes-editor/EmptyNoteIcon.vue'
 import ExistingNoteIcon from '@/components/shared/icons/notes-editor/ExistingNoteIcon.vue'
 import { ABILITY_CONTEXTS } from '@/constants'
+import { onKeyStroke } from '@vueuse/core'
+import { isFocusedElementEditable } from '@/utils'
 
 const starsStore = useStarsStore()
 const { isOpen: isNotesEditorOpen, toggle: toggleNotesEditor } = useNotesEditor()
@@ -37,4 +39,11 @@ const handleToggleNotesEditor = () => {
     showSponsorshipDialog(ABILITY_CONTEXTS.ADD_NOTES)
   }
 }
+
+onKeyStroke('n', (e) => {
+  if (!isFocusedElementEditable()) {
+    e.preventDefault()
+    handleToggleNotesEditor()
+  }
+})
 </script>

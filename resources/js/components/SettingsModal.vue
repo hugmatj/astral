@@ -23,7 +23,7 @@
               <div class="px-4 py-5">
                 <div class="flex items-center ">
                   <p class="text-sm font-bold text-gray-600">Auto-Save Notes</p>
-                  <BaseToggle class="ml-auto" :enabled="userStore.user?.settings.show_language_tags" @change="updateUserSetting('show_language_tags', !!$event)" />
+                  <BaseToggle class="ml-auto" :enabled="userStore.user?.settings.autosave_notes" @change="updateUserSetting('autosave_notes', !!$event)" />
                 </div>
               </div>
 
