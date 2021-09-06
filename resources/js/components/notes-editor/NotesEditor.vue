@@ -25,22 +25,33 @@
             class="h-full p-4 transition duration-300 transform bg-white shadow rounded-r-md"
           >
             <div v-if="editor" class="flex items-center py-2 bg-gray-100 divide-x divide-gray-300 rounded">
+            <!-- Bold Button -->
               <button class="px-3" aria-label="Bold" @click="editor?.chain().focus().toggleBold().run()">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg>
+                <BoldIcon />
               </button>
+
+              <!-- Italics Button -->
               <button class="px-3" aria-label="Italic" @click="editor?.chain().focus().toggleItalic().run()">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg>
+                <ItalicsIcon />
               </button>
+
+
+              <!-- Underline Button -->
               <button class="px-3" aria-label="Underline" @click="editor?.chain().focus().toggleUnderline().run()">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>
+                <UnderlineIcon />
               </button>
+
+              <!-- Code Button -->
               <button class="px-3" aria-label="Inline Code" @click="editor?.chain().focus().toggleCode().run()">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                <CodeIcon />
               </button>
+
+              <!-- CodeBlock Button -->
               <button class="px-3" aria-label="Code Block" @click="editor?.chain().focus().toggleCodeBlock().run()">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                <CodeBlockIcon />
               </button>
             </div>
+
             <EditorContent :editor="editor" class="h-full mt-4" />
           </div>
         </TransitionChild>
@@ -50,25 +61,30 @@
 </template>
 
 <script setup lang="ts">
+import { computed, watch } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+import { useNotesEditor } from '@/composables/useNotesEditor'
+import { useStarsStore } from '@/store/useStarsStore'
 import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
 import CodeBlock from '@tiptap/extension-code-block'
 import { TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { useNotesEditor } from '@/composables/useNotesEditor'
-import { useStarsStore } from '@/store/useStarsStore'
 import debounce from 'lodash/debounce'
-import { Inertia } from '@inertiajs/inertia'
-import { computed, watch } from 'vue'
-const { isOpen, hide } = useNotesEditor()
+import BoldIcon from '@/components/shared/icons/notes-editor/BoldIcon.vue'
+import ItalicsIcon from '@/components/shared/icons/notes-editor/ItalicsIcon.vue'
+import UnderlineIcon from '@/components/shared/icons/notes-editor/UnderlineIcon.vue'
+import CodeIcon from '@/components/shared/icons/notes-editor/CodeIcon.vue'
+import CodeBlockIcon from '@/components/shared/icons/notes-editor/CodeBlockIcon.vue'
 
 const starsStore = useStarsStore()
+const { isOpen, hide } = useNotesEditor()
 
 const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
 
-let initialNotes = JSON.parse(userStar.value?.notes || '{}')
+const initialNotes = JSON.parse(userStar.value?.notes || '{}')
 
 const editor = useEditor({
   content: Object.keys(initialNotes).length ? initialNotes : '<p></p>',

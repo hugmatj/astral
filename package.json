@@ -6,8 +6,8 @@
     "watch": "TAILWIND_MODE=watch mix watch",
     "prod": "mix --production",
     "start": "yarn watch",
-    "lint": "eslint \"resources/js/**/*.{js,vue}\"",
-    "lint-fix": "eslint \"resources/js/**/*.{js,vue}\" --fix"
+    "lint": "eslint \"resources/js/**/*.{ts,vue}\"",
+    "lint-fix": "eslint \"resources/js/**/*.{ts,vue}\" --fix"
   },
   "dependencies": {
     "@headlessui/vue": "^1.3.0",
