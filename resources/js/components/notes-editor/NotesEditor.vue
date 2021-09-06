@@ -24,31 +24,38 @@
           <div
             class="h-full p-4 transition duration-300 transform bg-white shadow rounded-r-md"
           >
-            <div v-if="editor" class="flex items-center py-2 bg-gray-100 divide-x divide-gray-300 rounded">
+            <div v-if="editor" class="flex items-center p-2 bg-gray-100 rounded">
             <!-- Bold Button -->
-              <button class="px-3" aria-label="Bold" @click="editor?.chain().focus().toggleBold().run()">
-                <BoldIcon />
+              <button class="p-1 rounded hover:bg-gray-200" :class="{'bg-brand-100 text-brand-700 hover:bg-brand-200': editor.isActive('bold') }" aria-label="Bold" @click="editor?.chain().focus().toggleBold().run()">
+                <BoldIcon class="h-5" />
               </button>
+
+              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
 
               <!-- Italics Button -->
-              <button class="px-3" aria-label="Italic" @click="editor?.chain().focus().toggleItalic().run()">
-                <ItalicsIcon />
+              <button class="p-1 rounded hover:bg-gray-200" :class="{'bg-brand-100 text-brand-700 hover:bg-brand-200': editor.isActive('italic') }" aria-label="Italic" @click="editor?.chain().focus().toggleItalic().run()">
+                <ItalicsIcon class="h-5" />
               </button>
 
+              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
 
               <!-- Underline Button -->
-              <button class="px-3" aria-label="Underline" @click="editor?.chain().focus().toggleUnderline().run()">
-                <UnderlineIcon />
+              <button class="p-1 rounded hover:bg-gray-200" :class="{'bg-brand-100 text-brand-700 hover:bg-brand-200': editor.isActive('underline') }" aria-label="Underline" @click="editor?.chain().focus().toggleUnderline().run()">
+                <UnderlineIcon class="h-5" />
               </button>
+
+              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
 
               <!-- Code Button -->
-              <button class="px-3" aria-label="Inline Code" @click="editor?.chain().focus().toggleCode().run()">
-                <CodeIcon />
+              <button class="p-1 rounded hover:bg-gray-200" :class="{'bg-brand-100 text-brand-700 hover:bg-brand-200': editor.isActive('code') }" aria-label="Inline Code" @click="editor?.chain().focus().toggleCode().run()">
+                <CodeIcon class="h-5" />
               </button>
 
+              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
+
               <!-- CodeBlock Button -->
-              <button class="px-3" aria-label="Code Block" @click="editor?.chain().focus().toggleCodeBlock().run()">
-                <CodeBlockIcon />
+              <button class="p-1 rounded hover:bg-gray-200" :class="{'bg-brand-100 text-brand-700 hover:bg-brand-200': editor.isActive('codeBlock') }" aria-label="Code Block" @click="editor?.chain().focus().toggleCodeBlock().run()">
+                <CodeBlockIcon class="h-5" />
               </button>
             </div>
 
@@ -90,11 +97,7 @@ const editor = useEditor({
   content: Object.keys(initialNotes).length ? initialNotes : '<p></p>',
   extensions: [StarterKit, Typography, Underline, Placeholder.configure({
     placeholder: 'Add some notes about this repo...',
-  }), CodeBlock.configure({
-    HTMLAttributes: {
-      class: 'bg-gray-800 p-4 rounded text-gray-50 text-sm leading-loose'
-    }
-  })],
+  }), CodeBlock],
   onUpdate: debounce(({ editor }) => {
     const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
 
@@ -103,6 +106,11 @@ const editor = useEditor({
       notes: notesData,
     })
   }, 1000),
+  editorProps: {
+    attributes: {
+      class: 'prose focus:outline-none',
+    },
+  },
 })
 
 watch(() => starsStore.selectedRepo, () => {
@@ -121,10 +129,6 @@ watch(isOpen, (newVal) => {
 <style lang="postcss">
 .ProseMirror {
   @apply h-full;
-}
-
-.ProseMirror.ProseMirror-focused {
-  outline: none;
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
