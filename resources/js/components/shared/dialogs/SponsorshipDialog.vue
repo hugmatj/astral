@@ -53,7 +53,8 @@ const { isOpen, hideDialog, currentContext } = useSponsorshipDialog()
     const authorizationsStore = useAuthorizationsStore()
 
     const DIALOG_MESSAGES: Record<AbilityContext, string> = {
-      [ABILITY_CONTEXTS.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`
+      [ABILITY_CONTEXTS.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`,
+      [ABILITY_CONTEXTS.ADD_NOTES]: 'To add notes to your starred repos',
     }
 
     const currentMessage: Ref<string | null> = computed(() => currentContext.value ? DIALOG_MESSAGES[currentContext.value] : null)

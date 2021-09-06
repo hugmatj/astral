@@ -83,9 +83,14 @@ export type FetchDirection = keyof FetchDirections
 
 export interface Abilities {
   create_tag: boolean,
+  add_notes: boolean,
 }
 
 export type AbilityContext = keyof Abilities
+
+export type AbilityContexts = {
+  [key in Uppercase<AbilityContext>]: Lowercase<key>
+}
 
 export interface Limits {
   max_tags: number

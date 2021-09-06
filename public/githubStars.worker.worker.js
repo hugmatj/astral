@@ -29,7 +29,8 @@ var FETCH_DIRECTIONS = {
   ASC: 'ASC'
 };
 var ABILITY_CONTEXTS = {
-  CREATE_TAG: 'create_tag'
+  CREATE_TAG: 'create_tag',
+  ADD_NOTES: 'add_notes'
 };
 
 /***/ }),
