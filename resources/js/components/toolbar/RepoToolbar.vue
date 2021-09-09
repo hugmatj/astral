@@ -30,7 +30,7 @@ const authorizationsStore = useAuthorizationsStore()
 const { showDialog: showSponsorshipDialog } = useSponsorshipDialog()
 
 // TODO: Should this just be a getter in the store?
-const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId].notes)
+const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId]?.notes)
 
 const handleToggleNotesEditor = () => {
   if (authorizationsStore.abilities[ABILITY_CONTEXTS.ADD_NOTES]) {

@@ -74,12 +74,12 @@ export interface PaginationResponse {
   hasNextPage: boolean
 }
 
-export interface FetchDirections {
-  ASC: 'ASC'
-  DESC: 'DESC'
+export enum FetchDirections {
+  ASC = 'ASC',
+  DESC = 'DESC'
 }
 
-export type FetchDirection = keyof FetchDirections
+export type FetchDirection = keyof typeof FetchDirections
 
 export interface Abilities {
   create_tag: boolean,
@@ -95,3 +95,5 @@ export type AbilityContexts = {
 export interface Limits {
   max_tags: number
 }
+
+export type TagSortMethod = keyof Pick<Tag, 'stars_count' | 'name'>

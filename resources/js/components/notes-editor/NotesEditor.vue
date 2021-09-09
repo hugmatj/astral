@@ -228,6 +228,7 @@ watch(isSaving, newVal => {
 
 const saveNotes = (editor: Editor | undefined) => {
   if (editor) {
+    console.log('saving notes!')
     isSaving.value = true
     const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
 

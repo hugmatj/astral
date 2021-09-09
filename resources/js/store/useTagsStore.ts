@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
-import type { Tag } from '@/types'
+import orderBy from 'lodash/orderBy'
+import type { FetchDirection, Tag, TagSortMethod } from '@/types'
 
 export const useTagsStore = defineStore({
   id: 'tags',
@@ -13,7 +14,11 @@ export const useTagsStore = defineStore({
     addTag(tagName: string) {
       Inertia.post('/tags', { name: tagName })
     },
-    reorderTags() {
+    sortTags(method: TagSortMethod, direction: Lowercase<FetchDirection>) {
+      this.tags = orderBy(this.tags, method, direction)
+      this.syncTagOrder()
+    },
+    syncTagOrder() {
       const reorderedTags = this.tags.map((tag, index) => ({
         id: tag.id,
         sort_order: index,

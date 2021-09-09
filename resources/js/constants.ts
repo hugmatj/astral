@@ -1,9 +1,4 @@
-import { FetchDirections, AbilityContexts } from '@/types'
-
-export const FETCH_DIRECTIONS: FetchDirections = {
-  DESC: 'DESC',
-  ASC: 'ASC',
-} as const
+import { AbilityContexts } from '@/types'
 
 export const ABILITY_CONTEXTS: AbilityContexts = {
   CREATE_TAG: 'create_tag',

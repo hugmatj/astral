@@ -26,51 +26,56 @@
         </ul>
       </SidebarGroup>
       <SidebarGroup title="Tags" collapsible class="relative">
-        <div class="relative flex items-center h-10 mt-2">
-          <button
-            class="inline-flex items-center w-full text-sm font-semibold text-gray-700 transition-colors focus:outline-none focus:text-gray-500 hover:text-gray-500"
-            :class="{ 'pointer-events-none': isNewTagFormShowing }"
-            type="button"
-            @click="showNewTagForm"
-          >
-            <PlusCircleIcon class="flex-shrink-0 w-5 h-5" aria-hidden="true" />
-            <span class="ml-2">Add a tag...</span>
-          </button>
-          <form
-            class="absolute top-0 left-0 w-full transition-opacity duration-150 opacity-0 pointer-events-none"
-            :class="{ 'opacity-100 pointer-events-auto': isNewTagFormShowing }"
-            @submit.prevent="doAddTag(newTag)"
-          >
-            <input
-              ref="newTagForm"
-              v-model="newTag"
-              type="text"
-              placeholder="Enter a tag name..."
-              class="w-full border-0 rounded-sm focus:ring-2 focus:ring-transparent sm:text-sm"
-              @blur="isNewTagFormShowing = false"
-            />
-          </form>
-        </div>
-        <ul class="mt-2 space-y-2" role="listbox" aria-label="Tags" tabindex="0">
-          <draggable
-            v-model="tags"
-            tag="transition-group"
-            item-key="id"
-            :animation="300"
-            ghost-class="tag-ghost"
-            @end="reorderTags"
-          >
-            <template #item="{ element: tag }">
-              <SidebarTag
-                :tag="tag"
-                :is-active="tagIsSelected(tag)"
-                @stars-dropped="onStarsDropped"
-                @click="$emit('tag-selected', tag)"
-              >
-              </SidebarTag>
-            </template>
-          </draggable>
-        </ul>
+        <template #right-action>
+          <SortTagsMenu class="-mt-1" @sort-tags="sortTags" />
+        </template>
+        <template #default>
+          <div class="relative flex items-center h-10 mt-2">
+            <button
+              class="inline-flex items-center w-full text-sm font-semibold text-gray-700 transition-colors focus:outline-none focus:text-gray-500 hover:text-gray-500"
+              :class="{ 'pointer-events-none': isNewTagFormShowing }"
+              type="button"
+              @click="showNewTagForm"
+            >
+              <PlusCircleIcon class="flex-shrink-0 w-5 h-5" aria-hidden="true" />
+              <span class="ml-2">Add a tag...</span>
+            </button>
+            <form
+              class="absolute top-0 left-0 w-full transition-opacity duration-150 opacity-0 pointer-events-none"
+              :class="{ 'opacity-100 pointer-events-auto': isNewTagFormShowing }"
+              @submit.prevent="doAddTag(newTag)"
+            >
+              <input
+                ref="newTagForm"
+                v-model="newTag"
+                type="text"
+                placeholder="Enter a tag name..."
+                class="w-full border-0 rounded-sm focus:ring-2 focus:ring-transparent sm:text-sm"
+                @blur="isNewTagFormShowing = false"
+              />
+            </form>
+          </div>
+          <ul class="mt-2 space-y-2" role="listbox" aria-label="Tags" tabindex="0">
+            <draggable
+              v-model="tags"
+              tag="transition-group"
+              item-key="id"
+              :animation="300"
+              ghost-class="tag-ghost"
+              @end="syncTagOrder"
+            >
+              <template #item="{ element: tag }">
+                <SidebarTag
+                  :tag="tag"
+                  :is-active="tagIsSelected(tag)"
+                  @stars-dropped="onStarsDropped"
+                  @click="$emit('tag-selected', tag)"
+                >
+                </SidebarTag>
+              </template>
+            </draggable>
+          </ul>
+        </template>
       </SidebarGroup>
       <SidebarGroup title="Languages" collapsible>
         <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages" tabindex="0">
@@ -97,6 +102,7 @@ import draggable from 'vuedraggable'
 import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import SidebarTag from '@/components/sidebar/SidebarTag.vue'
+import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
 import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
 import { Tag, StarDragDataTransferData } from '@/types'
 
@@ -106,6 +112,7 @@ export default defineComponent({
     SidebarGroup,
     SidebarItem,
     SidebarTag,
+    SortTagsMenu,
     InboxIcon,
     StarIcon,
     PlusCircleIcon,
@@ -165,7 +172,8 @@ export default defineComponent({
       ),
       totalUntaggedRepos: computed(() => starsStore.untaggedStars.length),
       languages: computed(() => starsStore.languages),
-      reorderTags: tagsStore.reorderTags,
+      sortTags: tagsStore.sortTags,
+      syncTagOrder: tagsStore.syncTagOrder,
     }
   },
 })
