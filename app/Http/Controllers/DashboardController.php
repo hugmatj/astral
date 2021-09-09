@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         return Inertia::render('Dashboard', [
-            'limits' => config('limits'),
+            'limits' => auth()->user()->limits(),
             'abilities' => [
                 Abilities::CREATE_TAG => auth()->user()->can('create', Tag::class),
                 Abilities::ADD_NOTES => auth()->user()->can('addNotes', Star::class),

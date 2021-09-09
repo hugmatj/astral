@@ -20,9 +20,9 @@ import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useNotesEditor } from '@/composables/useNotesEditor'
 import EmptyNoteIcon from '@/components/shared/icons/notes-editor/EmptyNoteIcon.vue'
 import ExistingNoteIcon from '@/components/shared/icons/notes-editor/ExistingNoteIcon.vue'
-import { ABILITY_CONTEXTS } from '@/constants'
 import { onKeyStroke } from '@vueuse/core'
 import { isFocusedElementEditable } from '@/utils'
+import { Ability } from '@/types'
 
 const starsStore = useStarsStore()
 const { isOpen: isNotesEditorOpen, toggle: toggleNotesEditor } = useNotesEditor()
@@ -33,10 +33,10 @@ const { showDialog: showSponsorshipDialog } = useSponsorshipDialog()
 const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId]?.notes)
 
 const handleToggleNotesEditor = () => {
-  if (authorizationsStore.abilities[ABILITY_CONTEXTS.ADD_NOTES]) {
+  if (authorizationsStore.abilities[Ability.ADD_NOTES]) {
     toggleNotesEditor()
   } else {
-    showSponsorshipDialog(ABILITY_CONTEXTS.ADD_NOTES)
+    showSponsorshipDialog(Ability.ADD_NOTES)
   }
 }
 

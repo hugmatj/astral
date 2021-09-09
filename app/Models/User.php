@@ -136,4 +136,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Star::class);
     }
+
+    public function limits()
+    {
+        return $this->isNotSponsor() ?
+            config('limits') :
+            collect(config('limits'))->map(fn($item, $key) => -1)->toArray();
+    }
 }

@@ -44,7 +44,9 @@ var fetchStarsQuery = function fetchStarsQuery() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "FetchDirections": () => (/* binding */ FetchDirections)
+/* harmony export */   "FetchDirections": () => (/* binding */ FetchDirections),
+/* harmony export */   "Ability": () => (/* binding */ Ability),
+/* harmony export */   "Limit": () => (/* binding */ Limit)
 /* harmony export */ });
 var FetchDirections;
 
@@ -52,6 +54,19 @@ var FetchDirections;
   FetchDirections["ASC"] = "ASC";
   FetchDirections["DESC"] = "DESC";
 })(FetchDirections || (FetchDirections = {}));
+
+var Ability;
+
+(function (Ability) {
+  Ability["CREATE_TAG"] = "create_tag";
+  Ability["ADD_NOTES"] = "add_notes";
+})(Ability || (Ability = {}));
+
+var Limit;
+
+(function (Limit) {
+  Limit["MAX_TAGS"] = "max_tags";
+})(Limit || (Limit = {}));
 
 /***/ }),
 

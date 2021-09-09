@@ -46,15 +46,14 @@ import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } f
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { UserGroupIcon } from '@heroicons/vue/outline'
-import { ABILITY_CONTEXTS } from '@/constants'
-import { AbilityContext } from '@/types'
+import { Ability } from '@/types'
 
 const { isOpen, hideDialog, currentContext } = useSponsorshipDialog()
     const authorizationsStore = useAuthorizationsStore()
 
-    const DIALOG_MESSAGES: Record<AbilityContext, string> = {
-      [ABILITY_CONTEXTS.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`,
-      [ABILITY_CONTEXTS.ADD_NOTES]: 'To add notes to your starred repos',
+    const DIALOG_MESSAGES: Record<Ability, string> = {
+      [Ability.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`,
+      [Ability.ADD_NOTES]: 'To add notes to your starred repos',
     }
 
     const currentMessage: Ref<string | null> = computed(() => currentContext.value ? DIALOG_MESSAGES[currentContext.value] : null)

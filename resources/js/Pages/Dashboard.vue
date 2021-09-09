@@ -119,7 +119,7 @@ import RenameTagDialog from '@/components/shared/dialogs/RenameTagDialog.vue'
 import UserMenu from '@/components/UserMenu.vue'
 import Galileo from '@/components/Galileo.vue'
 import SettingsModal from '@/components/SettingsModal.vue'
-import { GitHubRepo, Tag, UserStar, User, Abilities, AbilityContext, Limits, } from '@/types'
+import { GitHubRepo, Tag, UserStar, User, Ability, Limits, Authorizations }  from '@/types'
 import {
   ArrowCircleLeftIcon,
   XCircleIcon as CloseIcon,
@@ -140,7 +140,7 @@ const props = defineProps({
       required: true,
     },
     abilities: {
-      type: Object as PropType<Abilities>,
+      type: Object as PropType<Authorizations>,
       required: true,
     },
     limits: {
@@ -148,7 +148,7 @@ const props = defineProps({
       required: true,
     },
     flash: {
-      type: Object as PropType<Record<string, AbilityContext>>,
+      type: Object as PropType<Record<string, Ability>>,
       required: true,
     },
     errors: {

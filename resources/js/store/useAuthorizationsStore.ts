@@ -1,17 +1,18 @@
 import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
-import type { Abilities, Limits } from '@/types'
-import { ABILITY_CONTEXTS } from '@/constants'
+import { Ability, Limit, Limits, Authorizations } from '@/types'
 
 export const useAuthorizationsStore = defineStore({
   id: 'authorizations',
   state() {
     return {
       abilities: {
-        [ABILITY_CONTEXTS.CREATE_TAG]: false,
-        [ABILITY_CONTEXTS.ADD_NOTES]: false,
-      } as Abilities,
-      limits: null as Nullable<Limits>
+        [Ability.CREATE_TAG]: false,
+        [Ability.ADD_NOTES]: false,
+      } as Authorizations,
+      limits: {
+        [Limit.MAX_TAGS]: -1,
+      } as Limits,
     }
   },
   actions: {

@@ -81,19 +81,17 @@ export enum FetchDirections {
 
 export type FetchDirection = keyof typeof FetchDirections
 
-export interface Abilities {
-  create_tag: boolean,
-  add_notes: boolean,
+export enum Ability {
+  CREATE_TAG = 'create_tag',
+  ADD_NOTES = 'add_notes',
 }
 
-export type AbilityContext = keyof Abilities
+export type Authorizations = Record<Ability, boolean>
 
-export type AbilityContexts = {
-  [key in Uppercase<AbilityContext>]: Lowercase<key>
+export enum Limit {
+  MAX_TAGS = 'max_tags'
 }
 
-export interface Limits {
-  max_tags: number
-}
+export type Limits = Record<Limit, number>
 
 export type TagSortMethod = keyof Pick<Tag, 'stars_count' | 'name'>
