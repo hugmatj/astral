@@ -33,7 +33,7 @@ export default defineComponent({
         ? 'text-white bg-brand-600'
         : props.isActive
         ? 'text-brand-600'
-        : 'text-gray-400'
+        : 'text-gray-400 hover:text-gray-300'
     })
 
     const badgeClasses = computed(() => {
@@ -61,7 +61,7 @@ export default defineComponent({
     return h(
       this.tag,
       {
-        class: `group flex items-center p-1 font-semibold cursor-pointer text-sm ${this.labelClasses}`,
+        class: `group flex items-center p-1 font-semibold cursor-pointer text-sm transition-colors ${this.labelClasses}`,
         role: 'option',
         ariaSelected: this.isActive,
       },

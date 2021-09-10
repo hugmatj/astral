@@ -85,7 +85,9 @@
   })
 
   const updateUserSetting = (setting: string, enabled: boolean) => {
-    Inertia.put('/settings', { key: setting, enabled });
+    Inertia.put('/settings', { key: setting, enabled }, {
+      only: ['user']
+    });
   }
 
   const deleteUser = () => {

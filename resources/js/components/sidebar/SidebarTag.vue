@@ -18,7 +18,7 @@
       <div :class="[tag.stars_count && 'absolute top-0 right-0']">
         <Menu v-slot="{ open }" as="div" class="relative">
           <MenuButton
-            class="top-0 right-0 w-5 h-5 text-white opacity-0 group-hover:opacity-100 group-focus-within:opacity-100" :class="[open && 'opacity-100']">
+            class="top-0 right-0 w-5 h-5 text-gray-300 opacity-0 hover:text-gray-200 group-hover:opacity-100 group-focus-within:opacity-100" :class="[open && 'opacity-100']">
             <DotsHorizontalIcon />
           </MenuButton>
           <transition
