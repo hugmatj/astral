@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot as="template" :show="isOpen" appear>
-    <div class="absolute inset-0 z-30 mt-16">
+    <div class="absolute inset-0 z-30 mt-16" aria-keyshortcuts="n">
       <TransitionChild
         as="template"
         enter-from="opacity-0"

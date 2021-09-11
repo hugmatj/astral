@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center ">
     <label for="repo_clone_url" class="text-sm font-semibold text-gray-600 cursor-pointer">Clone:</label>
-    <BaseTextInput id="repo_clone_url" v-model="cloneUrl" readonly class="ml-2" type="text" @focus="selectUrlText" />
+    <BaseTextInput id="repo_clone_url" ref="input" v-model="cloneUrl" readonly class="ml-2" type="text" aria-keyshortcuts="c" @focus="selectUrlText" />
     <RadioGroup v-model="currentUrlType" class="inline-flex items-center ml-2 isolate">
       <RadioGroupLabel class="sr-only">Clone URL Type</RadioGroupLabel>
       <RadioGroupOption
@@ -45,21 +45,31 @@ import {
   RadioGroupOption,
 } from '@headlessui/vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
+import { onKeyStroke } from '@vueuse/core'
+import { isFocusedElementEditable } from '@/utils'
 
 type CloneUrlType = 'ssh' | 'https'
 
 const starsStore = useStarsStore()
 
 const currentUrlType: Ref<CloneUrlType> = ref('ssh')
-
-const sshCloneUrl = computed(() => `git@github.com:${starsStore.selectedRepo?.nameWithOwner}.git`)
-const httpsCloneUrl = computed(() => `${starsStore.selectedRepo?.url}.git`)
+const input = ref<typeof BaseTextInput | null>(null)
 
 const cloneUrl = computed(() => {
-  return currentUrlType.value === 'ssh' ? sshCloneUrl.value : httpsCloneUrl.value
+  return currentUrlType.value === 'ssh' ?
+    `git@github.com:${starsStore.selectedRepo?.nameWithOwner}.git` :
+    `${starsStore.selectedRepo?.url}.git`
 })
 
 const selectUrlText = (e: FocusEvent) => {
   (e?.currentTarget as HTMLInputElement)?.select()
 }
+
+onKeyStroke('c', (e) => {
+  const inputEl: HTMLInputElement = input.value?.$el
+  if (!isFocusedElementEditable() && inputEl) {
+    e.preventDefault()
+    inputEl.focus()
+  }
+})
 </script>
