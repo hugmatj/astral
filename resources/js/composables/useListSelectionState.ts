@@ -20,7 +20,7 @@ const { shift, cmd, ctrl } = useMagicKeys()
  */
 const documentVisibility = useDocumentVisibility()
 watch(documentVisibility, (v) => {
-  if (v === 'visible') {
+  if (v === 'hidden') {
     ["shift", "meta", "control"].forEach(key => {
       window.dispatchEvent(new KeyboardEvent("keyup", { key }))
     })
