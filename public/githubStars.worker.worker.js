@@ -21,7 +21,8 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "fetchStarsQuery": () => (/* binding */ fetchStarsQuery)
+/* harmony export */   "fetchStarsQuery": () => (/* binding */ fetchStarsQuery),
+/* harmony export */   "removeStarQuery": () => (/* binding */ removeStarQuery)
 /* harmony export */ });
 /* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/types */ "./resources/js/types/index.ts");
 
@@ -31,6 +32,9 @@ var fetchStarsQuery = function fetchStarsQuery() {
   var perPage = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 100;
   var cursorFilter = cursor ? "after:\"".concat(cursor, "\"") : 'after:null';
   return "query {\n    viewer {\n    starredRepositories(first: ".concat(perPage, ", orderBy: {field: STARRED_AT, direction: ").concat(direction, "},  ").concat(cursorFilter, ") {\n        totalCount\n        edges {\n        node {\n            id\n            nameWithOwner\n            description\n            url\n            databaseId\n            isArchived\n            defaultBranchRef {\n            name\n            }\n            primaryLanguage {\n            name\n            }\n            stargazers {\n            totalCount\n            }\n            forkCount,\n            releases(first: 1, orderBy: {field: CREATED_AT, direction: DESC}) {\n                edges{\n                    node {\n                        tagName\n                    }\n                }\n            }\n        }\n        cursor\n        }\n        pageInfo {\n        startCursor\n        endCursor\n        hasNextPage\n        }\n    }\n    }\n  }");
+};
+var removeStarQuery = function removeStarQuery(id) {
+  return "mutation RemoveStar {\n  removeStar(input:{starrableId: \"".concat(id, "\"}) {\n    starrable {\n      id\n    }\n  }\n}");
 };
 
 /***/ }),
@@ -46,7 +50,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "FetchDirections": () => (/* binding */ FetchDirections),
 /* harmony export */   "Ability": () => (/* binding */ Ability),
-/* harmony export */   "Limit": () => (/* binding */ Limit)
+/* harmony export */   "Limit": () => (/* binding */ Limit),
+/* harmony export */   "AuthScope": () => (/* binding */ AuthScope)
 /* harmony export */ });
 var FetchDirections;
 
@@ -67,6 +72,13 @@ var Limit;
 (function (Limit) {
   Limit["MAX_TAGS"] = "max_tags";
 })(Limit || (Limit = {}));
+
+var AuthScope;
+
+(function (AuthScope) {
+  AuthScope["READ_USER"] = "read:user";
+  AuthScope["PUBLIC_REPO"] = "public_repo";
+})(AuthScope || (AuthScope = {}));
 
 /***/ }),
 

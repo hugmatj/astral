@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot as="template" :show="isOpen">
-    <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hideDialog">
+    <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hide">
       <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
           <DialogOverlay class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
@@ -26,10 +26,10 @@
               </div>
             </div>
             <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-              <a href="https://github.com/sponsors/syropian" rel="noopener noreferrer" target="_blank" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:col-start-2 sm:text-sm" @click="hideDialog">
+              <a href="https://github.com/sponsors/syropian" rel="noopener noreferrer" target="_blank" class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:col-start-2 sm:text-sm" @click="hide">
                 I'd like to be a sponsor!
               </a>
-              <button ref="cancelButtonRef" type="button" class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:col-start-1 sm:text-sm" @click="hideDialog">
+              <button ref="cancelButtonRef" type="button" class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:col-start-1 sm:text-sm" @click="hide">
                 Nevermind
               </button>
             </div>
@@ -48,7 +48,7 @@ import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { UserGroupIcon } from '@heroicons/vue/outline'
 import { Ability } from '@/types'
 
-const { isOpen, hideDialog, currentContext } = useSponsorshipDialog()
+const { isOpen, hide, currentContext } = useSponsorshipDialog()
 const authorizationsStore = useAuthorizationsStore()
 
 const DIALOG_MESSAGES: Record<Ability, string> = {

@@ -1,11 +1,9 @@
-import { Ref, ref } from 'vue'
+import { ref } from 'vue'
+import { BaseDialogReturnType } from '@/types'
 
 const isOpen = ref(false)
 
-interface NotesEditorReturnType {
-  isOpen: Ref<boolean>
-  show(): void,
-  hide(): void,
+interface NotesEditorReturnType extends BaseDialogReturnType {
   toggle(): void,
 }
 

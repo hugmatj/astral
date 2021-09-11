@@ -15,6 +15,15 @@ class Star extends Model
         'notes',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($model) {
+            $model->tags()->detach();
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

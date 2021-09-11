@@ -27,7 +27,7 @@
       </SidebarGroup>
       <SidebarGroup title="Tags" collapsible class="relative">
         <template #right-action>
-          <SortTagsMenu class="-mt-1" @sort-tags="sortTags" />
+          <SortTagsMenu v-if="tags.length > 1" class="-mt-1" @sort-tags="sortTags" />
         </template>
         <template #default>
           <div class="relative flex items-center h-10 mt-2">

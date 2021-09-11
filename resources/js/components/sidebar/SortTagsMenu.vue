@@ -24,7 +24,7 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center px-2 py-2 text-xs w-full font-semibold',
+                'group flex items-center p-2 text-xs w-full font-semibold',
               ]"
               @click="emit('sortTags', 'name', 'asc')"
             >
@@ -40,7 +40,7 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center px-2 py-2 text-xs w-full font-semibold',
+                'group flex items-center p-2 text-xs w-full font-semibold',
               ]"
               @click="emit('sortTags', 'name', 'desc')"
             >
@@ -56,7 +56,7 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center px-2 py-2 text-xs w-full font-semibold',
+                'group flex items-center p-2 text-xs w-full font-semibold',
               ]"
               @click="emit('sortTags', 'stars_count', 'desc')"
             >
@@ -72,7 +72,7 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center px-2 py-2 text-xs w-full font-semibold',
+                'group flex items-center p-2 text-xs w-full font-semibold',
               ]"
               @click="emit('sortTags', 'stars_count', 'asc')"
             >

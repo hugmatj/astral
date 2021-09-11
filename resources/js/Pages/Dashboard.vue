@@ -5,6 +5,7 @@
     <SponsorshipDialog />
     <RenameTagDialog />
     <SettingsModal />
+    <UpgradeOAuthScopeDialog />
     <div class="grid h-screen dashboard-grid">
       <!-- Nav -->
       <div class="flex items-center px-4 bg-brand-600 col-span-full">
@@ -24,7 +25,7 @@
           />
         </div>
         <div class="flex justify-end w-1/3 sm:w-2/3">
-          <UserMenu @show-settings="showSettingsModal"/>
+          <UserMenu @show-settings="showSettingsModal" />
         </div>
       </div>
       <!-- Sidebar -->
@@ -52,7 +53,7 @@
         </div>
         <div v-show="isSidebarOpen" class="flex justify-center flex-grow pt-5">
           <button
-            class="inline-flex items-center justify-center w-10 h-10 text-4xl text-white"
+            class="inline-flex items-center justify-center w-10 h-10 text-4xl text-white "
             @click="isSidebarOpen = !isSidebarOpen"
           >
             <CloseIcon />
@@ -61,15 +62,15 @@
       </div>
       <!-- Starred Repo List -->
       <div class="relative flex flex-col border-r border-gray-300">
-      <Galileo />
-      <StarredRepoList v-slot="{ repo }">
-        <StarredRepo
-          :repo="repo"
-          @selected="onRepoSelected"
-          @tag-selected="onTagSelected"
-          @language-selected="onLanguageSelected"
-        />
-      </StarredRepoList>
+        <Galileo />
+        <StarredRepoList v-slot="{ repo }">
+          <StarredRepo
+            :repo="repo"
+            @selected="onRepoSelected"
+            @tag-selected="onTagSelected"
+            @language-selected="onLanguageSelected"
+          />
+        </StarredRepoList>
       </div>
       <!-- Selected Star Info -->
       <div
@@ -106,7 +107,7 @@ import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useSyncValueToStore } from '@/composables/useSyncValueToStore'
 import { useListSelectionState } from '@/composables/useListSelectionState'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
-import { useSettingsModal } from '@/composables/useSettingsModal'
+import { useSettingsDialog } from '@/composables/useSettingsDialog'
 import { useUrlParams } from '@/composables/useUrlParams'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import StarredRepoList from '@/components/stars/StarredRepoList.vue'
@@ -116,10 +117,19 @@ import NotesEditor from '@/components/notes-editor/NotesEditor.vue'
 import Readme from '@/components/readme/Readme.vue'
 import SponsorshipDialog from '@/components/shared/dialogs/SponsorshipDialog.vue'
 import RenameTagDialog from '@/components/shared/dialogs/RenameTagDialog.vue'
+import UpgradeOAuthScopeDialog from '@/components/shared/dialogs/UpgradeAuthScopeDialog.vue'
 import UserMenu from '@/components/UserMenu.vue'
 import Galileo from '@/components/Galileo.vue'
-import SettingsModal from '@/components/SettingsModal.vue'
-import { GitHubRepo, Tag, UserStar, User, Ability, Limits, Authorizations }  from '@/types'
+import SettingsModal from '@/components/shared/dialogs/SettingsDialog.vue'
+import {
+  GitHubRepo,
+  Tag,
+  UserStar,
+  User,
+  Ability,
+  Limits,
+  Authorizations,
+} from '@/types'
 import {
   ArrowCircleLeftIcon,
   XCircleIcon as CloseIcon,
@@ -127,117 +137,143 @@ import {
 } from '@heroicons/vue/outline'
 
 const props = defineProps({
-    tags: {
-      type: Array as PropType<Tag[]>,
-      required: true,
+  tags: {
+    type: Array as PropType<Tag[]>,
+    required: true,
+  },
+  stars: {
+    type: Array as PropType<UserStar[]>,
+    required: true,
+  },
+  user: {
+    type: Object as PropType<User>,
+    required: true,
+  },
+  abilities: {
+    type: Object as PropType<Authorizations>,
+    required: true,
+  },
+  limits: {
+    type: Object as PropType<Limits>,
+    required: true,
+  },
+  flash: {
+    type: Object as PropType<Record<string, Ability>>,
+    required: true,
+  },
+  errors: {
+    type: Object,
+    default: () => {
+      return {}
     },
-    stars: {
-      type: Array as PropType<UserStar[]>,
-      required: true,
-    },
-    user: {
-      type: Object as PropType<User>,
-      required: true,
-    },
-    abilities: {
-      type: Object as PropType<Authorizations>,
-      required: true,
-    },
-    limits: {
-      type: Object as PropType<Limits>,
-      required: true,
-    },
-    flash: {
-      type: Object as PropType<Record<string, Ability>>,
-      required: true,
-    },
-    errors: {
-      type: Object,
-      default: () => {
-        return {}
-      },
-    },
-  });
+  },
+})
 
 const userStore = useUserStore()
-    const authorizationsStore = useAuthorizationsStore()
-    const tagsStore = useTagsStore()
-    const starsStore = useStarsStore()
-    const starsFilterStore = useStarsFilterStore()
-    const { showDialog } = useSponsorshipDialog()
-    const { showSettingsModal } = useSettingsModal()
-    const { params: urlParams, clearParams } = useUrlParams()
+const authorizationsStore = useAuthorizationsStore()
+const tagsStore = useTagsStore()
+const starsStore = useStarsStore()
+const starsFilterStore = useStarsFilterStore()
+const { show: showSponsorshipDialog } = useSponsorshipDialog()
+const { show: showSettingsModal } = useSettingsDialog()
+const { params: urlParams, clearParams } = useUrlParams()
 
-    const flash = computed(() => props.flash)
+const flash = computed(() => props.flash)
 
-    useSyncValueToStore(computed(() => props.user), userStore, 'user')
-    useSyncValueToStore(computed(() => props.abilities), authorizationsStore, 'abilities')
-    useSyncValueToStore(computed(() => props.limits), authorizationsStore, 'limits')
-    useSyncValueToStore(computed(() => props.tags), tagsStore, 'tags')
-    useSyncValueToStore(computed(() => props.stars), starsStore, 'userStars')
+useSyncValueToStore(
+  computed(() => props.user),
+  userStore,
+  'user'
+)
+useSyncValueToStore(
+  computed(() => props.abilities),
+  authorizationsStore,
+  'abilities'
+)
+useSyncValueToStore(
+  computed(() => props.limits),
+  authorizationsStore,
+  'limits'
+)
+useSyncValueToStore(
+  computed(() => props.tags),
+  tagsStore,
+  'tags'
+)
+useSyncValueToStore(
+  computed(() => props.stars),
+  starsStore,
+  'userStars'
+)
 
-    const { selectItem, selectedItems } = useListSelectionState(computed(() => starsStore.starredRepos.map(repo => repo.node)))
+const { selectItem, selectedItems } = useListSelectionState(
+  computed(() => starsStore.starredRepos.map(repo => repo.node))
+)
 
-    /**
-     * After each request finishes we check the session to see if
-     * the user attempted to do something that requires an active
-     * sponsorship. If true, show them the Sponsor dialog.
-     */
-    Inertia.on('finish', () => {
-      if (flash.value.sponsorship_required) {
-        showDialog(flash.value.sponsorship_required)
+/**
+ * After each request finishes we check the session to see if
+ * the user attempted to do something that requires an active
+ * sponsorship. If true, show them the Sponsor dialog.
+ */
+Inertia.on('finish', () => {
+  if (flash.value.sponsorship_required) {
+    showSponsorshipDialog(flash.value.sponsorship_required)
+  }
+})
+
+const isSidebarOpen = ref(false)
+const isReadmeOpen = ref(false)
+
+const onAllStarsSelected = () => {
+  isSidebarOpen.value = false
+  starsFilterStore.setFilterByAll()
+  clearParams()
+}
+
+const onUntaggedSelected = () => {
+  isSidebarOpen.value = false
+  starsFilterStore.setFilterByUntagged()
+  clearParams()
+}
+
+const onTagSelected = (tag: Tag) => {
+  isSidebarOpen.value = false
+  starsFilterStore.selectedTag = tag
+  urlParams.tag = tag.name
+}
+
+const onLanguageSelected = (language: string) => {
+  isSidebarOpen.value = false
+  starsFilterStore.selectedLanguage = language
+  urlParams.language = language
+}
+
+const onRepoSelected = (repo: GitHubRepo) => {
+  isReadmeOpen.value = true
+  selectItem(repo.node)
+}
+
+watch(selectedItems, repos => {
+  starsStore.selectedRepos = repos
+})
+
+watch(
+  urlParams,
+  params => {
+    if (params.tag) {
+      const tag = tagsStore.tags.find(tag => tag.name === params.tag)
+
+      if (tag) {
+        starsFilterStore.selectedTag = tag
       }
-    })
-
-    const isSidebarOpen = ref(false)
-    const isReadmeOpen = ref(false)
-
-    const onAllStarsSelected = () => {
-      isSidebarOpen.value = false
-      starsFilterStore.setFilterByAll()
-      clearParams()
     }
 
-    const onUntaggedSelected = () => {
-      isSidebarOpen.value = false
-      starsFilterStore.setFilterByUntagged()
-      clearParams()
+    if (params.language) {
+      starsFilterStore.selectedLanguage = params.language
     }
-
-    const onTagSelected = (tag: Tag) => {
-      isSidebarOpen.value = false
-      starsFilterStore.selectedTag = tag
-      urlParams.tag = tag.name
-    }
-
-    const onLanguageSelected = (language: string) => {
-      isSidebarOpen.value = false
-      starsFilterStore.selectedLanguage = language
-      urlParams.language = language
-    }
-
-    const onRepoSelected = (repo: GitHubRepo) => {
-      isReadmeOpen.value = true
-      selectItem(repo.node)
-    }
-
-    watch(selectedItems, repos => {
-      starsStore.selectedRepos = repos
-    })
-
-    watch(urlParams, (params) => {
-      if (params.tag) {
-        const tag = tagsStore.tags.find(tag => tag.name === params.tag)
-
-        if (tag) {
-          starsFilterStore.selectedTag = tag
-        }
-      }
-
-      if (params.language) {
-        starsFilterStore.selectedLanguage = params.language
-      }
-    }, { immediate: true })
+  },
+  { immediate: true }
+)
 </script>
 
 <style>

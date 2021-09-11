@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot as="template" :show="isOpen">
-    <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hideSettingsModal">
+    <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hide">
       <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
           <DialogOverlay class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
@@ -68,12 +68,12 @@
   import BaseTextInput from '@/components/shared/core/BaseTextInput.vue';
   import BaseToggle from "@/components/shared/core/BaseToggle.vue";
   import BaseButton from "@/components/shared/core/BaseButton.vue";
-  import { useSettingsModal } from '@/composables/useSettingsModal'
+  import { useSettingsDialog } from '@/composables/useSettingsDialog'
   import { useUserStore } from '@/store/useUserStore';
   import { Inertia } from '@inertiajs/inertia'
 
 
-  const { isOpen, hideSettingsModal } = useSettingsModal()
+  const { isOpen, hide } = useSettingsDialog()
   const userStore = useUserStore()
   const isRequestingDeleteConfirmation = ref(false)
   const usernameConfirmation = ref('')
@@ -94,8 +94,7 @@
     if (!isRequestingDeleteConfirmation.value) {
       isRequestingDeleteConfirmation.value = true;
     } else {
-      // TODO: Delete all locally stored data
-      Inertia.delete('/user');
+      userStore.deleteUser()
     }
   }
 </script>

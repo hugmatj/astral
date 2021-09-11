@@ -1,29 +1,25 @@
 import { ref, computed, Ref } from 'vue'
-import { Ability } from '@/types'
+import { Ability, BaseDialogReturnType } from '@/types'
 
 const isOpen = ref(false)
 const currentContext = ref<Ability | null>(null)
 
-interface SponsorshipDialogReturnType {
+interface SponsorshipDialogReturnType extends Omit<BaseDialogReturnType, 'show'> {
   isOpen: Ref<boolean>
   currentContext: Ref<Ability | null>
-  showDialog(context: Ability): void
-  hideDialog(): void
+  show(context: Ability): void
+  hide(): void
 }
 
 export const useSponsorshipDialog = (): SponsorshipDialogReturnType => {
-  const showDialog = (context: Ability) => {
-    currentContext.value = context
-    isOpen.value = true
-  }
-
-  const hideDialog = () => isOpen.value = false
-
   return {
     isOpen: computed(() => isOpen.value),
     currentContext: computed(() => currentContext.value),
-    showDialog,
-    hideDialog
+    show: (context: Ability) => {
+      currentContext.value = context
+      isOpen.value = true
+    },
+    hide: () => isOpen.value = false,
   }
 }
 

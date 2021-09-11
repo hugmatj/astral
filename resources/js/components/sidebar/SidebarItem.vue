@@ -25,6 +25,10 @@ export default defineComponent({
     hasContextMenu: {
       type: Boolean,
       default: false,
+    },
+    isContextMenuActive: {
+      type: Boolean,
+      default: false,
     }
   },
   setup(props) {
@@ -42,7 +46,7 @@ export default defineComponent({
         : props.isActive
         ? 'text-white bg-brand-600'
         : 'text-white bg-gray-700')
-        + (props.hasContextMenu ? ' group-hover:opacity-0 group-focus-within:opacity-0' : '')
+        + (props.hasContextMenu ? props.isContextMenuActive ? ' invisible' : ' group-hover:opacity-0' : '')
     })
 
     const iconClasses = computed(() => {
@@ -78,7 +82,7 @@ export default defineComponent({
             h(
               'div',
               {
-                class: `text-white rounded-full px-2 h-5 text-xs inline-flex items-center flex-shrink-0 ${this.badgeClasses}`,
+                class: `transition-opacity text-white rounded-full px-2 h-5 text-xs inline-flex items-center flex-shrink-0 ${this.badgeClasses}`,
                 role: 'region',
                 ariaLive: 'polite',
               },

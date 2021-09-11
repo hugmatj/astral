@@ -58,7 +58,7 @@ class StarTagsController extends Controller
         $request->validate([
             'repoId' => 'required|numeric',
             'tags' => 'array',
-            'tags.*.name' => 'required_with:tags|alpha_dash',
+            'tags.*.name' => 'required_with:tags|string',
         ]);
 
         DB::beginTransaction();

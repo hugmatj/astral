@@ -1,3 +1,5 @@
+import type { Ref } from 'vue'
+
 export interface User {
   access_token: string
   avatar: string
@@ -95,3 +97,14 @@ export enum Limit {
 export type Limits = Record<Limit, number>
 
 export type TagSortMethod = keyof Pick<Tag, 'stars_count' | 'name'>
+
+export enum AuthScope {
+  READ_USER = 'read:user',
+  PUBLIC_REPO = 'public_repo'
+}
+
+export interface BaseDialogReturnType {
+  isOpen: Ref<boolean>
+  show(): void,
+  hide(): void,
+}

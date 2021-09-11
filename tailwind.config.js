@@ -29,5 +29,6 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
+    require("tailwindcss-nested-groups"),
   ],
 }
