@@ -53,7 +53,9 @@ const removeSelectedStar = () => {
   if (userStore.user?.scope !== AuthScope.PUBLIC_REPO){
     showUpgradeAuthScopeDialog()
   } else {
-    starsStore.removeStar(starsStore.selectedRepo.id)
+    if (window.confirm(`Are you sure you want to unstar ${starsStore.selectedRepo.nameWithOwner}?`)) {
+      starsStore.removeStar(starsStore.selectedRepo.id)
+    }
   }
 }
 
