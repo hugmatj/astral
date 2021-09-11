@@ -1647,27 +1647,18 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.8.tgz#2f918e330aeb3f56ab1031ca60a5b30672512457"
   integrity sha512-E2DQQnG7Qr4GwTs3GlfPPlHliGVADoufTnhpwfoViw7JlyLMmYtjfnTwM6nXAwvSJWiF7D+7AxpnWBBT3VWo6Q==
 
-"@vueuse/components@^5.0.3":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/components/-/components-5.3.0.tgz#43917e491243effdfb703cb05a70e9f97f08645a"
-  integrity sha512-3/UFESkfsh/xtUjY4Oa/YqNapnQ6fkAVtyw2NL42KWm4loEsKMCcKOXQn+a5xzoYNZSRXpo6iWbQwVs4SsZq6w==
+"@vueuse/core@^6.3.2":
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-6.3.2.tgz#3365b21a2d094d5afc42b607e84792fed6a4c463"
+  integrity sha512-Uq8XT4iH9tq7uIxsxDWeH3YXo5GJAJC9cB7q58oVMym3o34oO6AaMVDJd6HlqjzoIwoOAlsrd3ZLHrEUjBGPsw==
   dependencies:
-    "@vueuse/core" "5.3.0"
-    "@vueuse/shared" "5.3.0"
+    "@vueuse/shared" "6.3.2"
     vue-demi "*"
 
-"@vueuse/core@5.3.0", "@vueuse/core@^5.0.3":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-5.3.0.tgz#d8c6e939e18089afa224fab6e443fae2bdb57a51"
-  integrity sha512-bBL1/JMRHFWmbgQzUZHF4WOwlqfenR1B8+elriXsbnHlogQM5foSz9++WyDBR0YPIVgCJq7fvNLqd4T7+cjc5w==
-  dependencies:
-    "@vueuse/shared" "5.3.0"
-    vue-demi "*"
-
-"@vueuse/shared@5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-5.3.0.tgz#2b9583f80f1284242f808925e7e141310e400e45"
-  integrity sha512-qZfkPFH0qTScFpYiPOFpTcxWriRhlM3bgSzl3DFTgr/U0eZg3w2EFWaRZHdWeSvAUdNQyjOC4Toa8S0zJyEjHw==
+"@vueuse/shared@6.3.2":
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-6.3.2.tgz#35a821561fd4fb1ea2e24b6fa9086f3d0d506316"
+  integrity sha512-/KcGBbdxdjAPlmPjAs6Zs5dVWMYYL5eK7/c1kPExRIO7HKVRnV6scUYWgmU4qMP9ZVB8XD2tF+5JuWz3vAHuAw==
   dependencies:
     vue-demi "*"
 

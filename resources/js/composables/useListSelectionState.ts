@@ -1,9 +1,7 @@
-import { useMagicKeys, onKeyStroke, MaybeRef } from '@vueuse/core'
+import { useMagicKeys, onKeyStroke, MaybeRef, useDocumentVisibility } from '@vueuse/core'
 import { ref, computed, Ref, isRef, watch, unref } from 'vue'
 import { isFocusedElementEditable } from '../utils'
 
-const { shift, cmd, ctrl } = useMagicKeys()
-const isHoldingMetaKey = computed(() => cmd.value || ctrl.value)
 
 interface ListSelectionStateReturnType<T> {
   selectItem(item: T): void
@@ -11,6 +9,26 @@ interface ListSelectionStateReturnType<T> {
 }
 
 type GenericItems<T> = MaybeRef<T[]>
+
+const { shift, cmd, ctrl } = useMagicKeys()
+
+/**
+ * There's a strange browser issue where if you're holding any keys
+ * that are captured by a keydown event when the document visibility
+ * changes, when the document becomes visible again the keydown event will
+ * continue to fire, but the keyup event won't. This is a workaround for that.
+ */
+const documentVisibility = useDocumentVisibility()
+watch(documentVisibility, (v) => {
+  if (v === 'visible') {
+    ["shift", "meta", "control"].forEach(key => {
+      window.dispatchEvent(new KeyboardEvent("keyup", { key }))
+    })
+  }
+})
+
+const isHoldingMetaKey = computed(() => cmd.value || ctrl.value)
+const isHoldingShiftKey = computed(() => shift.value)
 
 export const useListSelectionState = <T>(
   items: GenericItems<T> | (() => GenericItems<T>),
@@ -189,9 +207,9 @@ export const useListSelectionState = <T>(
   }
 
   const updateSelectedItems = (item: T) => {
-    if (isHoldingMetaKey.value && !shift.value) {
+    if (isHoldingMetaKey.value && !isHoldingShiftKey.value) {
       toggleItem(item)
-    } else if (shift.value) {
+    } else if (isHoldingShiftKey.value) {
       setSelectedItemsRange(item)
       lastShiftSelectedItem.value = item
     } else {
@@ -199,7 +217,7 @@ export const useListSelectionState = <T>(
       lastShiftSelectedItem.value = null
     }
 
-    if (!shift.value || lastSelectedIndex.value === -1) {
+    if (!isHoldingShiftKey.value || lastSelectedIndex.value === -1) {
       lastSelectedItem.value = item
     }
   }
