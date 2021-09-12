@@ -1,4 +1,4 @@
-import { useMagicKeys, onKeyStroke, MaybeRef, useDocumentVisibility } from '@vueuse/core'
+import { useMagicKeys, onKeyStroke, MaybeRef, useEventListener } from '@vueuse/core'
 import { ref, computed, Ref, isRef, watch, unref } from 'vue'
 import { isFocusedElementEditable } from '../utils'
 
@@ -14,17 +14,14 @@ const { shift, cmd, ctrl } = useMagicKeys()
 
 /**
  * There's a strange browser issue where if you're holding any keys
- * that are captured by a keydown event when the document visibility
- * changes, when the document becomes visible again the keydown event will
+ * that are captured by a keydown event when the window blur event
+ * triggers, when the window becomes visible again the keydown event will
  * continue to fire, but the keyup event won't. This is a workaround for that.
  */
-const documentVisibility = useDocumentVisibility()
-watch(documentVisibility, (v) => {
-  if (v === 'hidden') {
-    ["shift", "meta", "control"].forEach(key => {
-      window.dispatchEvent(new KeyboardEvent("keyup", { key }))
-    })
-  }
+useEventListener(window, 'blur', () => {
+  ["shift", "meta", "control"].forEach(key => {
+    window.dispatchEvent(new KeyboardEvent("keyup", { key }))
+  })
 })
 
 const isHoldingMetaKey = computed(() => cmd.value || ctrl.value)
