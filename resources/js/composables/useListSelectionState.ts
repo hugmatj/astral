@@ -13,10 +13,11 @@ type GenericItems<T> = MaybeRef<T[]>
 const { shift, cmd, ctrl } = useMagicKeys()
 
 /**
- * There's a strange browser issue where if you're holding any keys
- * that are captured by a keydown event when the window blur event
- * triggers, when the window becomes visible again the keydown event will
- * continue to fire, but the keyup event won't. This is a workaround for that.
+ * There's a strange browser behaviour where when the window blur event
+ * triggers, if you're holding any keys that are captured by a keydown event
+ * when the window becomes visible again the keydown event will continue to
+ * fire, but the keyup event won't. The fix is to manually dispatch a keyup
+ * event when the window blur event fires.
  */
 useEventListener(window, 'blur', () => {
   ["shift", "meta", "control"].forEach(key => {
