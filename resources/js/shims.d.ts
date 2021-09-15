@@ -11,12 +11,4 @@ declare module 'fuzzysearch' {
   export default function(needle: string, haystack: string): boolean
 }
 
-declare module 'worker-loader!*' {
-  class WebpackWorker extends Worker {
-    constructor()
-  }
-
-  export default WebpackWorker
-}
-
 declare module '@heroicons/*'

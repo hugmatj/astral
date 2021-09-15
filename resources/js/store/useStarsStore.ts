@@ -3,7 +3,7 @@ import { Inertia } from '@inertiajs/inertia'
 import { useUserStore } from '@/store/useUserStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { removeStarQuery } from '@/queries'
-import StarsWorker from 'worker-loader!@/workers/githubStars.worker'
+import StarsWorker from '@/workers/githubStars.worker?worker'
 import keyBy from 'lodash/keyBy'
 import type { Dictionary } from 'lodash'
 import {

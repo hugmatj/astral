@@ -1,23 +1,42 @@
-// tsconfig.json
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["resources/js/*"]
+    "compilerOptions": {
+        "allowJs": true,
+        "target": "esnext",
+        "module": "esnext",
+        "strict": true,
+        "jsx": "preserve",
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "@@/*": [
+                "resources/*"
+            ],
+            "@/*": [
+                "resources/js/*"
+            ]
+        },
+        "types": [
+            "vite/client"
+        ],
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable",
+            "scripthost",
+            "webworker"
+        ]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost", "webworker"],
-  },
-  "include": ["resources/js/**/*.ts", "resources/js/**/*.vue"],
-  "exclude": ["node_modules"]
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.vue",
+        "vite.config.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }
