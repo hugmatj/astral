@@ -66,7 +66,7 @@ return [
     | The URL at which the Vite development server runs.
     | This is used to generate the script tags when developing.
     */
-    'dev_url' => 'https://localhost:3000',
+    'dev_url' => 'https://localhost:3001',
 
     /*
     |--------------------------------------------------------------------------
