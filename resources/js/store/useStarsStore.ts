@@ -163,6 +163,8 @@ export const useStarsStore = defineStore({
         cursor,
         direction,
       })
+
+      console.log(this.worker)
     },
     addTagToStars(tagId: number, repoIds: number[]) {
       Inertia.post('/stars/tag', { tagId, repoIds })

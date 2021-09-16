@@ -41,7 +41,7 @@
                     <div class="flex items-center ml-auto space-x-3">
                       <div v-show="isRequestingDeleteConfirmation">
                         <label for="confirm-user-delete" class="sr-only">Enter your username to confirm</label>
-                        <BaseTextInput id="confirm-user-delete" v-model="usernameConfirmation" placeholder="Enter your username to confirm" />
+                        <BaseTextInput id="confirm-user-delete" v-model="usernameConfirmation" placeholder="Enter your username to confirm" class="w-60" />
                       </div>
                       <BaseButton kind="danger" size="sm" :disabled="deleteButtonIsDisabled" @click="deleteUser">{{ deleteButtonLabel }}</BaseButton>
                     </div>

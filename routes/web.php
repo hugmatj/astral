@@ -10,6 +10,7 @@ use App\Http\Controllers\TagsController;
 use App\Http\Controllers\TagsSortOrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\WebWorkerProxyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,3 +51,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+if (App::environment() === 'local') {
+    Route::group(['prefix' => config('vite.entrypoints')[0]], function () {
+        foreach([
+            '/workers/githubStars.worker.ts',
+            '/queries/index.ts',
+            '/types/index.ts',
+        ] as $path) {
+            Route::get($path, WebWorkerProxyController::class);
+        }
+    });
+}
