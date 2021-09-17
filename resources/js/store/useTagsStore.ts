@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
 import orderBy from 'lodash/orderBy'
-import type { FetchDirection, Tag, TagSortMethod } from '@/types'
+import { FetchDirection, Tag, TagSortMethod } from '@/types'
 
 export const useTagsStore = defineStore({
   id: 'tags',

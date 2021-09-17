@@ -5,7 +5,7 @@ import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { removeStarQuery } from '@/queries'
 import StarsWorker from '@/workers/githubStars.worker?worker'
 import keyBy from 'lodash/keyBy'
-import type { Dictionary } from 'lodash'
+import { Dictionary } from 'lodash'
 import {
   UserStar,
   GitHubRepo,

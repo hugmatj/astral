@@ -1,5 +1,5 @@
 import { watch, ComputedRef } from 'vue'
-import type { Store } from 'pinia'
+import { Store } from 'pinia'
 
 export const useSyncValueToStore = <
   TStore extends Store,
