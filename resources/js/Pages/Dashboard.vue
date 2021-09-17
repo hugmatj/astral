@@ -61,7 +61,7 @@
         </div>
       </div>
       <!-- Starred Repo List -->
-      <div class="relative flex flex-col border-r border-gray-300">
+      <div class="relative flex flex-col border-r border-gray-300 dark:border-gray-600">
         <Galileo />
         <StarredRepoList v-slot="{ repo }">
           <StarredRepo

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full p-4 overflow-y-auto bg-gray-900">
+  <div class="h-full p-4 overflow-y-auto bg-gray-900 dark:bg-gray-800">
     <div class="mt-6 space-y-6">
       <SidebarGroup title="Stars">
         <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars" tabindex="0">

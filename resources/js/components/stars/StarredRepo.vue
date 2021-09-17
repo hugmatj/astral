@@ -1,7 +1,7 @@
 <template>
   <div
-    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800 group"
-    :class="{ 'bg-gray-100 dark:bg-gray-900 shadow-inner': isSelected }"
+    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-900 group"
+    :class="{ 'bg-gray-100 dark:bg-gray-800 shadow-inner': isSelected }"
     draggable="true"
     role="option"
     :aria-selected="isSelected"
@@ -34,6 +34,8 @@
         class="
           text-brand-800
           bg-brand-100
+          dark:bg-brand-800
+          dark:text-brand-200
           px-2
           py-0.5
           rounded-sm
@@ -57,6 +59,8 @@
         class="
           text-indigo-800
           bg-indigo-100
+          dark:bg-indigo-800
+          dark:text-indigo-200
           px-2
           py-0.5
           rounded-sm
@@ -77,6 +81,8 @@
           transition-opacity
           text-gray-600
           bg-gray-200
+          dark:bg-gray-600
+          dark:text-gray-200
           px-2
           py-0.5
           rounded-sm
@@ -94,7 +100,7 @@
       Edit Tags
       </li>
     </ul>
-    <div class="flex items-center mt-4 space-x-4 text-gray-500">
+    <div class="flex items-center mt-4 space-x-4 text-gray-500 dark:text-gray-400">
       <div class="flex items-center">
         <StarIcon class="w-4 h-4" />
         <span class="ml-1 text-xs font-medium">{{ repo.node.stargazers.totalCount }}</span>

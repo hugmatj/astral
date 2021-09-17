@@ -74,7 +74,7 @@ export default defineComponent({
         starredRepositories.edges
       )
       if (starsStore.pageInfo.hasNextPage) {
-        starsStore.fetchStars(starsStore.pageInfo.endCursor)
+        // starsStore.fetchStars(starsStore.pageInfo.endCursor)
       } else {
         authorizationsStore.checkForSponsorship()
       }

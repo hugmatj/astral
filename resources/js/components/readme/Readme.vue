@@ -1,9 +1,9 @@
 <template>
   <div ref="readmeContainerEl" class="relative flex-grow overflow-y-auto">
-    <div v-show="contents" class="relative w-full h-full">
+    <div v-show="contents && !isReadmeLoading" class="relative w-full h-full">
       <div
         ref="readmeEl"
-        class="p-4 prose max-w-none sm:max-w-2xl sm:mx-auto"
+        class="p-4 prose max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto"
         v-html="contents"
       ></div>
     </div>
