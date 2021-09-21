@@ -4,17 +4,20 @@ export default defineComponent({
   props: {
     value: {
       required: true,
-      type: undefined
+      type: undefined,
     },
   },
   emits: ['change'],
   setup(props, { emit }) {
-    watch(() => props.value, (val) => {
-      emit('change', val)
-    })
+    watch(
+      () => props.value,
+      val => {
+        emit('change', val)
+      }
+    )
   },
   render() {
     return []
-  }
+  },
 })
 </script>

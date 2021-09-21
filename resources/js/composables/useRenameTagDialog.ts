@@ -7,7 +7,7 @@ const currentTag = ref<Nullable<Tag>>(null)
 
 interface RenameTagDialogReturnType extends Omit<BaseDialogReturnType, 'show'> {
   isOpen: Ref<boolean>
-  currentTag: Ref<Nullable<Tag>>,
+  currentTag: Ref<Nullable<Tag>>
   show(tag: Tag): void
   hide(): void
 }
@@ -20,7 +20,6 @@ export const useRenameTagDialog = (): RenameTagDialogReturnType => {
       currentTag.value = tag
       isOpen.value = true
     },
-    hide: () => isOpen.value = false
+    hide: () => (isOpen.value = false),
   }
 }
-

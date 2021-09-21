@@ -7,9 +7,9 @@ const BASE_FILTERS = {
 } as const
 
 interface SearchInput {
-  query: string,
-  tags: string[],
-  strings: string[],
+  query: string
+  tags: string[]
+  strings: string[]
 }
 
 type BaseFilter = Values<typeof BASE_FILTERS>
@@ -21,7 +21,7 @@ export const useStarsFilterStore = defineStore({
       selectedFilter: BASE_FILTERS.ALL as BaseFilter,
       selectedTag: null as Nullable<Tag>,
       selectedLanguage: null as Nullable<string>,
-      searchQuery: ""
+      searchQuery: '',
     }
   },
   getters: {
@@ -31,7 +31,9 @@ export const useStarsFilterStore = defineStore({
         .toLowerCase()
         .split(':')
         .filter(Boolean)
-      const tags = queryParts.filter(part => part.startsWith('#')).map(tag => tag.substring(1))
+      const tags = queryParts
+        .filter(part => part.startsWith('#'))
+        .map(tag => tag.substring(1))
       const strings = queryParts.filter(part => !part.startsWith('#'))
 
       return {

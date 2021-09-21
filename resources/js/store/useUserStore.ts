@@ -18,6 +18,6 @@ export const useUserStore = defineStore({
       starsStore.resetPageInfo()
 
       Inertia.delete('/user')
-    }
-  }
+    },
+  },
 })

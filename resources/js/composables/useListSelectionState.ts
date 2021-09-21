@@ -1,7 +1,11 @@
-import { useMagicKeys, onKeyStroke, MaybeRef, useEventListener } from '@vueuse/core'
+import {
+  useMagicKeys,
+  onKeyStroke,
+  MaybeRef,
+  useEventListener,
+} from '@vueuse/core'
 import { ref, computed, Ref, isRef, watch, unref } from 'vue'
 import { isFocusedElementEditable } from '../utils'
-
 
 interface ListSelectionStateReturnType<T> {
   selectItem(item: T): void
@@ -20,8 +24,8 @@ const { shift, cmd, ctrl } = useMagicKeys()
  * event when the window blur event fires.
  */
 useEventListener(window, 'blur', () => {
-  ["shift", "meta", "control"].forEach(key => {
-    window.dispatchEvent(new KeyboardEvent("keyup", { key }))
+  ;['shift', 'meta', 'control'].forEach(key => {
+    window.dispatchEvent(new KeyboardEvent('keyup', { key }))
   })
 })
 

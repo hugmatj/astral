@@ -10,10 +10,10 @@ module.exports = {
   },
   extends: [
     // add more generic rulesets here, such as:
-    'plugin:vue/vue3-recommended',
     'eslint:recommended',
-    'prettier',
+    'plugin:vue/vue3-recommended',
     '@vue/typescript/recommended',
+    'prettier',
   ],
   rules: {
     // override/add rules settings here, such as:
@@ -22,9 +22,9 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   },
   globals: {
-    defineProps: "readonly",
-    defineEmits: "readonly",
-    defineExpose: "readonly",
-    withDefaults: "readonly"
-  }
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly',
+    withDefaults: 'readonly',
+  },
 }

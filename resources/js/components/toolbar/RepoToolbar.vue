@@ -1,8 +1,23 @@
 <template>
-  <div class="flex items-center flex-shrink-0 h-16 px-4 border-b border-gray-300 bg-gray-50">
+  <div
+    class="
+      flex
+      items-center
+      flex-shrink-0
+      h-16
+      px-4
+      border-b border-gray-300
+      bg-gray-50
+    "
+  >
     <BaseButton size="sm" @click="handleToggleNotesEditor()">
-      <component :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon" class="h-4 -ml-2" />
-      <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} Notes</span>
+      <component
+        :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon"
+        class="h-4 -ml-2"
+      />
+      <span class="ml-0.5"
+        >{{ isNotesEditorOpen ? 'Hide' : 'Show' }} Notes</span
+      >
     </BaseButton>
     <BaseButton size="sm" class="ml-2" @click="removeSelectedStar">
       <StarIcon class="h-4 -ml-1" />
@@ -33,13 +48,17 @@ import { Ability, AuthScope } from '@/types'
 
 const starsStore = useStarsStore()
 const userStore = useUserStore()
-const { isOpen: isNotesEditorOpen, toggle: toggleNotesEditor } = useNotesEditor()
+const { isOpen: isNotesEditorOpen, toggle: toggleNotesEditor } =
+  useNotesEditor()
 const authorizationsStore = useAuthorizationsStore()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showUpgradeAuthScopeDialog } = useUpgradeAuthScopeDialog()
 
 // TODO: Should this just be a getter in the store?
-const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId]?.notes)
+const currentStarHasNotes = computed(
+  () =>
+    !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId]?.notes
+)
 
 const handleToggleNotesEditor = () => {
   if (authorizationsStore.abilities[Ability.ADD_NOTES]) {
@@ -50,16 +69,20 @@ const handleToggleNotesEditor = () => {
 }
 
 const removeSelectedStar = () => {
-  if (userStore.user?.scope !== AuthScope.PUBLIC_REPO){
+  if (userStore.user?.scope !== AuthScope.PUBLIC_REPO) {
     showUpgradeAuthScopeDialog()
   } else {
-    if (window.confirm(`Are you sure you want to unstar ${starsStore.selectedRepo.nameWithOwner}?`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to unstar ${starsStore.selectedRepo.nameWithOwner}?`
+      )
+    ) {
       starsStore.removeStar(starsStore.selectedRepo.id)
     }
   }
 }
 
-onKeyStroke('n', (e) => {
+onKeyStroke('n', e => {
   if (!isFocusedElementEditable()) {
     e.preventDefault()
     handleToggleNotesEditor()

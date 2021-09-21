@@ -18,6 +18,6 @@ export const useAuthorizationsStore = defineStore({
   actions: {
     checkForSponsorship() {
       Inertia.get('/check-sponsorship')
-    }
-  }
+    },
+  },
 })

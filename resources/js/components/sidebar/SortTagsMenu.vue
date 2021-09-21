@@ -1,7 +1,13 @@
 <template>
   <Menu v-slot="{ open }" as="div" class="relative">
     <MenuButton
-      class="inline-flex items-center text-gray-400 transition-colors hover:text-gray-200"
+      class="
+        inline-flex
+        items-center
+        text-gray-400
+        transition-colors
+        hover:text-gray-200
+      "
       :class="{ 'text-gray-50': open }"
     >
       <span class="text-xs tracking-wider uppercase">Sort</span>
@@ -16,7 +22,21 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems
-        class="absolute z-20 w-40 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg right-2 sm:right-0 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="
+          absolute
+          z-20
+          w-40
+          mt-2
+          origin-top-right
+          bg-white
+          divide-y divide-gray-100
+          rounded-md
+          shadow-lg
+          right-2
+          sm:right-0
+          ring-1 ring-black ring-opacity-5
+          focus:outline-none
+        "
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">

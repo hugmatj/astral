@@ -1,8 +1,8 @@
-import { reactive, watch } from "vue"
+import { reactive, watch } from 'vue'
 import { useEventListener } from '@vueuse/core'
 
 interface UseUrlParamsReturnValue {
-  params: Record<string, string | null>,
+  params: Record<string, string | null>
   clearParams: () => void
 }
 
@@ -10,9 +10,9 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
   const urlParams = new URLSearchParams(location.search || '')
   const params: Record<string, string | null> = reactive(Object.assign({}))
 
-  urlParams.forEach((value, key) => params[key] = value)
+  urlParams.forEach((value, key) => (params[key] = value))
 
-  watch(params, (newParams) => {
+  watch(params, newParams => {
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === null) {
         delete params[key]
@@ -24,7 +24,11 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
     if (!Object.keys(params).length) {
       clearParams()
     } else {
-      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`)
+      window.history.replaceState(
+        {},
+        '',
+        `${window.location.pathname}?${urlParams.toString()}`
+      )
     }
   })
 
@@ -32,16 +36,16 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
     Object.keys(params).forEach(key => {
       urlParams.delete(key)
       params[key] = null
-      window.history.pushState(null, document.title, window.location.pathname);
+      window.history.pushState(null, document.title, window.location.pathname)
     })
   }
 
   useEventListener(window, 'popstate', () => {
-    urlParams.forEach((value, key) => params[key] = value)
+    urlParams.forEach((value, key) => (params[key] = value))
   })
 
   return {
     params,
-    clearParams
+    clearParams,
   }
 }

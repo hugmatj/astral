@@ -201,11 +201,17 @@ export const useStarsStore = defineStore({
         }),
       })
 
-      const repo: GitHubRepo | undefined = this.starredRepos.find(repo => repo.node.id === id)
+      const repo: GitHubRepo | undefined = this.starredRepos.find(
+        repo => repo.node.id === id
+      )
 
       if (repo) {
-        const userStar: UserStar | undefined = this.userStars.find(star => star.repo_id === repo.node.databaseId)
-        this.selectedRepos = this.selectedRepos.filter(selectedRepo => selectedRepo.id !== id)
+        const userStar: UserStar | undefined = this.userStars.find(
+          star => star.repo_id === repo.node.databaseId
+        )
+        this.selectedRepos = this.selectedRepos.filter(
+          selectedRepo => selectedRepo.id !== id
+        )
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 
         if (userStar) {

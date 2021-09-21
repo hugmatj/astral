@@ -78,7 +78,7 @@ export interface PaginationResponse {
 
 export enum FetchDirections {
   ASC = 'ASC',
-  DESC = 'DESC'
+  DESC = 'DESC',
 }
 
 export type FetchDirection = keyof typeof FetchDirections
@@ -91,7 +91,7 @@ export enum Ability {
 export type Authorizations = Record<Ability, boolean>
 
 export enum Limit {
-  MAX_TAGS = 'max_tags'
+  MAX_TAGS = 'max_tags',
 }
 
 export type Limits = Record<Limit, number>
@@ -100,11 +100,11 @@ export type TagSortMethod = keyof Pick<Tag, 'stars_count' | 'name'>
 
 export enum AuthScope {
   READ_USER = 'read:user',
-  PUBLIC_REPO = 'public_repo'
+  PUBLIC_REPO = 'public_repo',
 }
 
 export interface BaseDialogReturnType {
   isOpen: Ref<boolean>
-  show(): void,
-  hide(): void,
+  show(): void
+  hide(): void
 }

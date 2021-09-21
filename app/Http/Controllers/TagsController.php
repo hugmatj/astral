@@ -32,6 +32,9 @@ class TagsController extends Controller
 
         $request->validate([
             'name' => 'bail|required|string|unique:tags,name,NULL,id,user_id,'.auth()->id(),
+        ], [
+            'required' => 'You must give a name to your tag.',
+            'unique' => 'You already have a tag with that name.'
         ]);
 
         auth()->user()->tags()->create(['name' => $request->input('name')]);
@@ -50,6 +53,9 @@ class TagsController extends Controller
     {
         $this->validate($request, [
             'name' => 'bail|required|string|unique:tags,name,'.$tag->id.',id,user_id,'.auth()->id(),
+        ], [
+            'required' => 'You must give a name to your tag.',
+            'unique' => 'You already have a tag with that name.'
         ]);
 
         $tag = auth()->user()->tags()->findOrFail($tag->id);

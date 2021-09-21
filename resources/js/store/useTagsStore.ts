@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Inertia } from '@inertiajs/inertia'
+import { Inertia, Page, PageProps } from '@inertiajs/inertia'
 import orderBy from 'lodash/orderBy'
 import { FetchDirection, Tag, TagSortMethod } from '@/types'
 
@@ -11,8 +11,17 @@ export const useTagsStore = defineStore({
     }
   },
   actions: {
-    addTag(tagName: string) {
-      Inertia.post('/tags', { name: tagName })
+    addTag(tagName: string): Promise<Page<PageProps> | string> {
+      return new Promise((resolve, reject) => {
+        Inertia.post(
+          '/tags',
+          { name: tagName },
+          {
+            onSuccess: page => resolve(page),
+            onError: errors => reject(errors[Object.keys(errors)[0]]),
+          }
+        )
+      })
     },
     sortTags(method: TagSortMethod, direction: Lowercase<FetchDirection>) {
       this.tags = orderBy(this.tags, method, direction)

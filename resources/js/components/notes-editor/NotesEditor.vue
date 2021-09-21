@@ -9,7 +9,13 @@
         leave-to="opacity-0"
       >
         <div
-          class="absolute inset-0 transition-opacity duration-300 bg-gray-500/75"
+          class="
+            absolute
+            inset-0
+            transition-opacity
+            duration-300
+            bg-gray-500/75
+          "
           @click.self="hide"
         ></div>
       </TransitionChild>
@@ -22,7 +28,17 @@
           leave-to="opacity-0 -translate-x-full"
         >
           <div
-            class="relative h-full p-4 transition duration-300 transform bg-white shadow rounded-r-md"
+            class="
+              relative
+              h-full
+              p-4
+              transition
+              duration-300
+              transform
+              bg-white
+              shadow
+              rounded-r-md
+            "
           >
             <div
               v-if="editor"
@@ -32,7 +48,7 @@
               <button
                 class="p-1 rounded hover:bg-gray-200"
                 :class="{
-                  'bg-brand-100 text-brand-700 hover:bg-brand-200':
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200':
                     editor.isActive('bold'),
                 }"
                 aria-label="Bold"
@@ -49,7 +65,7 @@
               <button
                 class="p-1 rounded hover:bg-gray-200"
                 :class="{
-                  'bg-brand-100 text-brand-700 hover:bg-brand-200':
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200':
                     editor.isActive('italic'),
                 }"
                 aria-label="Italic"
@@ -66,7 +82,7 @@
               <button
                 class="p-1 rounded hover:bg-gray-200"
                 :class="{
-                  'bg-brand-100 text-brand-700 hover:bg-brand-200':
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200':
                     editor.isActive('underline'),
                 }"
                 aria-label="Underline"
@@ -83,7 +99,7 @@
               <button
                 class="p-1 rounded hover:bg-gray-200"
                 :class="{
-                  'bg-brand-100 text-brand-700 hover:bg-brand-200':
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200':
                     editor.isActive('code'),
                 }"
                 aria-label="Inline Code"
@@ -100,7 +116,7 @@
               <button
                 class="p-1 rounded hover:bg-gray-200"
                 :class="{
-                  'bg-brand-100 text-brand-700 hover:bg-brand-200':
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200':
                     editor.isActive('codeBlock'),
                 }"
                 aria-label="Code Block"
@@ -132,7 +148,25 @@
               as="template"
             >
               <div
-                class="absolute bottom-0 right-0 z-30 px-3 py-2 mb-4 mr-4 text-sm font-semibold transition transform rounded-full bg-brand-200 text-brand-700" aria-role="status" aria-live="assertive"
+                class="
+                  absolute
+                  bottom-0
+                  right-0
+                  z-30
+                  px-3
+                  py-2
+                  mb-4
+                  mr-4
+                  text-sm
+                  font-semibold
+                  transition
+                  transform
+                  rounded-full
+                  bg-brand-200
+                  text-brand-700
+                "
+                aria-role="status"
+                aria-live="assertive"
               >
                 Notes saved!
               </div>

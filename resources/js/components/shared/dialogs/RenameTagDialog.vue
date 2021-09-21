@@ -8,7 +8,17 @@
       @close="hide"
     >
       <div
-        class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+        class="
+          flex
+          items-end
+          justify-center
+          min-h-screen
+          px-4
+          pt-4
+          pb-20
+          text-center
+          sm:block sm:p-0
+        "
       >
         <TransitionChild
           as="template"
@@ -40,7 +50,21 @@
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div
-            class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-6"
+            class="
+              inline-block
+              px-4
+              pt-5
+              pb-4
+              overflow-hidden
+              text-left
+              align-bottom
+              transition-all
+              transform
+              bg-white
+              rounded-lg
+              shadow-xl
+              sm:my-8 sm:align-middle sm:max-w-md sm:w-full sm:p-6
+            "
           >
             <form @submit.prevent="renameTag">
               <div>
@@ -51,6 +75,7 @@
                   <label for="tagName" class="sr-only">Tag Name</label>
                   <BaseTextInput
                     id="tagName"
+                    ref="input"
                     v-model="form.name"
                     type="text"
                     class="block w-full"
@@ -58,18 +83,40 @@
                   />
                   <p
                     v-if="form.errors.name"
-                    class="mt-2 text-xs text-left text-red-500"
+                    class="mt-2 text-xs font-semibold text-left text-red-500"
                   >
                     {{ form.errors.name }}
                   </p>
                 </div>
               </div>
               <div
-                class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
+                class="
+                  mt-5
+                  sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense
+                "
               >
                 <button
                   type="submit"
-                  class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:col-start-2 sm:text-sm"
+                  class="
+                    inline-flex
+                    justify-center
+                    w-full
+                    px-4
+                    py-2
+                    text-base
+                    font-medium
+                    text-white
+                    border border-transparent
+                    rounded-md
+                    shadow-sm
+                    bg-brand-600
+                    hover:bg-brand-700
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-offset-2
+                    focus:ring-brand-500
+                    sm:col-start-2 sm:text-sm
+                  "
                   :disabled="form.processing"
                 >
                   Save Tag
@@ -77,7 +124,27 @@
                 <button
                   ref="cancelButtonRef"
                   type="button"
-                  class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+                  class="
+                    inline-flex
+                    justify-center
+                    w-full
+                    px-4
+                    py-2
+                    mt-3
+                    text-base
+                    font-medium
+                    text-gray-700
+                    bg-white
+                    border border-gray-300
+                    rounded-md
+                    shadow-sm
+                    hover:bg-gray-50
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-offset-2
+                    focus:ring-brand-500
+                    sm:mt-0 sm:col-start-1 sm:text-sm
+                  "
                   @click="hide"
                 >
                   Cancel
@@ -92,7 +159,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import {
   Dialog,
   DialogOverlay,
@@ -107,10 +174,15 @@ const { isOpen, hide, currentTag } = useRenameTagDialog()
 const form = useForm({
   name: '',
 })
+const input = ref<typeof BaseTextInput | null>(null)
 
-watch([currentTag, isOpen], ([tag, openState]) => {
+watch([currentTag, isOpen], async ([tag, openState]) => {
   if (tag && openState === true) {
     form.name = tag.name
+    await nextTick()
+
+    const inputEl: HTMLInputElement = input.value?.$el
+    if (inputEl) inputEl.select()
   } else {
     setTimeout(() => {
       form.clearErrors()

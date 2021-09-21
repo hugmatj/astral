@@ -6,6 +6,7 @@
     <RenameTagDialog />
     <SettingsModal />
     <UpgradeOAuthScopeDialog />
+    <GlobalToast />
     <div class="grid h-screen dashboard-grid">
       <!-- Nav -->
       <div class="flex items-center px-4 bg-brand-600 col-span-full">
@@ -30,7 +31,20 @@
       </div>
       <!-- Sidebar -->
       <div
-        class="absolute inset-0 z-20 flex col-start-1 row-start-2 row-end-3 transition-colors duration-300 ease-in-out bg-gray-900 sm:relative sm:pointer-events-auto backdrop-filter"
+        class="
+          absolute
+          inset-0
+          z-20
+          flex
+          col-start-1
+          row-start-2 row-end-3
+          transition-colors
+          duration-300
+          ease-in-out
+          bg-gray-900
+          sm:relative sm:pointer-events-auto
+          backdrop-filter
+        "
         :aria-hidden="!isSidebarOpen"
         :class="{
           'bg-opacity-0 pointer-events-none': !isSidebarOpen,
@@ -38,7 +52,14 @@
         }"
       >
         <div
-          class="w-3/4 transition-transform duration-300 ease-in-out transform-gpu sm:translate-x-0 sm:w-full"
+          class="
+            w-3/4
+            transition-transform
+            duration-300
+            ease-in-out
+            transform-gpu
+            sm:translate-x-0 sm:w-full
+          "
           :class="{
             '-translate-x-full': !isSidebarOpen,
             'translate-x-0': isSidebarOpen,
@@ -53,7 +74,14 @@
         </div>
         <div v-show="isSidebarOpen" class="flex justify-center flex-grow pt-5">
           <button
-            class="inline-flex items-center justify-center w-10 h-10 text-4xl text-white "
+            class="
+              inline-flex
+              items-center
+              justify-center
+              w-10
+              h-10
+              text-4xl text-white
+            "
             @click="isSidebarOpen = !isSidebarOpen"
           >
             <CloseIcon />
@@ -61,7 +89,14 @@
         </div>
       </div>
       <!-- Starred Repo List -->
-      <div class="relative flex flex-col border-r border-gray-300 dark:border-gray-600">
+      <div
+        class="
+          relative
+          flex flex-col
+          border-r border-gray-300
+          dark:border-gray-600
+        "
+      >
         <Galileo />
         <StarredRepoList v-slot="{ repo }">
           <StarredRepo
@@ -74,14 +109,44 @@
       </div>
       <!-- Selected Star Info -->
       <div
-        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
+        class="
+          absolute
+          inset-0
+          z-10
+          col-start-3
+          row-start-2 row-end-3
+          transition-transform
+          duration-300
+          ease-in-out
+          bg-white
+          pointer-events-auto
+          dark:bg-gray-900
+          transform-gpu
+          sm:translate-x-0 sm:relative
+        "
         :class="{
           'translate-x-full pointer-events-none': !isReadmeOpen,
           'translate-x-0': isReadmeOpen,
         }"
       >
         <button
-          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-20 ml-5 text-gray-700 rounded-full bg-gray-50 sm:hidden"
+          class="
+            absolute
+            top-0
+            left-0
+            z-10
+            inline-flex
+            items-center
+            justify-center
+            w-6
+            h-6
+            mt-20
+            ml-5
+            text-gray-700
+            rounded-full
+            bg-gray-50
+            sm:hidden
+          "
           @click="isReadmeOpen = false"
         >
           <ArrowCircleLeftIcon />
@@ -121,6 +186,7 @@ import UpgradeOAuthScopeDialog from '@/components/shared/dialogs/UpgradeAuthScop
 import UserMenu from '@/components/UserMenu.vue'
 import Galileo from '@/components/Galileo.vue'
 import SettingsModal from '@/components/shared/dialogs/SettingsDialog.vue'
+import GlobalToast from '@/components/GlobalToast.vue'
 import {
   GitHubRepo,
   Tag,

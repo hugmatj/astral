@@ -4,10 +4,7 @@ const colors = require('tailwindcss/colors')
 
 module.exports = {
   mode: 'jit',
-  purge: [
-    './resources/js/**/*.vue',
-    './resources/views/**/*.blade.php',
-  ],
+  purge: ['./resources/js/**/*.vue', './resources/views/**/*.blade.php'],
 
   darkMode: 'class',
 
@@ -29,6 +26,6 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
-    require("tailwindcss-nested-groups"),
+    require('tailwindcss-nested-groups'),
   ],
 }

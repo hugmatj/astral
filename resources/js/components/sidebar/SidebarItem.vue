@@ -29,7 +29,7 @@ export default defineComponent({
     isContextMenuActive: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   setup(props) {
     const labelClasses = computed(() => {
@@ -41,12 +41,18 @@ export default defineComponent({
     })
 
     const badgeClasses = computed(() => {
-      return (props.isHighlighted
-        ? 'text-brand-600 bg-white'
-        : props.isActive
-        ? 'text-white bg-brand-600'
-        : 'text-white bg-gray-700')
-        + (props.hasContextMenu ? props.isContextMenuActive ? ' invisible' : ' group-hover:opacity-0' : '')
+      return (
+        (props.isHighlighted
+          ? 'text-brand-600 bg-white'
+          : props.isActive
+          ? 'text-white bg-brand-600'
+          : 'text-white bg-gray-700') +
+        (props.hasContextMenu
+          ? props.isContextMenuActive
+            ? ' invisible'
+            : ' group-hover:opacity-0'
+          : '')
+      )
     })
 
     const iconClasses = computed(() => {
@@ -73,10 +79,13 @@ export default defineComponent({
         !!this.$slots.icon &&
           h(
             'div',
-            { class: `flex-shrink-0 w-5 h-5 mr-2 ${this.iconClasses}`, ariaHidden: true },
+            {
+              class: `flex-shrink-0 w-5 h-5 mr-2 ${this.iconClasses}`,
+              ariaHidden: true,
+            },
             this.$slots.icon()
           ),
-        h('span', { role: 'region', ariaLive: 'polite'}, this.title),
+        h('span', { role: 'region', ariaLive: 'polite' }, this.title),
         h('div', { class: 'relative ml-auto' }, [
           !!this.count &&
             h(
@@ -88,8 +97,10 @@ export default defineComponent({
               },
               this.count
             ),
-            !!this.hasContextMenu && this.$slots.contextMenu && this.$slots.contextMenu()
-        ])
+          !!this.hasContextMenu &&
+            this.$slots.contextMenu &&
+            this.$slots.contextMenu(),
+        ]),
       ]
     )
   },

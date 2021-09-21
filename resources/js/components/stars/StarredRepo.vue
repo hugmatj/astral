@@ -1,6 +1,14 @@
 <template>
   <div
-    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-900 group"
+    class="
+      relative
+      p-4
+      bg-white
+      shadow-sm
+      cursor-pointer
+      dark:bg-gray-900
+      group
+    "
     :class="{ 'bg-gray-100 dark:bg-gray-800 shadow-inner': isSelected }"
     draggable="true"
     role="option"
@@ -11,7 +19,16 @@
   >
     <div
       aria-hidden
-      class="absolute top-0 left-0 w-1 transition-transform transform bg-brand-600 -bottom-px"
+      class="
+        absolute
+        top-0
+        left-0
+        w-1
+        transition-transform
+        transform
+        bg-brand-600
+        -bottom-px
+      "
       :class="{
         'translate-x-0': isSelected,
         '-translate-x-full': !isSelected,
@@ -24,18 +41,20 @@
     >
       {{ repo.node.description }}
     </p>
-    <TagsEditor v-if="isEditingTags" :tags="tags" class="mt-4" @change="syncTagsToStar(repo.node.databaseId, $event)" @blur="isEditingTags = false" />
-    <ul
-      v-if="!isEditingTags"
-      class="inline-flex flex-wrap items-start mt-4"
-    >
+    <TagsEditor
+      v-if="isEditingTags"
+      :tags="tags"
+      class="mt-4"
+      @change="syncTagsToStar(repo.node.databaseId, $event)"
+      @blur="isEditingTags = false"
+    />
+    <ul v-if="!isEditingTags" class="inline-flex flex-wrap items-start mt-4">
       <li
         v-if="shouldShowLanguageTag && repo.node.primaryLanguage?.name"
         class="
           text-brand-800
           bg-brand-100
-          dark:bg-brand-800
-          dark:text-brand-200
+          dark:bg-brand-800 dark:text-brand-200
           px-2
           py-0.5
           rounded-sm
@@ -59,8 +78,7 @@
         class="
           text-indigo-800
           bg-indigo-100
-          dark:bg-indigo-800
-          dark:text-indigo-200
+          dark:bg-indigo-800 dark:text-indigo-200
           px-2
           py-0.5
           rounded-sm
@@ -81,8 +99,7 @@
           transition-opacity
           text-gray-600
           bg-gray-200
-          dark:bg-gray-600
-          dark:text-gray-200
+          dark:bg-gray-600 dark:text-gray-200
           px-2
           py-0.5
           rounded-sm
@@ -93,17 +110,23 @@
           opacity-0
           group-hover:opacity-100
         "
-        :class="{'opacity-100': !tags.length && !repo.node.primaryLanguage?.name}"
+        :class="{
+          'opacity-100': !tags.length && !repo.node.primaryLanguage?.name,
+        }"
         role="button"
         @click.stop="isEditingTags = true"
       >
-      Edit Tags
+        Edit Tags
       </li>
     </ul>
-    <div class="flex items-center mt-4 space-x-4 text-gray-500 dark:text-gray-400">
+    <div
+      class="flex items-center mt-4 space-x-4 text-gray-500 dark:text-gray-400"
+    >
       <div class="flex items-center">
         <StarIcon class="w-4 h-4" />
-        <span class="ml-1 text-xs font-medium">{{ repo.node.stargazers.totalCount }}</span>
+        <span class="ml-1 text-xs font-medium">{{
+          repo.node.stargazers.totalCount
+        }}</span>
       </div>
       <div class="flex items-center">
         <ShareIcon class="w-4 h-4" />
@@ -144,7 +167,9 @@ export default defineComponent({
       )
     })
 
-    const shouldShowLanguageTag = computed(() => !!userStore.user?.settings.show_language_tags);
+    const shouldShowLanguageTag = computed(
+      () => !!userStore.user?.settings.show_language_tags
+    )
 
     const isEditingTags = ref(false)
 

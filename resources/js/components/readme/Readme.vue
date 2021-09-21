@@ -9,13 +9,34 @@
     </div>
     <div
       v-show="isReadmeLoading"
-      class="absolute inset-0 z-10 flex items-center justify-center text-center text-gray-500 bg-white dark:bg-gray-900"
+      class="
+        absolute
+        inset-0
+        z-10
+        flex
+        items-center
+        justify-center
+        text-center text-gray-500
+        bg-white
+        dark:bg-gray-900
+      "
     >
       Loading...
     </div>
     <div
       v-show="noRepoSelected"
-      class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-gray-500 bg-gray-50 dark:bg-gray-900"
+      class="
+        absolute
+        inset-0
+        z-10
+        flex flex-col
+        items-center
+        justify-center
+        p-4
+        text-center text-gray-500
+        bg-gray-50
+        dark:bg-gray-900
+      "
     >
       <img
         src="/images/readme-not-selected.svg"
@@ -76,8 +97,7 @@ export default defineComponent({
             if (readmeContainerEl.value && readmeEl.value) {
               const anchorTop: number =
                 readmeContainerEl.value.scrollTop +
-                (e.currentTarget as HTMLElement).getBoundingClientRect()
-                  .top -
+                (e.currentTarget as HTMLElement).getBoundingClientRect().top -
                 readmeContainerEl.value.getBoundingClientRect().top -
                 16
 
@@ -85,8 +105,8 @@ export default defineComponent({
             }
           })
         } else {
-          const repoName  = starsStore.selectedRepo.nameWithOwner
-          const repoBranch  = starsStore.selectedRepo.defaultBranchRef.name
+          const repoName = starsStore.selectedRepo.nameWithOwner
+          const repoBranch = starsStore.selectedRepo.defaultBranchRef.name
           const href = anchor.getAttribute('href')
 
           if (!href?.startsWith('http')) {
@@ -99,14 +119,13 @@ export default defineComponent({
     }
 
     const patchReadmeImages = () => {
-
       if (!readmeEl.value) {
         return false
       }
 
       Array.from(readmeEl.value.querySelectorAll('img')).forEach(img => {
-        const repoName  = starsStore.selectedRepo.nameWithOwner
-        const repoBranch  = starsStore.selectedRepo.defaultBranchRef.name
+        const repoName = starsStore.selectedRepo.nameWithOwner
+        const repoBranch = starsStore.selectedRepo.defaultBranchRef.name
         const imgSrc = img.getAttribute('src')
 
         if (!imgSrc?.startsWith('http')) {
@@ -217,7 +236,7 @@ export default defineComponent({
   }
 
   .pl-c2::before /* carriage-return */ {
-    content: "^M";
+    content: '^M';
   }
 
   .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
@@ -283,7 +302,5 @@ export default defineComponent({
     text-decoration: underline;
     color: #79b8ff;
   }
-
-
 }
 </style>

@@ -11,6 +11,6 @@ export const useSettingsDialog = (): BaseDialogReturnType => {
     },
     hide: () => {
       isOpen.value = false
-    }
+    },
   }
 }

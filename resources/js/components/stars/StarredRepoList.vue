@@ -4,7 +4,14 @@
     :items="filteredRepos"
     :min-item-size="156"
     key-field="cursor"
-    class="relative flex-grow col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
+    class="
+      relative
+      flex-grow
+      col-span-1
+      row-start-2 row-end-3
+      bg-white
+      sm:col-start-2
+    "
     role="listbox"
     aria-label="Stars List"
     aria-multiselectable="true"

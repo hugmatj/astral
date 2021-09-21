@@ -4,7 +4,8 @@ import { Ability, BaseDialogReturnType } from '@/types'
 const isOpen = ref(false)
 const currentContext = ref<Ability | null>(null)
 
-interface SponsorshipDialogReturnType extends Omit<BaseDialogReturnType, 'show'> {
+interface SponsorshipDialogReturnType
+  extends Omit<BaseDialogReturnType, 'show'> {
   isOpen: Ref<boolean>
   currentContext: Ref<Ability | null>
   show(context: Ability): void
@@ -19,7 +20,6 @@ export const useSponsorshipDialog = (): SponsorshipDialogReturnType => {
       currentContext.value = context
       isOpen.value = true
     },
-    hide: () => isOpen.value = false,
+    hide: () => (isOpen.value = false),
   }
 }
-
