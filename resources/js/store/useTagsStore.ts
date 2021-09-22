@@ -17,8 +17,8 @@ export const useTagsStore = defineStore({
           '/tags',
           { name: tagName },
           {
-            onSuccess: page => resolve(page),
-            onError: errors => reject(errors[Object.keys(errors)[0]]),
+            onSuccess: (page) => resolve(page),
+            onError: (errors) => reject(errors[Object.keys(errors)[0]]),
           }
         )
       })

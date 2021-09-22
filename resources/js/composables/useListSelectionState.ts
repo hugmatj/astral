@@ -1,9 +1,4 @@
-import {
-  useMagicKeys,
-  onKeyStroke,
-  MaybeRef,
-  useEventListener,
-} from '@vueuse/core'
+import { useMagicKeys, onKeyStroke, MaybeRef, useEventListener } from '@vueuse/core'
 import { ref, computed, Ref, isRef, watch, unref } from 'vue'
 import { isFocusedElementEditable } from '../utils'
 
@@ -24,7 +19,7 @@ const { shift, cmd, ctrl } = useMagicKeys()
  * event when the window blur event fires.
  */
 useEventListener(window, 'blur', () => {
-  ;['shift', 'meta', 'control'].forEach(key => {
+  ;['shift', 'meta', 'control'].forEach((key) => {
     window.dispatchEvent(new KeyboardEvent('keyup', { key }))
   })
 })
@@ -70,9 +65,7 @@ export const useListSelectionState = <T>(
     return -1
   })
 
-  watch(lastShiftSelectedIndex, v =>
-    console.log('Last shift-selected index is now:', v)
-  )
+  watch(lastShiftSelectedIndex, (v) => console.log('Last shift-selected index is now:', v))
 
   const itemAtIndex = (i: number): T => {
     return allItems()[i]
@@ -142,10 +135,7 @@ export const useListSelectionState = <T>(
       itemIsSelected(lastSelectedItem.value) && !didSelectItemBelow
         ? lastSelectedIndex.value
         : lastSelectedIndex.value + 1
-    let itemsInRange = getItemsFromRange(
-      Math.max(lastIndex, 0),
-      clickedItemIndex
-    )
+    let itemsInRange = getItemsFromRange(Math.max(lastIndex, 0), clickedItemIndex)
 
     /**
      * If the item at last selected index is not selected (it was toggled off)
@@ -160,15 +150,10 @@ export const useListSelectionState = <T>(
          * When the last selected item is not visually selected we need to find the next sibling
          * that is visibly selected to set the correct range
          */
-        const nextSelectedSiblingIndex = indexOfItem(
-          nextAvailableSelectedItem.value || itemAtIndex(maxIndex.value)
-        )
+        const nextSelectedSiblingIndex = indexOfItem(nextAvailableSelectedItem.value || itemAtIndex(maxIndex.value))
 
         if (nextSelectedSiblingIndex) {
-          itemsInRange = getItemsFromRange(
-            clickedItemIndex,
-            nextSelectedSiblingIndex
-          )
+          itemsInRange = getItemsFromRange(clickedItemIndex, nextSelectedSiblingIndex)
 
           /**
            * We then need to find all adjacent visually selected elements and de-select them.
@@ -185,7 +170,7 @@ export const useListSelectionState = <T>(
         }
       }
     }
-    itemsInRange.forEach(item => {
+    itemsInRange.forEach((item) => {
       appendItemToSelection(item)
     })
 
@@ -233,13 +218,9 @@ export const useListSelectionState = <T>(
   const selectNextItem = () => {
     let targetItem: T
     if (~lastShiftSelectedIndex.value) {
-      targetItem = itemAtIndex(
-        Math.min(maxIndex.value, lastShiftSelectedIndex.value + 1)
-      )
+      targetItem = itemAtIndex(Math.min(maxIndex.value, lastShiftSelectedIndex.value + 1))
     } else {
-      targetItem = itemAtIndex(
-        Math.min(maxIndex.value, lastSelectedIndex.value + 1)
-      )
+      targetItem = itemAtIndex(Math.min(maxIndex.value, lastSelectedIndex.value + 1))
     }
 
     setSingleSelectedItem(targetItem)
@@ -275,20 +256,13 @@ export const useListSelectionState = <T>(
        * non-shift selected item, it should deselect all items with an index less than the last
        * non-shift selected item
        */
-      if (
-        lastShiftSelectedItem.value &&
-        lastShiftSelectedIndex.value < lastSelectedIndex.value
-      ) {
+      if (lastShiftSelectedItem.value && lastShiftSelectedIndex.value < lastSelectedIndex.value) {
         removeItemFromSelection(lastShiftSelectedItem.value)
-        lastShiftSelectedItem.value = itemAtIndex(
-          Math.min(maxIndex.value, lastShiftSelectedIndex.value + 1)
-        )
+        lastShiftSelectedItem.value = itemAtIndex(Math.min(maxIndex.value, lastShiftSelectedIndex.value + 1))
       } else {
         // Find the next non-selected item
         if (~~lastShiftSelectedIndex.value) {
-          targetItem = itemAtIndex(
-            Math.min(maxIndex.value, lastShiftSelectedIndex.value + 1)
-          )
+          targetItem = itemAtIndex(Math.min(maxIndex.value, lastShiftSelectedIndex.value + 1))
           appendItemToSelection(targetItem)
           lastShiftSelectedItem.value = targetItem
         } else {
@@ -316,14 +290,9 @@ export const useListSelectionState = <T>(
       lastShiftSelectedItem.value = targetItem
       lastSelectedItem.value = targetItem
     } else {
-      if (
-        lastShiftSelectedItem.value &&
-        lastShiftSelectedIndex.value > lastSelectedIndex.value
-      ) {
+      if (lastShiftSelectedItem.value && lastShiftSelectedIndex.value > lastSelectedIndex.value) {
         removeItemFromSelection(lastShiftSelectedItem.value)
-        lastShiftSelectedItem.value = itemAtIndex(
-          lastShiftSelectedIndex.value - 1
-        )
+        lastShiftSelectedItem.value = itemAtIndex(lastShiftSelectedIndex.value - 1)
       } else {
         const lowestIndex = lastShiftSelectedItem.value
           ? Math.min(lastShiftSelectedIndex.value, lastSelectedIndex.value)

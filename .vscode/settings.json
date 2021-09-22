@@ -1,15 +1,21 @@
 {
-  "eslint.validate": ["javascript", "javascriptreact", "vue"],
+  "eslint.validate": ["vue", "typescript"],
   "vetur.validation.template": false,
+  "volar.codeLens.pugTools": false,
+  "editor.formatOnSave": false,
+  "eslint.format.enable": false,
+  "prettier.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "volar.codeLens.pugTools": false,
-  "editor.formatOnSave": true,
   "[vue]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
 }

@@ -12,7 +12,7 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
 
   urlParams.forEach((value, key) => (params[key] = value))
 
-  watch(params, newParams => {
+  watch(params, (newParams) => {
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === null) {
         delete params[key]
@@ -24,16 +24,12 @@ export const useUrlParams = (): UseUrlParamsReturnValue => {
     if (!Object.keys(params).length) {
       clearParams()
     } else {
-      window.history.replaceState(
-        {},
-        '',
-        `${window.location.pathname}?${urlParams.toString()}`
-      )
+      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`)
     }
   })
 
   const clearParams = () => {
-    Object.keys(params).forEach(key => {
+    Object.keys(params).forEach((key) => {
       urlParams.delete(key)
       params[key] = null
       window.history.pushState(null, document.title, window.location.pathname)

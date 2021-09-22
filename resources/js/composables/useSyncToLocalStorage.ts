@@ -7,10 +7,7 @@ localForage.config({
   storeName: 'astral_local_store',
 })
 
-export const useSyncToLocalStorage = async <
-  TStore extends Store,
-  TKey extends keyof TStore
->(
+export const useSyncToLocalStorage = async <TStore extends Store, TKey extends keyof TStore>(
   store: TStore,
   key: TKey
 ): Promise<void> => {
@@ -18,11 +15,8 @@ export const useSyncToLocalStorage = async <
 
   watch(
     () => store[key],
-    async newVal => {
-      await localForage.setItem(
-        key as string,
-        JSON.parse(JSON.stringify(newVal))
-      )
+    async (newVal) => {
+      await localForage.setItem(key as string, JSON.parse(JSON.stringify(newVal)))
     }
   )
 

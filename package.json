@@ -6,9 +6,8 @@
     "build": "vite build",
     "start": "yarn dev",
     "preview": "vite preview",
-    "lint": "eslint \"resources/js/**/*.{ts,vue}\"",
-    "lint-fix": "eslint \"resources/js/**/*.{ts,vue}\" --fix",
-    "format": "prettier ./resources/js  --write"
+    "lint": "eslint --ext .ts,vue --ignore-path .gitignore ./resources/js",
+    "format": "prettier ./resources/js  -w -u"
   },
   "dependencies": {
     "@headlessui/vue": "^1.4.1",
@@ -40,29 +39,29 @@
     "@tailwindcss/typography": "^0.4.0",
     "@types/lodash": "^4.14.172",
     "@types/node": "^14.14.37",
-    "@typescript-eslint/eslint-plugin": "^4.21.0",
-    "@typescript-eslint/parser": "^4.21.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
     "@vitejs/plugin-vue": "^1.9.0",
     "@vue/compiler-sfc": "^3.2.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "autoprefixer": "^10.2.5",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.23.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-vue": "^7.16.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-vue": "^7.18.0",
     "laravel-vite": "^0.0.16",
     "postcss": "^8.2.8",
     "postcss-import": "^14.0.0",
-    "postcss-loader": "^5.2.0",
     "postcss-nested": "^5.0.5",
-    "prettier": "^2.3.0",
+    "prettier": "2.2.1",
     "tailwindcss": "^2.2.4",
     "tailwindcss-interaction-variants": "^5.0.0",
     "tailwindcss-nested-groups": "^1.2.4",
-    "ts-loader": "^9.2.5",
-    "tsconfig-paths-webpack-plugin": "^3.5.1",
     "typescript": "^4.3.5",
     "vite": "^2.5.10",
     "vite-plugin-mkcert": "^1.5.1"
+  },
+  "resolutions": {
+    "**/prettier": "2.2.1"
   }
 }

@@ -2,5 +2,5 @@
   <SortAscendingIcon />
 </template>
 <script setup>
-import { SortAscendingIcon } from '@heroicons/vue/solid'
+  import { SortAscendingIcon } from '@heroicons/vue/solid'
 </script>

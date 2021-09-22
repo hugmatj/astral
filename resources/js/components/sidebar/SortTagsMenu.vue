@@ -1,13 +1,7 @@
 <template>
   <Menu v-slot="{ open }" as="div" class="relative">
     <MenuButton
-      class="
-        inline-flex
-        items-center
-        text-gray-400
-        transition-colors
-        hover:text-gray-200
-      "
+      class="inline-flex items-center text-gray-400 transition-colors hover:text-gray-200"
       :class="{ 'text-gray-50': open }"
     >
       <span class="text-xs tracking-wider uppercase">Sort</span>
@@ -22,21 +16,7 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems
-        class="
-          absolute
-          z-20
-          w-40
-          mt-2
-          origin-top-right
-          bg-white
-          divide-y divide-gray-100
-          rounded-md
-          shadow-lg
-          right-2
-          sm:right-0
-          ring-1 ring-black ring-opacity-5
-          focus:outline-none
-        "
+        class="absolute z-20 w-40 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg right-2 sm:right-0 ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">
@@ -48,10 +28,7 @@
               ]"
               @click="emit('sortTags', 'name', 'asc')"
             >
-              <NameAZIcon
-                class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500"
-                aria-hidden="true"
-              />
+              <NameAZIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Alphabetical (A-Z)</span>
             </button>
           </MenuItem>
@@ -64,10 +41,7 @@
               ]"
               @click="emit('sortTags', 'name', 'desc')"
             >
-              <NameZAIcon
-                class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500"
-                aria-hidden="true"
-              />
+              <NameZAIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Alphabetical (Z-A)</span>
             </button>
           </MenuItem>
@@ -80,10 +54,7 @@
               ]"
               @click="emit('sortTags', 'stars_count', 'desc')"
             >
-              <StarsCountHighIcon
-                class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500"
-                aria-hidden="true"
-              />
+              <StarsCountHighIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Most Stars</span>
             </button>
           </MenuItem>
@@ -96,10 +67,7 @@
               ]"
               @click="emit('sortTags', 'stars_count', 'asc')"
             >
-              <StarsCountLowIcon
-                class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500"
-                aria-hidden="true"
-              />
+              <StarsCountLowIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Fewest Stars</span>
             </button>
           </MenuItem>
@@ -109,19 +77,15 @@
   </Menu>
 </template>
 <script lang="ts" setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { SwitchVerticalIcon } from '@heroicons/vue/solid'
-import { FetchDirection, TagSortMethod } from '@/types'
-import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
-import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
-import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
-import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
+  import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+  import { SwitchVerticalIcon } from '@heroicons/vue/solid'
+  import { FetchDirection, TagSortMethod } from '@/types'
+  import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
+  import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
+  import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
+  import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
 
-const emit = defineEmits<{
-  (
-    e: 'sortTags',
-    method: TagSortMethod,
-    direction: Lowercase<FetchDirection>
-  ): void
-}>()
+  const emit = defineEmits<{
+    (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
+  }>()
 </script>

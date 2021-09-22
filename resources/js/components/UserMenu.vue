@@ -1,27 +1,8 @@
 <template>
-  <Menu
-    v-if="userStore.user"
-    v-slot="{ open }"
-    as="div"
-    class="relative -mr-4 sm:mr-0"
-  >
+  <Menu v-if="userStore.user" v-slot="{ open }" as="div" class="relative -mr-4 sm:mr-0">
     <div>
       <MenuButton
-        class="
-          flex
-          items-center
-          py-1
-          pl-2
-          pr-2
-          text-white
-          transition-colors
-          sm:pl-1 sm:rounded-md sm:hover:bg-brand-800
-          focus:outline-none
-          focus:ring-2
-          focus:ring-offset-2
-          focus:ring-offset-brand-600
-          focus:ring-brand-800
-        "
+        class="flex items-center py-1 pl-2 pr-2 text-white transition-colors sm:pl-1 sm:rounded-md sm:hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-brand-600 focus:ring-brand-800"
         :class="{ 'bg-brand-800': open }"
       >
         <img
@@ -29,14 +10,8 @@
           :alt="userStore.user?.username"
           class="w-10 h-10 rounded-md image-rendering-crisp"
         />
-        <span class="hidden ml-2 text-sm font-semibold sm:inline-block">{{
-          userStore.user?.username
-        }}</span>
-        <ChevronDownIcon
-          class="flex-shrink-0 w-4 h-4 mt-0.5 ml-1"
-          :class="{ 'rotate-180': open }"
-          aria-hidden="true"
-        />
+        <span class="hidden ml-2 text-sm font-semibold sm:inline-block">{{ userStore.user?.username }}</span>
+        <ChevronDownIcon class="flex-shrink-0 w-4 h-4 mt-0.5 ml-1" :class="{ 'rotate-180': open }" aria-hidden="true" />
       </MenuButton>
     </div>
     <transition
@@ -48,21 +23,7 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems
-        class="
-          absolute
-          z-20
-          w-56
-          mt-2
-          origin-top-right
-          bg-white
-          divide-y divide-gray-100
-          rounded-md
-          shadow-lg
-          right-2
-          sm:right-0
-          ring-1 ring-black ring-opacity-5
-          focus:outline-none
-        "
+        class="absolute z-20 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg right-2 sm:right-0 ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">
@@ -74,10 +35,7 @@
               ]"
               @click="$emit('showSettings')"
             >
-              <CogIcon
-                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
-                aria-hidden="true"
-              />
+              <CogIcon class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
               <span>Settings</span>
             </button>
           </MenuItem>
@@ -91,10 +49,7 @@
                 'group flex items-center px-4 py-2 text-sm',
               ]"
             >
-              <UserGroupIcon
-                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
-                aria-hidden="true"
-              />
+              <UserGroupIcon class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
               <span>Become a Sponsor</span>
             </a>
           </MenuItem>
@@ -110,10 +65,7 @@
                 'group flex items-center px-4 py-2 text-sm',
               ]"
             >
-              <GitHubLogoIcon
-                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
-                aria-hidden="true"
-              />
+              <GitHubLogoIcon class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
               <span>View on GitHub</span>
             </a>
           </MenuItem>
@@ -127,10 +79,7 @@
                 'group flex items-center px-4 py-2 text-sm',
               ]"
             >
-              <ChatAlt2Icon
-                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
-                aria-hidden="true"
-              />
+              <ChatAlt2Icon class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
               <span>Discussions</span>
             </a>
           </MenuItem>
@@ -144,10 +93,7 @@
                 'group flex items-center px-4 py-2 text-sm',
               ]"
             >
-              <ExclamationCircleIcon
-                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
-                aria-hidden="true"
-              />
+              <ExclamationCircleIcon class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
               <span>File an Issue</span>
             </a>
           </MenuItem>
@@ -161,10 +107,7 @@
                 'group flex items-center px-4 py-2 text-sm',
               ]"
             >
-              <LogoutIcon
-                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
-                aria-hidden="true"
-              />
+              <LogoutIcon class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
               <span>Sign Out</span>
             </a>
           </MenuItem>
@@ -174,19 +117,19 @@
   </Menu>
 </template>
 <script lang="ts" setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import {
-  CogIcon,
-  UserGroupIcon,
-  ChatAlt2Icon,
-  ExclamationCircleIcon,
-  LogoutIcon,
-  ChevronDownIcon,
-} from '@heroicons/vue/solid'
-import GitHubLogoIcon from '@/components/shared/icons/GitHubLogoIcon.vue'
-import { useUserStore } from '@/store/useUserStore'
+  import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+  import {
+    CogIcon,
+    UserGroupIcon,
+    ChatAlt2Icon,
+    ExclamationCircleIcon,
+    LogoutIcon,
+    ChevronDownIcon,
+  } from '@heroicons/vue/solid'
+  import GitHubLogoIcon from '@/components/shared/icons/GitHubLogoIcon.vue'
+  import { useUserStore } from '@/store/useUserStore'
 
-defineEmits(['showSettings'])
+  defineEmits(['showSettings'])
 
-const userStore = useUserStore()
+  const userStore = useUserStore()
 </script>

@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { TransitionRoot } from '@headlessui/vue'
-export default defineComponent({
-  components: {
-    TransitionRoot,
-  },
-})
+  import { defineComponent } from 'vue'
+  import { TransitionRoot } from '@headlessui/vue'
+  export default defineComponent({
+    components: {
+      TransitionRoot,
+    },
+  })
 </script>

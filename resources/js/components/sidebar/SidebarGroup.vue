@@ -30,17 +30,17 @@
 </template>
 
 <script lang="ts" setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
+  import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+  import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
 
-defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  collapsible: {
-    type: Boolean,
-    default: false,
-  },
-})
+  defineProps({
+    title: {
+      type: String,
+      required: true,
+    },
+    collapsible: {
+      type: Boolean,
+      default: false,
+    },
+  })
 </script>

@@ -9,12 +9,12 @@ const pages = import.meta.glob('./Pages/**/*.vue')
 
 if (el) {
   createInertiaApp({
-    resolve: async name => {
+    resolve: async (name) => {
       if (import.meta.env.DEV) {
         return (await import(`./Pages/${name}.vue`)).default
       } else {
         const importPage = pages[`./Pages/${name}.vue`]
-        return importPage().then(module => module.default)
+        return importPage().then((module) => module.default)
       }
     },
     setup({ el, app, props, plugin }) {

@@ -44,7 +44,7 @@ export const useStarsStore = defineStore({
       return this.starredRepos
     },
     untaggedStars(): GitHubRepo[] {
-      return this.allStars.filter(repo => {
+      return this.allStars.filter((repo) => {
         const userStar: UserStar = this.userStarsByRepoId[repo.node.databaseId]
         return !userStar || !userStar.tags.length
       })
@@ -53,31 +53,20 @@ export const useStarsStore = defineStore({
       const starsFilterStore = useStarsFilterStore()
       const selectedTag = starsFilterStore.selectedTag
 
-      let filteredRepos = starsFilterStore.isFilteringByUntagged
-        ? this.untaggedStars
-        : this.allStars
+      let filteredRepos = starsFilterStore.isFilteringByUntagged ? this.untaggedStars : this.allStars
 
-      if (
-        starsFilterStore.isFilteringByTag ||
-        starsFilterStore.isFilteringByLanguage
-      ) {
+      if (starsFilterStore.isFilteringByTag || starsFilterStore.isFilteringByLanguage) {
         if (starsFilterStore.isFilteringByTag) {
-          filteredRepos = filteredRepos.filter(repo => {
+          filteredRepos = filteredRepos.filter((repo) => {
             const userStar = this.userStarsByRepoId[repo.node.databaseId]
 
-            return (
-              !!userStar &&
-              !!selectedTag &&
-              userStar.tags.map(tag => tag.id).includes(selectedTag.id)
-            )
+            return !!userStar && !!selectedTag && userStar.tags.map((tag) => tag.id).includes(selectedTag.id)
           })
         }
 
         if (starsFilterStore.isFilteringByLanguage) {
           filteredRepos = filteredRepos.filter(
-            (repo: GitHubRepo) =>
-              repo.node.primaryLanguage?.name ===
-              starsFilterStore.selectedLanguage
+            (repo: GitHubRepo) => repo.node.primaryLanguage?.name === starsFilterStore.selectedLanguage
           )
         }
       }
@@ -86,27 +75,18 @@ export const useStarsStore = defineStore({
         const search = starsFilterStore.search
 
         filteredRepos = filteredRepos.filter((repo: GitHubRepo) => {
-          const starNotes =
-            this.userStarsByRepoId[repo.node.databaseId]?.notes || ''
-          const repoTextHaystack = [
-            repo.node.nameWithOwner,
-            repo.node.description,
-            starNotes,
-          ]
+          const starNotes = this.userStarsByRepoId[repo.node.databaseId]?.notes || ''
+          const repoTextHaystack = [repo.node.nameWithOwner, repo.node.description, starNotes]
             .filter(Boolean)
             .join(' ')
             .toLowerCase()
-          const repoHasStringMatches = search.strings.every(searchString =>
-            repoTextHaystack.includes(searchString)
-          )
+          const repoHasStringMatches = search.strings.every((searchString) => repoTextHaystack.includes(searchString))
 
           if (search.tags.length) {
-            const repoTagNames = (
-              this.userStarsByRepoId[repo.node.databaseId]?.tags || []
-            ).map(tag => tag.name.toLowerCase())
-            const repoHasTagMatches = search.tags.every(tag =>
-              repoTagNames.includes(tag)
+            const repoTagNames = (this.userStarsByRepoId[repo.node.databaseId]?.tags || []).map((tag) =>
+              tag.name.toLowerCase()
             )
+            const repoHasTagMatches = search.tags.every((tag) => repoTagNames.includes(tag))
 
             return repoHasTagMatches && repoHasStringMatches
           } else {
@@ -120,19 +100,13 @@ export const useStarsStore = defineStore({
     languages(): RepoLanguage[] {
       return Object.entries(
         this.allStars
-          .map(repo => {
+          .map((repo) => {
             return repo.node.primaryLanguage?.name || ''
           })
           .filter(Boolean)
-          .reduce(
-            (
-              totals: Record<string, number>,
-              lang: string
-            ): Record<string, number> => {
-              return { ...totals, [lang]: (totals[lang] || 0) + 1 }
-            },
-            {}
-          )
+          .reduce((totals: Record<string, number>, lang: string): Record<string, number> => {
+            return { ...totals, [lang]: (totals[lang] || 0) + 1 }
+          }, {})
       )
         .map((language: [string, number]) => {
           const [name, count] = language
@@ -152,10 +126,7 @@ export const useStarsStore = defineStore({
     },
   },
   actions: {
-    fetchStars(
-      cursor: Nullable<string> = null,
-      direction: FetchDirection = FetchDirections.DESC
-    ) {
+    fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirections.DESC) {
       const userStore = useUserStore()
 
       this.worker.postMessage({
@@ -174,15 +145,12 @@ export const useStarsStore = defineStore({
       const userStore = useUserStore()
 
       const readme = await (
-        await fetch(
-          `https://api.github.com/repos/${repo.nameWithOwner}/readme`,
-          {
-            headers: {
-              Accept: 'application/vnd.github.v3.html',
-              Authorization: `bearer ${userStore.user?.access_token}`,
-            },
-          }
-        )
+        await fetch(`https://api.github.com/repos/${repo.nameWithOwner}/readme`, {
+          headers: {
+            Accept: 'application/vnd.github.v3.html',
+            Authorization: `bearer ${userStore.user?.access_token}`,
+          },
+        })
       ).text()
 
       return readme
@@ -201,17 +169,11 @@ export const useStarsStore = defineStore({
         }),
       })
 
-      const repo: GitHubRepo | undefined = this.starredRepos.find(
-        repo => repo.node.id === id
-      )
+      const repo: GitHubRepo | undefined = this.starredRepos.find((repo) => repo.node.id === id)
 
       if (repo) {
-        const userStar: UserStar | undefined = this.userStars.find(
-          star => star.repo_id === repo.node.databaseId
-        )
-        this.selectedRepos = this.selectedRepos.filter(
-          selectedRepo => selectedRepo.id !== id
-        )
+        const userStar: UserStar | undefined = this.userStars.find((star) => star.repo_id === repo.node.databaseId)
+        this.selectedRepos = this.selectedRepos.filter((selectedRepo) => selectedRepo.id !== id)
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 
         if (userStar) {

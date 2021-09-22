@@ -26,15 +26,9 @@ export const useStarsFilterStore = defineStore({
   },
   getters: {
     search(): SearchInput {
-      const queryParts = this.searchQuery
-        .trim()
-        .toLowerCase()
-        .split(':')
-        .filter(Boolean)
-      const tags = queryParts
-        .filter(part => part.startsWith('#'))
-        .map(tag => tag.substring(1))
-      const strings = queryParts.filter(part => !part.startsWith('#'))
+      const queryParts = this.searchQuery.trim().toLowerCase().split(':').filter(Boolean)
+      const tags = queryParts.filter((part) => part.startsWith('#')).map((tag) => tag.substring(1))
+      const strings = queryParts.filter((part) => !part.startsWith('#'))
 
       return {
         query: this.searchQuery,
@@ -43,16 +37,10 @@ export const useStarsFilterStore = defineStore({
       }
     },
     isFilteringByAll(): boolean {
-      return (
-        this.selectedFilter === BASE_FILTERS.ALL &&
-        !this.isFilteringByTag &&
-        !this.isFilteringByLanguage
-      )
+      return this.selectedFilter === BASE_FILTERS.ALL && !this.isFilteringByTag && !this.isFilteringByLanguage
     },
     isFilteringByUntagged(): boolean {
-      return (
-        this.selectedFilter === BASE_FILTERS.UNTAGGED && !this.isFilteringByTag
-      )
+      return this.selectedFilter === BASE_FILTERS.UNTAGGED && !this.isFilteringByTag
     },
     isFilteringByTag(): boolean {
       return !!this.selectedTag && !!Object.keys(this.selectedTag).length
