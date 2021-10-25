@@ -1,28 +1,38 @@
 <template>
   <div ref="readmeContainerEl" class="relative flex-grow overflow-y-auto">
-    <div v-show="contents && !isReadmeLoading" class="relative w-full h-full">
-      <div ref="readmeEl" class="p-4 prose max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto" v-html="contents"></div>
-    </div>
-    <div
-      v-show="isReadmeLoading"
-      class="absolute inset-0 z-10 flex items-center justify-center text-center text-gray-500 bg-white dark:bg-gray-900"
-    >
-      Loading...
-    </div>
     <div
       v-show="noRepoSelected"
       class="absolute inset-0 z-10 flex flex-col items-center justify-center p-4 text-center text-gray-500 bg-gray-50 dark:bg-gray-900"
     >
-      <img src="/images/readme-not-selected.svg" alt="No Readme Selected" class="w-full max-w-sm" />
+      <ReadmeNotSelectedSvg aria-label="No Readme Selected" class="w-full max-w-sm" />
     </div>
+    <div v-show="contents" as="div" class="relative z-20 w-full h-full">
+      <div ref="readmeEl" class="p-4 prose max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto" v-html="contents"></div>
+    </div>
+    <TransitionFade
+      :show="isReadmeLoading"
+      as="div"
+      class="absolute inset-0 z-30 flex items-center justify-center w-full h-full text-center text-gray-500 bg-white dark:bg-gray-900"
+    >
+      <LoadingSpinner />
+    </TransitionFade>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, computed, nextTick } from 'vue'
+  import { defineComponent, ref, computed, nextTick, watch } from 'vue'
   import { useStarsStore } from '@/store/useStarsStore'
   import { debouncedWatch } from '@vueuse/core'
+  import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
+  import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
+  import ReadmeNotSelectedSvg from '@@/img/readme-not-selected.svg?component'
+
   export default defineComponent({
+    components: {
+      ReadmeNotSelectedSvg,
+      TransitionFade,
+      LoadingSpinner,
+    },
     setup() {
       const starsStore = useStarsStore()
 
@@ -34,14 +44,24 @@
 
       const noRepoSelected = computed(() => !starsStore.selectedRepos.length)
 
+      watch(
+        () => starsStore.selectedRepo,
+        (selectedRepo) => {
+          if (Object.keys(selectedRepo).length) {
+            isReadmeLoading.value = true
+          }
+        }
+      )
+
       debouncedWatch(
         () => starsStore.selectedRepo,
         async (selectedRepo) => {
           if (Object.keys(selectedRepo).length) {
-            isReadmeLoading.value = true
             if (readmeContainerEl.value && readmeEl.value) {
+              console.log(selectedRepo)
+              const readmeContents = await starsStore.fetchReadme(selectedRepo)
               readmeContainerEl.value.scrollTo(0, 0)
-              contents.value = await starsStore.fetchReadme(selectedRepo)
+              contents.value = readmeContents
 
               await nextTick()
 

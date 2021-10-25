@@ -9,11 +9,12 @@ module.exports = {
     ecmaVersion: 2021,
   },
   extends: [
-    'eslint:recommended',
     'plugin:vue/vue3-recommended',
+    'eslint:recommended',
     '@vue/typescript/recommended',
     '@vue/prettier',
     '@vue/prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

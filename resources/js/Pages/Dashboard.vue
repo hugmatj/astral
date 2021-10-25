@@ -16,8 +16,8 @@
             <MenuIcon />
           </button>
         </div>
-        <div class="flex items-center flex-shrink-0 w-1/3">
-          <img src="/images/logo.svg" alt="No Readme Selected" class="h-6 sm:h-8" />
+        <div class="flex items-center justify-start flex-shrink-0 w-1/3">
+          <LogoSvg class="h-6 sm:h-8" aria-label="Astral" />
         </div>
         <div class="flex justify-end w-1/3 sm:w-2/3">
           <UserMenu @show-settings="showSettingsModal" />
@@ -119,6 +119,7 @@
   import GlobalToast from '@/components/GlobalToast.vue'
   import { GitHubRepo, Tag, UserStar, User, Ability, Limits, Authorizations } from '@/types'
   import { ArrowCircleLeftIcon, XCircleIcon as CloseIcon, MenuAlt1Icon as MenuIcon } from '@heroicons/vue/outline'
+  import LogoSvg from '@@/img/logo.svg?component'
 
   const props = defineProps({
     tags: {
