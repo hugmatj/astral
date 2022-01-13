@@ -13,6 +13,15 @@ class Star extends Model
     protected $fillable = [
         'repo_id',
         'notes',
+        'meta',
+    ];
+
+    protected $casts = [
+        'meta' => 'array',
+    ];
+
+    protected $attributes = [
+        'meta' => '{"nameWithOwner": "", "url": "", "description": ""}',
     ];
 
     protected static function boot()
@@ -37,5 +46,10 @@ class Star extends Model
     public function isOrphan(): bool
     {
         return ! (bool) $this->notes && ! $this->tags()->count();
+    }
+
+    public function removeAllTags()
+    {
+        $this->tags()->sync([]);
     }
 }

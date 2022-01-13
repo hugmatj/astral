@@ -18,6 +18,7 @@ class CreateStarsTable extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->integer('repo_id')->unsigned()->index();
             $table->text('notes')->nullable();
+            $table->json('meta')->nullable();
             $table->timestamps();
         });
     }

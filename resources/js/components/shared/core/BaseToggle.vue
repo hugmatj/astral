@@ -48,22 +48,22 @@
 </template>
 
 <script setup lang="ts">
-  import { Switch } from '@headlessui/vue'
-  import { watch, ref } from 'vue'
+import { Switch } from '@headlessui/vue'
+import { watch, ref } from 'vue'
 
-  const emit = defineEmits<{
-    (e: 'change', enabled: boolean | undefined): void
-  }>()
+const emit = defineEmits<{
+  (e: 'change', enabled: Maybe<boolean>): void
+}>()
 
-  interface Props {
-    enabled?: boolean
-  }
+interface Props {
+  enabled?: boolean
+}
 
-  const props = withDefaults(defineProps<Props>(), {
-    enabled: false,
-  })
+const props = withDefaults(defineProps<Props>(), {
+  enabled: false,
+})
 
-  const enabledState = ref(props.enabled)
+const enabledState = ref(props.enabled)
 
-  watch(enabledState, () => emit('change', enabledState.value))
+watch(enabledState, () => emit('change', enabledState.value))
 </script>

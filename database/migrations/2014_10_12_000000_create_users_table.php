@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
             $table->integer('github_id')->unique();
             $table->string('username');
-            $table->string('access_token', 512)->nullable();
+            $table->text('access_token')->nullable();
             $table->string('scope')->nullable();
             $table->string('avatar')->nullable();
             $table->timestamp('is_sponsor')->nullable();

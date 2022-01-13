@@ -22,7 +22,6 @@ return [
     | to generate a proper tsconfig.json file.
     */
     'aliases' => [
-        '@@' => 'resources',
         '@' => 'resources/js',
     ],
 

@@ -27,9 +27,9 @@
           class="w-full min-w-0 p-0 text-base leading-none bg-transparent border-0 sm:text-sm focus:outline-none focus:border-0 focus:ring-0"
           placeholder="Add a tag..."
           role="combobox"
-          aria-activedescendant="tags_autocomplete_list"
+          :aria-activedescendant="autocompleteUUID"
           autocomplete="off"
-          aria-owns="tags_autocomplete_list"
+          :aria-owns="autocompleteUUID"
           @keydown.,.prevent="addTagFromInput"
           @keydown.delete="deleteLastTag"
           @blur="onBlur"
@@ -38,7 +38,7 @@
 
         <!-- Autocomplete Menu -->
         <AutocompleteMenu
-          id="tags_autocomplete_list"
+          :id="autocompleteUUID"
           :style="{
             left: inputRect.left + 'px',
             top: inputRect.top + inputRect.height + 'px',
@@ -54,127 +54,135 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { computed, defineComponent, nextTick, PropType, reactive, ref } from 'vue'
-  import { useTagsStore } from '@/store/useTagsStore'
-  import AutocompleteMenu from '@/components/tags-editor/AutocompleteMenu.vue'
-  import { XIcon } from '@heroicons/vue/solid'
-  import { Tag } from '@/types'
-  import { useResizeObserver, whenever } from '@vueuse/core'
-  export default defineComponent({
-    components: {
-      AutocompleteMenu,
-      XIcon,
-    },
-    props: {
-      tags: {
-        type: Array as PropType<Tag[]>,
-        default: () => [],
-      },
-    },
-    emits: ['change', 'blur'],
-    setup(props, { emit }) {
-      const tagsStore = useTagsStore()
-      const tagText = ref('')
-      const input = ref<HTMLInputElement | null>(null)
-      const mutableTags = ref<Pick<Tag, 'name'>[]>(props.tags.map((tag) => ({ name: tag.name })))
-      let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
-        top: 0,
-        left: 0,
-        height: 20,
-      })
-      const autocompleteShowing = ref(false)
+<script lang="ts" setup>
+import { computed, nextTick, PropType, reactive, ref, unref, watch } from 'vue'
+import { useTagsStore } from '@/store/useTagsStore'
+import AutocompleteMenu from '@/components/tags-editor/AutocompleteMenu.vue'
+import { XIcon } from '@heroicons/vue/solid'
+import { TagEditorTag } from '@/types'
+import { whenever } from '@vueuse/core'
+import { nanoid } from 'nanoid'
 
-      const autocompleteOptions = computed(() => {
-        return tagsStore.tags
-          .map((tag) => tag.name)
-          .filter((tag) => {
-            return !mutableTags.value.map((tag) => tag.name).includes(tag)
-          })
-      })
+const props = defineProps({
+  tags: {
+    type: Array as PropType<TagEditorTag[]>,
+    default: () => [],
+  },
+  canCreate: {
+    type: Boolean,
+    default: true,
+  },
+  placeholder: {
+    type: String,
+    default: 'Add a tag...',
+  },
+  autocompleteOptions: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
+})
 
-      whenever(input, () => {
-        useResizeObserver(input, (entries) => {
-          const { x, y } = entries[0].target.getBoundingClientRect()
-          inputRect.top = y
-          inputRect.left = x
-        })
-      })
+const emit = defineEmits<{
+  (e: 'change', value: TagEditorTag[]): void
+  (e: 'blur'): void
+}>()
 
-      const tagsHasTag = (tag: string) => {
-        return mutableTags.value.map((tag) => tag.name?.toLowerCase()).includes(tag?.toLowerCase())
-      }
+const tagsStore = useTagsStore()
+const autocompleteUUID = nanoid()
+const tagText = ref('')
+const input = ref<HTMLInputElement | null>(null)
+const mutableTags = ref<TagEditorTag[]>(props.tags.map((tag) => ({ id: tag.id, name: tag.name })))
+let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
+  top: 0,
+  left: 0,
+  height: 20,
+})
+const autocompleteShowing = ref(false)
 
-      const tagsHaveChanged = computed(() => {
-        return !(
-          props.tags.length === mutableTags.value.length &&
-          props.tags
-            .map((tag) => tag.name)
-            .every((tag) => {
-              return mutableTags.value.map((tag) => tag.name).includes(tag)
-            })
-        )
-      })
-
-      const addTagWithName = (name: string) => {
-        if (name && !tagsHasTag(name)) {
-          mutableTags.value.push({ name: name })
-          tagText.value = ''
-          input.value?.focus()
-        }
-      }
-      const addTagFromInput = () => {
-        addTagWithName(tagText.value.trim())
-      }
-
-      const deleteLastTag = (e: KeyboardEvent) => {
-        if (!tagText.value) {
-          e.preventDefault()
-          mutableTags.value.pop()
-        }
-      }
-
-      const deleteTagAtIndex = (i: number) => {
-        mutableTags.value.splice(i, 1)
-
-        input.value?.focus()
-      }
-
-      const onBlur = () => {
-        if (tagsHaveChanged.value) {
-          emit('change', mutableTags)
-        } else {
-          emit('blur')
-        }
-      }
-
-      const onEnter = () => {
-        if (!autocompleteShowing.value) {
-          input.value?.blur()
-        }
-      }
-
-      nextTick(() => {
-        input.value?.focus()
-      })
-
-      return {
-        allTags: computed(() => tagsStore.tags),
-        mutableTags,
-        tagText,
-        addTagFromInput,
-        addTagWithName,
-        deleteLastTag,
-        deleteTagAtIndex,
-        onBlur,
-        onEnter,
-        input,
-        inputRect,
-        autocompleteShowing,
-        autocompleteOptions,
-      }
-    },
+const autocompleteOptions = computed(() => {
+  return props.autocompleteOptions.filter((option) => {
+    return !mutableTags.value.map((tag) => tag.name).includes(option)
   })
+})
+
+whenever(input, () => {
+  positionAutocompleteMenu()
+})
+
+watch(mutableTags.value, () => {
+  setTimeout(() => {
+    positionAutocompleteMenu()
+  }, 10)
+})
+
+const positionAutocompleteMenu = () => {
+  if (input.value) {
+    const { top, left } = input.value.getBoundingClientRect()
+    inputRect.top = top
+    inputRect.left = left
+  }
+}
+
+const tagsHasTag = (tag: string) => {
+  return mutableTags.value.map((tag) => tag.name?.toLowerCase()).includes(tag?.toLowerCase())
+}
+
+const tagsHaveChanged = computed(() => {
+  return !(
+    props.tags.length === mutableTags.value.length &&
+    props.tags
+      .map((tag) => tag.name)
+      .every((tag) => {
+        return mutableTags.value.map((tag) => tag.name).includes(tag)
+      })
+  )
+})
+
+const addTagWithName = (name: string) => {
+  if (name && !tagsHasTag(name)) {
+    const existingTag = tagsStore.tags.find((tag) => tag.name === name)
+
+    mutableTags.value.push({ name: name, id: existingTag ? existingTag.id : Date.now() })
+    tagText.value = ''
+    input.value?.focus()
+  }
+}
+const addTagFromInput = () => {
+  if (props.canCreate) {
+    addTagWithName(tagText.value.trim())
+  }
+}
+
+const deleteLastTag = (e: KeyboardEvent) => {
+  if (!tagText.value) {
+    e.preventDefault()
+    mutableTags.value.pop()
+  }
+}
+
+const deleteTagAtIndex = (i: number) => {
+  mutableTags.value.splice(i, 1)
+
+  input.value?.focus()
+}
+
+const onBlur = () => {
+  if (tagsHaveChanged.value) {
+    emit('change', unref(mutableTags))
+  } else {
+    emit('blur')
+  }
+}
+
+const onEnter = () => {
+  if (!autocompleteShowing.value) {
+    input.value?.blur()
+  }
+}
+
+nextTick(() => {
+  input.value?.focus()
+})
 </script>
 
 <style scoped></style>

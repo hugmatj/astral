@@ -29,7 +29,7 @@ const isHoldingShiftKey = computed(() => shift.value)
 
 export const useListSelectionState = <T>(
   items: GenericItems<T> | (() => GenericItems<T>),
-  isEnabled = true
+  isEnabled: Ref<boolean> = ref(true)
 ): ListSelectionStateReturnType<T> => {
   const selectedItems = ref([]) as Ref<T[]>
   const lastSelectedItem = ref(null) as Ref<Nullable<T>>
@@ -210,9 +210,7 @@ export const useListSelectionState = <T>(
   }
 
   const selectItem = (item: T) => {
-    if (isEnabled) {
-      updateSelectedItems(item)
-    }
+    updateSelectedItems(item)
   }
 
   const selectNextItem = () => {
@@ -233,7 +231,7 @@ export const useListSelectionState = <T>(
     if (~lastShiftSelectedIndex.value) {
       targetItem = itemAtIndex(Math.max(0, lastShiftSelectedIndex.value - 1))
     } else {
-      targetItem = itemAtIndex(Math.max(0, lastSelectedIndex.value + 1))
+      targetItem = itemAtIndex(Math.max(0, lastSelectedIndex.value - 1))
     }
 
     setSingleSelectedItem(targetItem)
@@ -312,29 +310,21 @@ export const useListSelectionState = <T>(
     }
   }
 
-  // onKeyStroke('ArrowDown', e => {
-  //   if (!isFocusedElementEditable()) {
-  //     if (!shift.value) {
-  //       selectNextItem()
-  //     } else {
-  //       setSelectionStateOfNextItem()
-  //     }
+  onKeyStroke('ArrowDown', (e) => {
+    if (!isFocusedElementEditable() && isEnabled.value) {
+      selectNextItem()
 
-  //     e.preventDefault()
-  //   }
-  // })
+      e.preventDefault()
+    }
+  })
 
-  // onKeyStroke('ArrowUp', e => {
-  //   if (!isFocusedElementEditable()) {
-  //     if (!shift.value) {
-  //       selectPrevItem()
-  //     } else {
-  //       setSelectionStateOfPrevItem()
-  //     }
+  onKeyStroke('ArrowUp', (e) => {
+    if (!isFocusedElementEditable() && isEnabled.value) {
+      selectPrevItem()
 
-  //     e.preventDefault()
-  //   }
-  // })
+      e.preventDefault()
+    }
+  })
 
   return {
     selectItem,

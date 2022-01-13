@@ -22,17 +22,17 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
-  import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
-  import { TransitionRoot } from '@headlessui/vue'
-  import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
+import { ref, computed } from 'vue'
+import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
+import { TransitionRoot } from '@headlessui/vue'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
 
-  const { isVisible, currentMessage, currentType } = useGlobalToast()
-  const toastType = ref(ToastType)
-  const toastClasses = computed(() => {
-    return {
-      [ToastType.Success]: 'bg-green-200 text-green-700',
-      [ToastType.Error]: 'bg-red-200 text-red-700',
-    }[currentType.value]
-  })
+const { isVisible, currentMessage, currentType } = useGlobalToast()
+const toastType = ref(ToastType)
+const toastClasses = computed(() => {
+  return {
+    [ToastType.Success]: 'bg-green-200 text-green-700',
+    [ToastType.Error]: 'bg-red-200 text-red-700',
+  }[currentType.value]
+})
 </script>

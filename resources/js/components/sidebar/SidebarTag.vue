@@ -77,87 +77,99 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, PropType } from 'vue'
-  import SidebarItem from '@/components/sidebar/SidebarItem.vue'
-  import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-  import WatchValue from '@/components/shared/core/WatchValue.vue'
-  import { TagIcon } from '@heroicons/vue/outline'
-  import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
-  import { useStarsStore } from '@/store/useStarsStore'
-  import { useTagsStore } from '@/store/useTagsStore'
-  import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
-  import { useGlobalToast } from '@/composables/useGlobalToast'
-  import { Tag } from '@/types'
+import { defineComponent, ref, PropType } from 'vue'
+import SidebarItem from '@/components/sidebar/SidebarItem.vue'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import WatchValue from '@/components/shared/core/WatchValue.vue'
+import { TagIcon } from '@heroicons/vue/outline'
+import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useTagsStore } from '@/store/useTagsStore'
+import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
+import { useGlobalToast } from '@/composables/useGlobalToast'
+import { useConfirm } from '@/composables/useConfirm'
+import { Tag } from '@/types'
 
-  export default defineComponent({
-    components: {
-      SidebarItem,
-      Menu,
-      MenuButton,
-      MenuItem,
-      MenuItems,
-      TagIcon,
-      DotsHorizontalIcon,
-      PencilAltIcon,
-      TrashIcon,
-      WatchValue,
+export default defineComponent({
+  components: {
+    SidebarItem,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    TagIcon,
+    DotsHorizontalIcon,
+    PencilAltIcon,
+    TrashIcon,
+    WatchValue,
+  },
+  props: {
+    tag: {
+      type: Object as PropType<Tag>,
+      required: true,
     },
-    props: {
-      tag: {
-        type: Object as PropType<Tag>,
-        required: true,
-      },
-      isActive: Boolean,
-    },
-    emits: ['stars-dropped'],
-    setup(props, { emit }) {
-      const isHighlighted = ref(false)
-      const isContextMenuActive = ref(false)
+    isActive: Boolean,
+  },
+  emits: ['stars-dropped'],
+  setup(props, { emit }) {
+    const isHighlighted = ref(false)
+    const isContextMenuActive = ref(false)
 
-      const starsStore = useStarsStore()
-      const tagsStore = useTagsStore()
-      const { show: showRenameTagDialog } = useRenameTagDialog()
-      const { show: showToast } = useGlobalToast()
+    const starsStore = useStarsStore()
+    const tagsStore = useTagsStore()
+    const { show: showRenameTagDialog } = useRenameTagDialog()
+    const { show: showToast } = useGlobalToast()
+    const { isConfirmed } = useConfirm()
 
-      const onDragOver = (e: DragEvent) => {
-        e.preventDefault()
+    const onDragOver = (e: DragEvent) => {
+      e.preventDefault()
 
-        if (starsStore.isDraggingRepo) {
-          isHighlighted.value = true
-        }
+      if (starsStore.isDraggingRepo) {
+        isHighlighted.value = true
       }
-      const onDragLeave = () => (isHighlighted.value = false)
+    }
+    const onDragLeave = () => (isHighlighted.value = false)
 
-      const onDrop = (e: DragEvent) => {
-        if (starsStore.isDraggingRepo && starsStore.draggingRepos.length) {
-          emit('stars-dropped', {
-            tag: props.tag,
-            repoIds: starsStore.draggingRepos.map((repo) => repo.databaseId),
-          })
-          isHighlighted.value = false
-        }
-
-        e.preventDefault()
+    const onDrop = (e: DragEvent) => {
+      if (starsStore.isDraggingRepo && starsStore.draggingRepos.length) {
+        emit('stars-dropped', {
+          tag: props.tag,
+          repos: starsStore.draggingRepos.map(({ databaseId, nameWithOwner, url, description }) => ({
+            databaseId,
+            nameWithOwner,
+            url,
+            description,
+          })),
+        })
+        isHighlighted.value = false
       }
 
-      const deleteTag = () => {
-        if (confirm(`Are you sure you want to delete the "${props.tag.name}" tag?`)) {
-          tagsStore.deleteTag(props.tag.id)
-          showToast(`The ${props.tag.name} tag was deleted.`)
-        }
-      }
+      e.preventDefault()
+    }
 
-      return {
-        onDragOver,
-        onDragLeave,
-        onDrop,
-        isHighlighted,
-        showRenameTagDialog,
-        deleteTag,
-        isContextMenuActive,
+    const deleteTag = async () => {
+      if (
+        await isConfirmed(`Are you sure you want to delete the "${props.tag.name}" tag?`, {
+          confirmLabel: "Yes, I'm sure",
+          cancelLabel: 'Nevermind',
+        })
+      ) {
+        tagsStore.deleteTag(props.tag.id)
+        showToast(`The ${props.tag.name} tag was deleted.`)
       }
-    },
-  })
+    }
+
+    return {
+      onDragOver,
+      onDragLeave,
+      onDrop,
+      isHighlighted,
+      showRenameTagDialog,
+      deleteTag,
+      isContextMenuActive,
+    }
+  },
+})
 </script>
 
 <style></style>

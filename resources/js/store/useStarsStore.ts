@@ -15,6 +15,8 @@ import {
   FetchDirection,
   FetchDirections,
   Tag,
+  StarMetaInput,
+  TagEditorTag,
 } from '@/types'
 
 export const useStarsStore = defineStore({
@@ -135,11 +137,11 @@ export const useStarsStore = defineStore({
         direction,
       })
     },
-    addTagToStars(tagId: number, repoIds: number[]) {
-      Inertia.post('/stars/tag', { tagId, repoIds })
+    addTagToStars(tagId: number, repos: StarMetaInput[]) {
+      Inertia.post('/stars/tag', { tagId, repos } as any)
     },
-    syncTagsToStar(repoId: number, tags: Partial<Tag>[]) {
-      Inertia.put(`/star/sync-tags`, { repoId, tags } as any)
+    syncTagsToStar(starInput: StarMetaInput, tags: TagEditorTag[]) {
+      Inertia.put(`/star/sync-tags`, { ...starInput, tags } as any)
     },
     async fetchReadme(repo: GitHubRepoNode): Promise<string> {
       const userStore = useUserStore()
@@ -169,10 +171,10 @@ export const useStarsStore = defineStore({
         }),
       })
 
-      const repo: GitHubRepo | undefined = this.starredRepos.find((repo) => repo.node.id === id)
+      const repo: Maybe<GitHubRepo> = this.starredRepos.find((repo) => repo.node.id === id)
 
       if (repo) {
-        const userStar: UserStar | undefined = this.userStars.find((star) => star.repo_id === repo.node.databaseId)
+        const userStar: Maybe<UserStar> = this.userStars.find((star) => star.repo_id === repo.node.databaseId)
         this.selectedRepos = this.selectedRepos.filter((selectedRepo) => selectedRepo.id !== id)
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 

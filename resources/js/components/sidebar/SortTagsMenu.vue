@@ -77,15 +77,15 @@
   </Menu>
 </template>
 <script lang="ts" setup>
-  import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-  import { SwitchVerticalIcon } from '@heroicons/vue/solid'
-  import { FetchDirection, TagSortMethod } from '@/types'
-  import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
-  import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
-  import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
-  import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { SwitchVerticalIcon } from '@heroicons/vue/solid'
+import { FetchDirection, TagSortMethod } from '@/types'
+import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
+import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
+import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
+import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
 
-  const emit = defineEmits<{
-    (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
-  }>()
+const emit = defineEmits<{
+  (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
+}>()
 </script>

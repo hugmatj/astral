@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-900 group"
+    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800 group"
     :class="{ 'bg-gray-100 dark:bg-gray-800 shadow-inner': isSelected }"
     draggable="true"
     role="option"
@@ -24,8 +24,9 @@
     <TagsEditor
       v-if="isEditingTags"
       :tags="tags"
+      :autocomplete-options="autocompleteOptions"
       class="mt-4"
-      @change="syncTagsToStar(repo.node.databaseId, $event)"
+      @change="syncTagsToStar(repo.node, $event)"
       @blur="isEditingTags = false"
     />
     <ul v-if="!isEditingTags" class="inline-flex flex-wrap items-start mt-4">
@@ -66,116 +67,137 @@
         <ShareIcon class="w-4 h-4" />
         <span class="ml-1 text-xs font-medium">{{ repo.node.forkCount }}</span>
       </div>
+      <a
+        class="flex items-center transition-colors group-scope"
+        :href="repo.node.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        @click.stop
+      >
+        <GlobeIcon class="w-4 h-4" />
+        <span class="ml-1 text-xs font-medium group-scope-hover:underline">Visit</span>
+      </a>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, computed, PropType, ref, Ref } from 'vue'
-  import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
-  import { useUserStore } from '@/store/useUserStore'
-  import { useStarsStore } from '@/store/useStarsStore'
-  import { StarIcon, ShareIcon } from '@heroicons/vue/outline'
-  import { GitHubRepo, Tag } from '@/types'
+import { defineComponent, computed, PropType, ref, Ref } from 'vue'
+import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
+import { useUserStore } from '@/store/useUserStore'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useTagsStore } from '@/store/useTagsStore'
+import { StarIcon, ShareIcon, GlobeIcon } from '@heroicons/vue/outline'
+import { GitHubRepo, GitHubRepoNode, StarMetaInput, TagEditorTag } from '@/types'
+import { pick } from 'lodash'
 
-  export default defineComponent({
-    components: {
-      TagsEditor,
-      StarIcon,
-      ShareIcon,
+export default defineComponent({
+  components: {
+    TagsEditor,
+    StarIcon,
+    ShareIcon,
+    GlobeIcon,
+  },
+  props: {
+    repo: {
+      type: Object as PropType<GitHubRepo>,
+      required: true,
     },
-    props: {
-      repo: {
-        type: Object as PropType<GitHubRepo>,
-        required: true,
-      },
-    },
-    emits: ['selected', 'tag-selected', 'language-selected'],
-    setup(props) {
-      const userStore = useUserStore()
-      const starsStore = useStarsStore()
+  },
+  emits: ['selected', 'tag-selected', 'language-selected'],
+  setup(props) {
+    const userStore = useUserStore()
+    const starsStore = useStarsStore()
+    const tagsStore = useTagsStore()
 
-      const tags = computed(() => {
-        return starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
-      })
+    const tags = computed(() => {
+      return starsStore.userStarsByRepoId[props.repo.node.databaseId]?.tags || []
+    })
 
-      const shouldShowLanguageTag = computed(() => !!userStore.user?.settings.show_language_tags)
+    const shouldShowLanguageTag = computed(() => !!userStore.user?.settings.show_language_tags)
 
-      const isEditingTags = ref(false)
+    const isEditingTags = ref(false)
 
-      const isSelected = computed(() =>
-        starsStore.selectedRepos.map((repo) => repo.databaseId).includes(props.repo.node.databaseId)
+    const isSelected = computed(() =>
+      starsStore.selectedRepos.map((repo) => repo.databaseId).includes(props.repo.node.databaseId)
+    )
+
+    const autocompleteOptions = computed(() => {
+      return tagsStore.tags.map((tag) => tag.name)
+    })
+
+    const syncTagsToStar = (repoNode: GitHubRepoNode, tags: TagEditorTag[]) => {
+      const starInput: StarMetaInput = pick(repoNode, ['databaseId', 'nameWithOwner', 'url', 'description'])
+      starsStore.syncTagsToStar(starInput, tags)
+
+      isEditingTags.value = false
+    }
+
+    let $dragImage: Maybe<HTMLElement> = undefined
+
+    const onDragStart = (e: DragEvent) => {
+      starsStore.isDraggingRepo = true
+
+      if (starsStore.selectedRepos.length) {
+        if (isSelected.value) {
+          starsStore.draggingRepos = [...starsStore.selectedRepos]
+        } else {
+          starsStore.draggingRepos = [props.repo.node, ...starsStore.selectedRepos]
+        }
+      } else {
+        starsStore.draggingRepos = [props.repo.node]
+      }
+
+      $dragImage = document.createElement('div')
+      $dragImage.classList.add(
+        ...[
+          'star-drag-image',
+          'inline-block',
+          'bg-white',
+          'shadow-md',
+          'p-4',
+          'font-semibold',
+          'rounded-md',
+          'text-brand-600',
+          'absolute',
+          'left-0',
+          'z-10',
+        ]
       )
-
-      const syncTagsToStar = (repoId: number, tags: Ref<Pick<Tag, 'name'>[]>) => {
-        starsStore.syncTagsToStar(repoId, tags.value)
-        isEditingTags.value = false
+      if (starsStore.draggingRepos.length > 1) {
+        $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner} + ${
+          starsStore.draggingRepos.length - 1
+        } more</span>`
+      } else {
+        $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner}</span>`
       }
+      $dragImage.style.top = '-999px'
+      document.body.appendChild($dragImage)
 
-      let $dragImage: HTMLElement | undefined = undefined
-
-      const onDragStart = (e: DragEvent) => {
-        starsStore.isDraggingRepo = true
-
-        if (starsStore.selectedRepos.length) {
-          if (isSelected.value) {
-            starsStore.draggingRepos = [...starsStore.selectedRepos]
-          } else {
-            starsStore.draggingRepos = [props.repo.node, ...starsStore.selectedRepos]
-          }
-        } else {
-          starsStore.draggingRepos = [props.repo.node]
-        }
-
-        $dragImage = document.createElement('div')
-        $dragImage.classList.add(
-          ...[
-            'star-drag-image',
-            'inline-block',
-            'bg-white',
-            'shadow-md',
-            'p-4',
-            'font-semibold',
-            'rounded-md',
-            'text-brand-600',
-            'absolute',
-            'left-0',
-            'z-10',
-          ]
-        )
-        if (starsStore.draggingRepos.length > 1) {
-          $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner} + ${
-            starsStore.draggingRepos.length - 1
-          } more</span>`
-        } else {
-          $dragImage.innerHTML = `<span>${props.repo.node.nameWithOwner}</span>`
-        }
-        $dragImage.style.top = '-999px'
-        document.body.appendChild($dragImage)
-
-        if (e.dataTransfer) {
-          e.dataTransfer.effectAllowed = 'copyLink'
-          e.dataTransfer.setDragImage($dragImage, 0, 0)
-        }
+      if (e.dataTransfer) {
+        e.dataTransfer.effectAllowed = 'copyLink'
+        e.dataTransfer.setDragImage($dragImage, 0, 0)
       }
+    }
 
-      const onDragEnd = () => {
-        starsStore.isDraggingRepo = false
-        starsStore.draggingRepos = []
-        if ($dragImage) {
-          document.body.removeChild($dragImage)
-        }
+    const onDragEnd = () => {
+      starsStore.isDraggingRepo = false
+      starsStore.draggingRepos = []
+      if ($dragImage) {
+        document.body.removeChild($dragImage)
       }
+    }
 
-      return {
-        tags,
-        isSelected,
-        onDragStart,
-        onDragEnd,
-        syncTagsToStar,
-        isEditingTags,
-        shouldShowLanguageTag,
-      }
-    },
-  })
+    return {
+      tags,
+      autocompleteOptions,
+      isSelected,
+      onDragStart,
+      onDragEnd,
+      syncTagsToStar,
+      isEditingTags,
+      shouldShowLanguageTag,
+    }
+  },
+})
 </script>

@@ -7,7 +7,11 @@
       <ReadmeNotSelectedSvg aria-label="No Readme Selected" class="w-full max-w-sm" />
     </div>
     <div v-show="contents" as="div" class="relative z-20 w-full h-full">
-      <div ref="readmeEl" class="p-4 prose max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto" v-html="contents"></div>
+      <div
+        ref="readmeEl"
+        class="p-4 prose max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto dark:prose-invert"
+        v-html="contents"
+      ></div>
     </div>
     <TransitionFade
       :show="isReadmeLoading"
@@ -19,279 +23,262 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, computed, nextTick, watch } from 'vue'
-  import { useStarsStore } from '@/store/useStarsStore'
-  import { debouncedWatch } from '@vueuse/core'
-  import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
-  import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
-  import ReadmeNotSelectedSvg from '@@/img/readme-not-selected.svg?component'
+<script lang="ts" setup>
+import { ref, computed, nextTick, watch } from 'vue'
+import { useStarsStore } from '@/store/useStarsStore'
+import { debouncedWatch } from '@vueuse/core'
+import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
+import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
+import ReadmeNotSelectedSvg from '@/../img/readme-not-selected.svg?component'
 
-  export default defineComponent({
-    components: {
-      ReadmeNotSelectedSvg,
-      TransitionFade,
-      LoadingSpinner,
-    },
-    setup() {
-      const starsStore = useStarsStore()
+const starsStore = useStarsStore()
 
-      const contents = ref<string>('')
-      const isReadmeLoading = ref(false)
+const contents = ref<string>('')
+const isReadmeLoading = ref(false)
 
-      const readmeEl = ref<HTMLElement>()
-      const readmeContainerEl = ref<HTMLElement>()
+const readmeEl = ref<HTMLElement>()
+const readmeContainerEl = ref<HTMLElement>()
 
-      const noRepoSelected = computed(() => !starsStore.selectedRepos.length)
+const noRepoSelected = computed(() => !starsStore.selectedRepos.length)
 
-      watch(
-        () => starsStore.selectedRepo,
-        (selectedRepo) => {
-          if (Object.keys(selectedRepo).length) {
-            isReadmeLoading.value = true
-          }
+watch(
+  () => starsStore.selectedRepo,
+  (selectedRepo) => {
+    if (Object.keys(selectedRepo).length) {
+      isReadmeLoading.value = true
+    }
+  }
+)
+
+debouncedWatch(
+  () => starsStore.selectedRepo,
+  async (selectedRepo) => {
+    if (Object.keys(selectedRepo).length) {
+      if (readmeContainerEl.value && readmeEl.value) {
+        const readmeContents = await starsStore.fetchReadme(selectedRepo)
+        readmeContainerEl.value.scrollTo(0, 0)
+        contents.value = readmeContents
+
+        await nextTick()
+
+        patchReadmeAnchors()
+        patchReadmeImages()
+      }
+      isReadmeLoading.value = false
+    } else {
+      contents.value = ''
+    }
+  },
+  { debounce: 500 }
+)
+
+const patchReadmeAnchors = () => {
+  if (!readmeEl.value) {
+    return false
+  }
+
+  Array.from(readmeEl.value.querySelectorAll('a')).forEach((anchor) => {
+    if (anchor.href.replace(location.href, '').startsWith('#')) {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault()
+        if (readmeContainerEl.value && readmeEl.value) {
+          const anchorTop: number =
+            readmeContainerEl.value.scrollTop +
+            (e.currentTarget as HTMLElement).getBoundingClientRect().top -
+            readmeContainerEl.value.getBoundingClientRect().top -
+            16
+
+          readmeContainerEl.value.scrollTo(0, anchorTop)
         }
-      )
+      })
+    } else {
+      const repoName = starsStore.selectedRepo.nameWithOwner
+      const repoBranch = starsStore.selectedRepo.defaultBranchRef.name
+      const href = anchor.getAttribute('href')
 
-      debouncedWatch(
-        () => starsStore.selectedRepo,
-        async (selectedRepo) => {
-          if (Object.keys(selectedRepo).length) {
-            if (readmeContainerEl.value && readmeEl.value) {
-              console.log(selectedRepo)
-              const readmeContents = await starsStore.fetchReadme(selectedRepo)
-              readmeContainerEl.value.scrollTo(0, 0)
-              contents.value = readmeContents
-
-              await nextTick()
-
-              patchReadmeAnchors()
-              patchReadmeImages()
-            }
-            isReadmeLoading.value = false
-          } else {
-            contents.value = ''
-          }
-        },
-        { debounce: 500 }
-      )
-
-      const patchReadmeAnchors = () => {
-        if (!readmeEl.value) {
-          return false
-        }
-
-        Array.from(readmeEl.value.querySelectorAll('a')).forEach((anchor) => {
-          if (anchor.href.replace(location.href, '').startsWith('#')) {
-            anchor.addEventListener('click', (e) => {
-              e.preventDefault()
-              if (readmeContainerEl.value && readmeEl.value) {
-                const anchorTop: number =
-                  readmeContainerEl.value.scrollTop +
-                  (e.currentTarget as HTMLElement).getBoundingClientRect().top -
-                  readmeContainerEl.value.getBoundingClientRect().top -
-                  16
-
-                readmeContainerEl.value.scrollTo(0, anchorTop)
-              }
-            })
-          } else {
-            const repoName = starsStore.selectedRepo.nameWithOwner
-            const repoBranch = starsStore.selectedRepo.defaultBranchRef.name
-            const href = anchor.getAttribute('href')
-
-            if (!href?.startsWith('http')) {
-              anchor.href = `https://github.com/${repoName}/raw/${repoBranch}/${href}`
-            }
-
-            anchor.setAttribute('target', '_blank')
-          }
-        })
+      if (!href?.startsWith('http')) {
+        anchor.href = `https://github.com/${repoName}/raw/${repoBranch}/${href}`
       }
 
-      const patchReadmeImages = () => {
-        if (!readmeEl.value) {
-          return false
-        }
-
-        Array.from(readmeEl.value.querySelectorAll('img')).forEach((img) => {
-          const repoName = starsStore.selectedRepo.nameWithOwner
-          const repoBranch = starsStore.selectedRepo.defaultBranchRef.name
-          const imgSrc = img.getAttribute('src')
-
-          if (!imgSrc?.startsWith('http')) {
-            img.src = `https://github.com/${repoName}/raw/${repoBranch}/${imgSrc}`
-          }
-        })
-      }
-      return {
-        contents,
-        isReadmeLoading,
-        readmeEl,
-        readmeContainerEl,
-        noRepoSelected,
-      }
-    },
+      anchor.setAttribute('target', '_blank')
+    }
   })
+}
+
+const patchReadmeImages = () => {
+  if (!readmeEl.value) {
+    return false
+  }
+
+  Array.from(readmeEl.value.querySelectorAll('img')).forEach((img) => {
+    const repoName = starsStore.selectedRepo.nameWithOwner
+    const repoBranch = starsStore.selectedRepo.defaultBranchRef.name
+    const imgSrc = img.getAttribute('src')
+
+    if (!imgSrc?.startsWith('http')) {
+      img.src = `https://github.com/${repoName}/raw/${repoBranch}/${imgSrc}`
+    }
+  })
+}
 </script>
 
 <style lang="postcss">
-  .entry-content {
-    h1,
-    h2,
-    h3,
-    h4,
-    h4,
-    h5,
-    h6 {
-      > a.anchor {
-        margin-right: 0.3em;
+.entry-content {
+  h1,
+  h2,
+  h3,
+  h4,
+  h4,
+  h5,
+  h6 {
+    > a.anchor {
+      margin-right: 0.3em;
 
-        svg.octicon-link {
-          display: inline;
-        }
+      svg.octicon-link {
+        display: inline;
       }
     }
+  }
 
-    /* Syntax highlighting */
-    .highlight {
-      margin-bottom: 16px;
-    }
+  /* Syntax highlighting */
+  .highlight {
+    margin-bottom: 16px;
+  }
 
-    .highlight pre {
-      margin-bottom: 0;
-      word-break: normal;
-      padding: 0.5rem;
-    }
+  .highlight pre {
+    margin-bottom: 0;
+    word-break: normal;
+    padding: 0.5rem;
+  }
 
-    /*!
+  /*!
   * GitHub Dark v0.5.0
   * Copyright (c) 2012 - 2017 GitHub, Inc.
   * Licensed under MIT (https://github.com/primer/github-syntax-theme-generator/blob/master/LICENSE)
   */
 
-    .pl-c /* comment, punctuation.definition.comment, string.comment */ {
-      color: #959da5;
-    }
+  .pl-c /* comment, punctuation.definition.comment, string.comment */ {
+    color: #959da5;
+  }
 
-    .pl-c1 /* constant, entity.name.constant, variable.other.constant, variable.language, support, meta.property-name, support.constant, support.variable, meta.module-reference, markup.quote, markup.raw, meta.diff.header */,
+  .pl-c1 /* constant, entity.name.constant, variable.other.constant, variable.language, support, meta.property-name, support.constant, support.variable, meta.module-reference, markup.quote, markup.raw, meta.diff.header */,
   .pl-s .pl-v /* string variable */ {
-      color: #c8e1ff;
-    }
+    color: #c8e1ff;
+  }
 
-    .pl-e /* entity */,
+  .pl-e /* entity */,
   .pl-en /* entity.name */ {
-      color: #b392f0;
-    }
+    color: #b392f0;
+  }
 
-    .pl-smi /* variable.parameter.function, storage.modifier.package, storage.modifier.import, storage.type.java, variable.other */,
+  .pl-smi /* variable.parameter.function, storage.modifier.package, storage.modifier.import, storage.type.java, variable.other */,
   .pl-s .pl-s1 /* string source */ {
-      color: #f6f8fa;
-    }
+    color: #f6f8fa;
+  }
 
-    .pl-ent /* entity.name.tag */ {
-      color: #7bcc72;
-    }
+  .pl-ent /* entity.name.tag */ {
+    color: #7bcc72;
+  }
 
-    .pl-k /* keyword, storage, storage.type */ {
-      color: #ea4a5a;
-    }
+  .pl-k /* keyword, storage, storage.type */ {
+    color: #ea4a5a;
+  }
 
-    .pl-s /* string */,
+  .pl-s /* string */,
   .pl-pds /* punctuation.definition.string, source.regexp, string.regexp.character-class */,
   .pl-s .pl-pse .pl-s1 /* string punctuation.section.embedded source */,
   .pl-sr /* string.regexp */,
   .pl-sr .pl-cce /* string.regexp constant.character.escape */,
   .pl-sr .pl-sre /* string.regexp source.ruby.embedded */,
   .pl-sr .pl-sra /* string.regexp string.regexp.arbitrary-repitition */ {
-      color: #79b8ff;
-    }
+    color: #79b8ff;
+  }
 
-    .pl-v /* variable */,
+  .pl-v /* variable */,
   .pl-ml /* markup.list, sublimelinter.mark.warning */ {
-      color: #fb8532;
-    }
+    color: #fb8532;
+  }
 
-    .pl-bu /* invalid.broken, invalid.deprecated, invalid.unimplemented, message.error, brackethighlighter.unmatched, sublimelinter.mark.error */ {
-      color: #d73a49;
-    }
+  .pl-bu /* invalid.broken, invalid.deprecated, invalid.unimplemented, message.error, brackethighlighter.unmatched, sublimelinter.mark.error */ {
+    color: #d73a49;
+  }
 
-    .pl-ii /* invalid.illegal */ {
-      color: #fafbfc;
-      background-color: #d73a49;
-    }
+  .pl-ii /* invalid.illegal */ {
+    color: #fafbfc;
+    background-color: #d73a49;
+  }
 
-    .pl-c2 /* carriage-return */ {
-      color: #fafbfc;
-      background-color: #d73a49;
-    }
+  .pl-c2 /* carriage-return */ {
+    color: #fafbfc;
+    background-color: #d73a49;
+  }
 
-    .pl-c2::before /* carriage-return */ {
-      content: '^M';
-    }
+  .pl-c2::before /* carriage-return */ {
+    content: '^M';
+  }
 
-    .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
-      font-weight: bold;
-      color: #7bcc72;
-    }
+  .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
+    font-weight: bold;
+    color: #7bcc72;
+  }
 
-    .pl-mh /* markup.heading */,
+  .pl-mh /* markup.heading */,
   .pl-mh .pl-en /* markup.heading entity.name */,
   .pl-ms /* meta.separator */ {
-      font-weight: bold;
-      color: #0366d6;
-    }
-
-    .pl-mi /* markup.italic */ {
-      font-style: italic;
-      color: #f6f8fa;
-    }
-
-    .pl-mb /* markup.bold */ {
-      font-weight: bold;
-      color: #f6f8fa;
-    }
-
-    .pl-md /* markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted */ {
-      color: #ff9491;
-      background-color: #380200;
-    }
-
-    .pl-mi1 /* markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted */ {
-      color: #66b66d;
-      background-color: #334641;
-    }
-
-    .pl-mc /* markup.changed, punctuation.definition.changed */ {
-      color: #b08800;
-      background-color: #fffdef;
-    }
-
-    .pl-mi2 /* markup.ignored, markup.untracked */ {
-      color: #2f363d;
-      background-color: #959da5;
-    }
-
-    .pl-mdr /* meta.diff.range */ {
-      font-weight: bold;
-      color: #b392f0;
-    }
-
-    .pl-mo /* meta.output */ {
-      color: #0366d6;
-    }
-
-    .pl-ba /* brackethighlighter.tag, brackethighlighter.curly, brackethighlighter.round, brackethighlighter.square, brackethighlighter.angle, brackethighlighter.quote */ {
-      color: #ffeef0;
-    }
-
-    .pl-sg /* sublimelinter.gutter-mark */ {
-      color: #6a737d;
-    }
-
-    .pl-corl /* constant.other.reference.link, string.other.link */ {
-      text-decoration: underline;
-      color: #79b8ff;
-    }
+    font-weight: bold;
+    color: #0366d6;
   }
+
+  .pl-mi /* markup.italic */ {
+    font-style: italic;
+    color: #f6f8fa;
+  }
+
+  .pl-mb /* markup.bold */ {
+    font-weight: bold;
+    color: #f6f8fa;
+  }
+
+  .pl-md /* markup.deleted, meta.diff.header.from-file, punctuation.definition.deleted */ {
+    color: #ff9491;
+    background-color: #380200;
+  }
+
+  .pl-mi1 /* markup.inserted, meta.diff.header.to-file, punctuation.definition.inserted */ {
+    color: #66b66d;
+    background-color: #334641;
+  }
+
+  .pl-mc /* markup.changed, punctuation.definition.changed */ {
+    color: #b08800;
+    background-color: #fffdef;
+  }
+
+  .pl-mi2 /* markup.ignored, markup.untracked */ {
+    color: #2f363d;
+    background-color: #959da5;
+  }
+
+  .pl-mdr /* meta.diff.range */ {
+    font-weight: bold;
+    color: #b392f0;
+  }
+
+  .pl-mo /* meta.output */ {
+    color: #0366d6;
+  }
+
+  .pl-ba /* brackethighlighter.tag, brackethighlighter.curly, brackethighlighter.round, brackethighlighter.square, brackethighlighter.angle, brackethighlighter.quote */ {
+    color: #ffeef0;
+  }
+
+  .pl-sg /* sublimelinter.gutter-mark */ {
+    color: #6a737d;
+  }
+
+  .pl-corl /* constant.other.reference.link, string.other.link */ {
+    text-decoration: underline;
+    color: #79b8ff;
+  }
+}
 </style>

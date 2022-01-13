@@ -126,113 +126,113 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue'
-  import { Inertia } from '@inertiajs/inertia'
-  import { useEditor, EditorContent, Editor } from '@tiptap/vue-3'
-  import { useNotesEditor } from '@/composables/useNotesEditor'
-  import { useStarsStore } from '@/store/useStarsStore'
-  import { useUserStore } from '@/store/useUserStore'
-  import StarterKit from '@tiptap/starter-kit'
-  import Typography from '@tiptap/extension-typography'
-  import Placeholder from '@tiptap/extension-placeholder'
-  import Underline from '@tiptap/extension-underline'
-  import CodeBlock from '@tiptap/extension-code-block'
-  import { TransitionChild, TransitionRoot } from '@headlessui/vue'
-  import debounce from 'lodash/debounce'
-  import BaseButton from '@/components/shared/core/BaseButton.vue'
-  import BoldIcon from '@/components/shared/icons/notes-editor/BoldIcon.vue'
-  import ItalicsIcon from '@/components/shared/icons/notes-editor/ItalicsIcon.vue'
-  import UnderlineIcon from '@/components/shared/icons/notes-editor/UnderlineIcon.vue'
-  import CodeIcon from '@/components/shared/icons/notes-editor/CodeIcon.vue'
-  import CodeBlockIcon from '@/components/shared/icons/notes-editor/CodeBlockIcon.vue'
+import { computed, ref, watch } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
+import { useEditor, EditorContent, Editor } from '@tiptap/vue-3'
+import { useNotesEditor } from '@/composables/useNotesEditor'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useUserStore } from '@/store/useUserStore'
+import StarterKit from '@tiptap/starter-kit'
+import Typography from '@tiptap/extension-typography'
+import Placeholder from '@tiptap/extension-placeholder'
+import Underline from '@tiptap/extension-underline'
+import CodeBlock from '@tiptap/extension-code-block'
+import { TransitionChild, TransitionRoot } from '@headlessui/vue'
+import debounce from 'lodash/debounce'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
+import BoldIcon from '@/components/shared/icons/notes-editor/BoldIcon.vue'
+import ItalicsIcon from '@/components/shared/icons/notes-editor/ItalicsIcon.vue'
+import UnderlineIcon from '@/components/shared/icons/notes-editor/UnderlineIcon.vue'
+import CodeIcon from '@/components/shared/icons/notes-editor/CodeIcon.vue'
+import CodeBlockIcon from '@/components/shared/icons/notes-editor/CodeBlockIcon.vue'
 
-  const starsStore = useStarsStore()
-  const userStore = useUserStore()
-  const { isOpen, hide } = useNotesEditor()
-  const isSaving = ref(false)
-  const isSaveToastVisible = ref(false)
+const starsStore = useStarsStore()
+const userStore = useUserStore()
+const { isOpen, hide } = useNotesEditor()
+const isSaving = ref(false)
+const isSaveToastVisible = ref(false)
 
-  const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
+const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
 
-  const initialNotes = JSON.parse(userStar.value?.notes || '{}')
+const initialNotes = JSON.parse(userStar.value?.notes || '{}')
 
-  const editor = useEditor({
-    content: Object.keys(initialNotes).length ? initialNotes : '<p></p>',
-    extensions: [
-      StarterKit,
-      Typography,
-      Underline,
-      Placeholder.configure({
-        placeholder: 'Add some notes about this repo...',
-      }),
-      CodeBlock,
-    ],
-    onUpdate: debounce(({ editor }) => {
-      if (userStore.user?.settings.autosave_notes) {
-        saveNotes(editor)
-      }
-    }, 1000),
-    editorProps: {
-      attributes: {
-        class: 'prose focus:outline-none',
-      },
+const editor = useEditor({
+  content: Object.keys(initialNotes).length ? initialNotes : '<p></p>',
+  extensions: [
+    StarterKit,
+    Typography,
+    Underline,
+    Placeholder.configure({
+      placeholder: 'Add some notes about this repo...',
+    }),
+    CodeBlock,
+  ],
+  onUpdate: debounce(({ editor }) => {
+    if (userStore.user?.settings.autosave_notes) {
+      saveNotes(editor)
+    }
+  }, 1000),
+  editorProps: {
+    attributes: {
+      class: 'prose focus:outline-none',
     },
-  })
+  },
+})
 
-  watch(
-    () => starsStore.selectedRepo,
-    () => {
-      let notes = JSON.parse(userStar.value?.notes || '{}')
-      editor.value?.commands.setContent(Object.keys(notes).length ? notes : '<p></p>')
-      editor.value?.commands.focus('end')
-    }
-  )
-
-  watch(isOpen, (newVal) => {
-    if (newVal) {
-      editor.value?.commands.focus('end')
-    }
-  })
-
-  watch(isSaving, (newVal) => {
-    if (newVal) {
-      isSaveToastVisible.value = true
-      setTimeout(() => {
-        isSaveToastVisible.value = false
-      }, 3000)
-    }
-  })
-
-  const saveNotes = (editor: Editor | undefined) => {
-    if (editor) {
-      isSaving.value = true
-      const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
-
-      Inertia.put(
-        '/star/notes',
-        {
-          repoId: starsStore.selectedRepo.databaseId,
-          notes: notesData,
-        },
-        {
-          onFinish: () => (isSaving.value = false),
-          only: ['stars'],
-        }
-      )
-    }
+watch(
+  () => starsStore.selectedRepo,
+  () => {
+    let notes = JSON.parse(userStar.value?.notes || '{}')
+    editor.value?.commands.setContent(Object.keys(notes).length ? notes : '<p></p>')
+    editor.value?.commands.focus('end')
   }
+)
+
+watch(isOpen, (newVal) => {
+  if (newVal) {
+    editor.value?.commands.focus('end')
+  }
+})
+
+watch(isSaving, (newVal) => {
+  if (newVal) {
+    isSaveToastVisible.value = true
+    setTimeout(() => {
+      isSaveToastVisible.value = false
+    }, 3000)
+  }
+})
+
+const saveNotes = (editor: Maybe<Editor>) => {
+  if (editor) {
+    isSaving.value = true
+    const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
+
+    Inertia.put(
+      '/star/notes',
+      {
+        repoId: starsStore.selectedRepo.databaseId,
+        notes: notesData,
+      },
+      {
+        onFinish: () => (isSaving.value = false),
+        only: ['stars'],
+      }
+    )
+  }
+}
 </script>
 
 <style lang="postcss">
-  .ProseMirror {
-    @apply h-full;
-  }
+.ProseMirror {
+  @apply h-full;
+}
 
-  .ProseMirror p.is-editor-empty:first-child::before {
-    content: attr(data-placeholder);
-    float: left;
-    color: #ced4da;
-    pointer-events: none;
-    height: 0;
-  }
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #ced4da;
+  pointer-events: none;
+  height: 0;
+}
 </style>

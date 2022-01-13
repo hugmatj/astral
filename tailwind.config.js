@@ -1,13 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const defaultTheme = require('tailwindcss/defaultTheme')
 const colors = require('tailwindcss/colors')
 
 module.exports = {
   mode: 'jit',
-  purge: ['./resources/js/**/*.vue', './resources/views/**/*.blade.php'],
-
+  content: ['./resources/js/**/*.vue', './resources/views/**/*.blade.php'],
   darkMode: 'class',
-
   theme: {
     extend: {
       colors: {
@@ -22,10 +19,5 @@ module.exports = {
     },
   },
 
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/line-clamp'),
-    require('@tailwindcss/typography'),
-    require('tailwindcss-nested-groups'),
-  ],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/line-clamp'), require('@tailwindcss/typography')],
 }

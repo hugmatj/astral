@@ -8,5 +8,5 @@
   "arrowParens": "always",
   "printWidth": 120,
   "endOfLine": "auto",
-  "vueIndentScriptAndStyle": true
+  "vueIndentScriptAndStyle": false
 }

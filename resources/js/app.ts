@@ -2,7 +2,7 @@ import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'
 import { InertiaProgress } from '@inertiajs/progress'
 import { createPinia } from 'pinia'
-import '@@/css/app.css'
+import '@/../css/app.css'
 
 const el = document.getElementById('app')
 const pages = import.meta.glob('./Pages/**/*.vue')

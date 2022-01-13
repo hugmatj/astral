@@ -5,8 +5,10 @@ module.exports = {
     es2021: true,
     node: true,
   },
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    ecmaVersion: 2021,
+    parser: '@typescript-eslint/parser',
+    extraFileExtensions: ['.vue'],
   },
   extends: [
     'plugin:vue/vue3-recommended',
@@ -26,8 +28,8 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unused-vars': ['off', { argsIgnorePattern: '^_' }],
     'vue/script-setup-uses-vars': 'error',
+    'vue/multi-word-component-names': 'off',
     'vue/no-v-html': 'off',
-    'prettier/prettier': ['error', {}, { usePrettierrc: true }],
   },
   globals: {
     defineProps: 'readonly',
@@ -35,4 +37,12 @@ module.exports = {
     defineExpose: 'readonly',
     withDefaults: 'readonly',
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.vue'],
+      rules: {
+        'no-undef': 'off',
+      },
+    },
+  ],
 }

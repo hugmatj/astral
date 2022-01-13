@@ -25,6 +25,8 @@ export interface Tag {
   readonly user_id: number
 }
 
+export type TagEditorTag = Pick<Tag, 'id' | 'name'>
+
 export interface UserStar {
   readonly id: number
   readonly repo_id: number
@@ -67,7 +69,7 @@ export interface RepoLanguage {
 
 export interface StarDragDataTransferData {
   tag: Tag
-  repoIds: number[]
+  repos: StarMetaInput[]
 }
 
 export interface PaginationResponse {
@@ -108,3 +110,10 @@ export interface BaseDialogReturnType {
   show(): void
   hide(): void
 }
+
+export interface SmartFilter {
+  name: string
+  body: string
+}
+
+export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'nameWithOwner' | 'url' | 'description'>

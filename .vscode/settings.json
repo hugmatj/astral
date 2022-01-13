@@ -1,6 +1,6 @@
 {
   "eslint.validate": ["vue", "typescript"],
-  "vetur.validation.template": false,
+  "volar.codeLens.scriptSetupTools": true,
   "volar.codeLens.pugTools": false,
   "editor.formatOnSave": false,
   "eslint.format.enable": false,

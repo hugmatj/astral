@@ -39,92 +39,92 @@
 </template>
 
 <script lang="ts">
-  import { computed, defineComponent, PropType, ref, watch } from 'vue'
-  import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
-  import fuzzysearch from 'fuzzysearch'
-  import { onKeyStroke } from '@vueuse/core'
+import { computed, defineComponent, PropType, ref, watch } from 'vue'
+import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
+import fuzzysearch from 'fuzzysearch'
+import { onKeyStroke } from '@vueuse/core'
 
-  export default defineComponent({
-    components: {
-      TransitionFade,
+export default defineComponent({
+  components: {
+    TransitionFade,
+  },
+  inheritAttrs: false,
+  props: {
+    source: {
+      type: Array as PropType<string[]>,
+      default: () => [],
     },
-    inheritAttrs: false,
-    props: {
-      source: {
-        type: Array as PropType<string[]>,
-        default: () => [],
-      },
-      search: {
-        type: String,
-        default: '',
-      },
+    search: {
+      type: String,
+      default: '',
     },
-    emits: ['select', 'show', 'hide'],
-    setup(props, { emit }) {
-      const currentIndex = ref(-1)
-      const isVisible = ref(false)
+  },
+  emits: ['select', 'show', 'hide'],
+  setup(props, { emit }) {
+    const currentIndex = ref(-1)
+    const isVisible = ref(false)
 
-      const visibleItems = computed(() => {
-        if (props.search.trim().length < 2) {
-          return []
-        }
-
-        return props.source
-          .filter((haystack) => fuzzysearch(props.search.toLowerCase(), haystack.toLowerCase()))
-          .slice(0, 5)
-      })
-      const hasResults = computed(() => !!visibleItems.value.length)
-      const shouldShow = computed(() => isVisible.value && hasResults.value)
-
-      watch(visibleItems, (oldItems, items) => {
-        if ((!oldItems.length && items.length) || (oldItems.length && !items.length)) {
-          currentIndex.value = 0
-        }
-      })
-
-      watch(hasResults, (shouldShow) => {
-        isVisible.value = shouldShow
-        emit(shouldShow ? 'show' : 'hide')
-      })
-
-      watch(
-        () => props.search,
-        () => (isVisible.value = true)
-      )
-
-      const selectActiveItem = () => {
-        emit('select', visibleItems.value[currentIndex.value])
+    const visibleItems = computed(() => {
+      if (props.search.trim().length < 2) {
+        return []
       }
 
-      onKeyStroke('ArrowDown', (e) => {
-        if (isVisible.value) {
-          e.preventDefault()
-          currentIndex.value = Math.min(visibleItems.value.length - 1, currentIndex.value + 1)
-        }
-      })
+      return props.source
+        .filter((haystack) => fuzzysearch(props.search.toLowerCase(), haystack.toLowerCase()))
+        .slice(0, 5)
+    })
+    const hasResults = computed(() => !!visibleItems.value.length)
+    const shouldShow = computed(() => isVisible.value && hasResults.value)
 
-      onKeyStroke('ArrowUp', (e) => {
-        if (isVisible.value) {
-          e.preventDefault()
-          currentIndex.value = Math.max(0, currentIndex.value - 1)
-        }
-      })
-
-      onKeyStroke('Enter', (e) => {
-        if (isVisible.value) {
-          e.preventDefault()
-          selectActiveItem()
-        }
-      })
-
-      onKeyStroke('Escape', () => (isVisible.value = false))
-
-      return {
-        currentIndex,
-        visibleItems,
-        shouldShow,
-        selectActiveItem,
+    watch(visibleItems, (oldItems, items) => {
+      if ((!oldItems.length && items.length) || (oldItems.length && !items.length)) {
+        currentIndex.value = 0
       }
-    },
-  })
+    })
+
+    watch(hasResults, (shouldShow) => {
+      isVisible.value = shouldShow
+      emit(shouldShow ? 'show' : 'hide')
+    })
+
+    watch(
+      () => props.search,
+      () => (isVisible.value = true)
+    )
+
+    const selectActiveItem = () => {
+      emit('select', visibleItems.value[currentIndex.value])
+    }
+
+    onKeyStroke('ArrowDown', (e) => {
+      if (isVisible.value) {
+        e.preventDefault()
+        currentIndex.value = Math.min(visibleItems.value.length - 1, currentIndex.value + 1)
+      }
+    })
+
+    onKeyStroke('ArrowUp', (e) => {
+      if (isVisible.value) {
+        e.preventDefault()
+        currentIndex.value = Math.max(0, currentIndex.value - 1)
+      }
+    })
+
+    onKeyStroke('Enter', (e) => {
+      if (isVisible.value) {
+        e.preventDefault()
+        selectActiveItem()
+      }
+    })
+
+    onKeyStroke('Escape', () => (isVisible.value = false))
+
+    return {
+      currentIndex,
+      visibleItems,
+      shouldShow,
+      selectActiveItem,
+    }
+  },
+})
 </script>

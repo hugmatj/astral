@@ -5,3 +5,5 @@ declare module 'fuzzysearch' {
 }
 
 declare module '@heroicons/*'
+
+declare module 'vue-flatpickr-component'

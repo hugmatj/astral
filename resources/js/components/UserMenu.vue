@@ -117,19 +117,19 @@
   </Menu>
 </template>
 <script lang="ts" setup>
-  import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-  import {
-    CogIcon,
-    UserGroupIcon,
-    ChatAlt2Icon,
-    ExclamationCircleIcon,
-    LogoutIcon,
-    ChevronDownIcon,
-  } from '@heroicons/vue/solid'
-  import GitHubLogoIcon from '@/components/shared/icons/GitHubLogoIcon.vue'
-  import { useUserStore } from '@/store/useUserStore'
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import {
+  CogIcon,
+  UserGroupIcon,
+  ChatAlt2Icon,
+  ExclamationCircleIcon,
+  LogoutIcon,
+  ChevronDownIcon,
+} from '@heroicons/vue/solid'
+import GitHubLogoIcon from '@/components/shared/icons/GitHubLogoIcon.vue'
+import { useUserStore } from '@/store/useUserStore'
 
-  defineEmits(['showSettings'])
+defineEmits(['showSettings'])
 
-  const userStore = useUserStore()
+const userStore = useUserStore()
 </script>

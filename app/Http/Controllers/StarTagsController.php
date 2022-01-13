@@ -29,17 +29,21 @@ class StarTagsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'repoIds' => 'required|array',
+            'repos' => ['required', 'array'],
+            'repos.*.databaseId' => ['required', 'integer'],
+            'repos.*.nameWithOwner' => ['required', 'string'],
+            'repos.*.url' => ['required', 'string', 'url'],
+            'repos.*.description' => ['nullable', 'string'],
             'tagId' => ['required', Rule::exists('tags', 'id')->where(function ($query) {
                 return $query->where('user_id', auth()->id());
             }),],
         ]);
 
-        $repoIds = $request->input('repoIds');
+        $repos = $request->input('repos');
         $tagId = $request->input('tagId');
 
-        foreach ($repoIds as $repoId) {
-            $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
+        foreach ($repos as $repo) {
+            $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repo['databaseId']], ['meta' => collect($repo)->except(['databaseId'])->toArray()]);
             $star->tags()->syncWithoutDetaching([$tagId]);
         }
 
@@ -56,20 +60,26 @@ class StarTagsController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'repoId' => 'required|numeric',
+            'databaseId' => ['required', 'integer'],
+            'nameWithOwner' => ['required', 'string'],
+            'url' => ['required', 'string', 'url'],
+            'description' => ['nullable', 'string'],
             'tags' => 'array',
-            'tags.*.name' => 'required_with:tags|string',
+            'tags.*.name' => ['required_with:tags', 'string'],
         ]);
 
         DB::beginTransaction();
 
-        $repoId = $request->input('repoId');
+        $repoId = $request->input('databaseId');
         $tags = $request->input('tags');
-        $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId]);
+        $meta = $request->only(['nameWithOwner', 'url', 'description']);
+
+        $star = auth()->user()->stars()->firstOrCreate(['repo_id' => $repoId], ['meta' => $meta]);
+
         $ids = [];
 
         if (empty($tags)) {
-            $star->tags()->sync([]);
+            $star->removeAllTags();
         } else {
             foreach ($tags as $tag) {
                 $tag = auth()->user()->tags()->firstOrCreate(['name' => $tag['name']]);
