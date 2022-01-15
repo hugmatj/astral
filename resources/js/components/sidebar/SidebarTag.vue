@@ -41,12 +41,12 @@
                   <button
                     :class="[
                       active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                      'group-scope flex items-center p-2 text-xs w-full font-semibold',
+                      'group-one flex items-center p-2 text-xs w-full font-semibold',
                     ]"
                     @click.stop="showRenameTagDialog(tag)"
                   >
                     <PencilAltIcon
-                      class="w-4 h-4 mr-1 text-gray-400 group-scope-hover:text-indigo-500"
+                      class="w-4 h-4 mr-1 text-gray-400 group-one-hover:text-indigo-500"
                       aria-hidden="true"
                     />
                     <span>Rename</span>
@@ -56,14 +56,11 @@
                   <button
                     :class="[
                       active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                      'group-scope flex items-center p-2 text-xs w-full font-semibold',
+                      'group-one flex items-center p-2 text-xs w-full font-semibold',
                     ]"
                     @click.stop="deleteTag"
                   >
-                    <TrashIcon
-                      class="w-4 h-4 mr-1 text-gray-400 group-scope-hover:text-indigo-500"
-                      aria-hidden="true"
-                    />
+                    <TrashIcon class="w-4 h-4 mr-1 text-gray-400 group-one-hover:text-indigo-500" aria-hidden="true" />
                     <span>Delete</span>
                   </button>
                 </MenuItem>

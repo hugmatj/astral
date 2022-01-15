@@ -2258,7 +2258,7 @@ postcss-nested@5.0.6, postcss-nested@^5.0.5:
   dependencies:
     postcss-selector-parser "^6.0.6"
 
-postcss-selector-parser@^6.0.2, postcss-selector-parser@^6.0.4, postcss-selector-parser@^6.0.6, postcss-selector-parser@^6.0.7:
+postcss-selector-parser@^6.0.6, postcss-selector-parser@^6.0.7:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-6.0.7.tgz#48404830a635113a71fd79397de8209ed05a66fc"
   integrity sha512-U+b/Deoi4I/UmE6KOVPpnhS7I7AYdKbhGcat+qTQ27gycvaACvNEw11ba6RrkwVmDVRW7sigWgLj4/KbbJjeDA==
@@ -2617,20 +2617,10 @@ svgo@^2.3.0:
     picocolors "^1.0.0"
     stable "^0.1.8"
 
-tailwindcss-interaction-variants@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/tailwindcss-interaction-variants/-/tailwindcss-interaction-variants-5.0.0.tgz#8e0825dfa4b2a81804cbae536915e48a85e96580"
-  integrity sha512-Tmx9HjwuNA3G7cLUcebGkNchKkNVIZXBroxa0LBoq/KUb/xEKEM8qugUG7QczSNPhaZzpXmo3IzPkRhf4tDaOQ==
-  dependencies:
-    lodash "^4.17.19"
-    postcss-selector-parser "^6.0.2"
-
-tailwindcss-nested-groups@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/tailwindcss-nested-groups/-/tailwindcss-nested-groups-1.2.4.tgz#f9840b9bddc69eceb04a869f5e6ef093e380e3b8"
-  integrity sha512-SrW9VTgH5/PmW/E0q1+TC7TckhVfonDpiYiLKsRYX57FEcM3LemiH7JYcsTlubM+eAVkd9Jjj03pTiyfnDBibQ==
-  dependencies:
-    postcss-selector-parser "^6.0.4"
+tailwindcss-scoped-groups@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss-scoped-groups/-/tailwindcss-scoped-groups-2.0.0.tgz#0a60ec02c9d6aaad16d6d78b080637ebe3a19ca2"
+  integrity sha512-uE9PJzfjqzsKlZ0dUjG5yPwBmkEZ/qmrXMLjykRs0otolUHAIclbtV49JQGyeYLo8YA7WPMgzKOg2e4snVyHqw==
 
 tailwindcss@^3.0.1:
   version "3.0.7"

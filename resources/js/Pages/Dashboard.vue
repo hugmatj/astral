@@ -72,7 +72,12 @@
         }"
       >
         <Galileo />
-        <StarredRepoList v-slot="{ repo }" @focus="isStarsListFocused = true" @blur="isStarsListFocused = false">
+        <StarredRepoList
+          v-slot="{ repo }"
+          class="focus:outline-none"
+          @focus="isStarsListFocused = true"
+          @blur="isStarsListFocused = false"
+        >
           <StarredRepo
             :repo="repo"
             @selected="onRepoSelected"

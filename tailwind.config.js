@@ -19,5 +19,12 @@ module.exports = {
     },
   },
 
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/line-clamp'), require('@tailwindcss/typography')],
+  plugins: [
+    require('tailwindcss-scoped-groups')({
+      groups: ['one'],
+    }),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
+    require('@tailwindcss/typography'),
+  ],
 }
