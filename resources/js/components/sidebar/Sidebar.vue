@@ -78,6 +78,28 @@
           </ul>
         </template>
       </SidebarGroup>
+      <SidebarGroup title="Smart Filters" collapsible class="relative group">
+        <template #right-action>
+          <button
+            class="inline-flex items-center w-full text-sm font-semibold text-gray-400 transition opacity-0 focus:outline-none hover:text-gray-200 group-hover:opacity-100"
+            type="button"
+            aria-label="Add Smart Filter"
+            @click="doShowSmartFiltersDialog"
+          >
+            <PlusCircleIcon class="flex-shrink-0 w-5 h-5" aria-hidden="true" />
+          </button>
+        </template>
+        <template #default>
+          <ul class="mt-2 space-y-2" role="listbox" aria-label="Smart Filters" tabindex="0">
+            <SidebarItem
+              v-for="smartFilter in smartFilters"
+              :key="smartFilter.id"
+              :title="smartFilter.name"
+              @click="$emit('smart-filter-selected', smartFilter)"
+            />
+          </ul>
+        </template>
+      </SidebarGroup>
       <SidebarGroup title="Languages" collapsible>
         <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages" tabindex="0">
           <SidebarItem
@@ -99,6 +121,8 @@ import { defineComponent, ref, computed } from 'vue'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
+import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
+import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
 import draggable from 'vuedraggable'
 import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
@@ -106,7 +130,11 @@ import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import SidebarTag from '@/components/sidebar/SidebarTag.vue'
 import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
 import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
-import { Tag, StarDragDataTransferData } from '@/types'
+import { useSmartFiltersDialog } from '@/composables/useSmartFiltersDialog'
+import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
+import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
+import { Tag, StarDragDataTransferData, Ability } from '@/types'
+import { Errors } from '@inertiajs/inertia'
 
 export default defineComponent({
   components: {
@@ -119,11 +147,15 @@ export default defineComponent({
     StarIcon,
     PlusCircleIcon,
   },
-  emits: ['tag-selected', 'language-selected', 'all-stars-selected', 'untagged-selected'],
+  emits: ['tag-selected', 'language-selected', 'all-stars-selected', 'untagged-selected', 'smart-filter-selected'],
   setup() {
     const starsFilterStore = useStarsFilterStore()
     const tagsStore = useTagsStore()
     const starsStore = useStarsStore()
+    const smartFiltersStore = useSmartFiltersStore()
+    const authorizationsStore = useAuthorizationsStore()
+    const { show: showSmartFiltersDialog } = useSmartFiltersDialog()
+    const { show: showSponsorshipDialog } = useSponsorshipDialog()
     const { show: showToast } = useGlobalToast()
 
     const newTagForm = ref<HTMLElement>()
@@ -138,11 +170,14 @@ export default defineComponent({
     const doAddTag = async (tagName: string) => {
       try {
         await tagsStore.addTag(tagName)
-        showToast(`The ${tagName} tag was added.`)
+        showToast(`The '${tagName}' tag was added.`)
 
         newTag.value = ''
       } catch (e) {
-        showToast(e as string, ToastType.Error)
+        const errors = e as Errors
+        if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
+          showToast(errors[Object.keys(errors)[0]], ToastType.Error)
+        }
       }
     }
 
@@ -151,6 +186,14 @@ export default defineComponent({
     const languageIsSelected = (language: string): boolean => language === starsFilterStore.selectedLanguage
 
     const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
+
+    const doShowSmartFiltersDialog = () => {
+      if (authorizationsStore.abilities[Ability.CREATE_SMART_FILTER]) {
+        showSmartFiltersDialog()
+      } else {
+        showSponsorshipDialog(Ability.CREATE_SMART_FILTER)
+      }
+    }
 
     return {
       newTagForm,
@@ -168,11 +211,18 @@ export default defineComponent({
           tagsStore.tags = val
         },
       }),
+      smartFilters: computed({
+        get: () => smartFiltersStore.smartFilters,
+        set: (val) => {
+          smartFiltersStore.smartFilters = val
+        },
+      }),
       totalRepos: computed(() => starsStore.totalRepos || starsStore.starredRepos.length),
       totalUntaggedRepos: computed(() => starsStore.untaggedStars.length),
       languages: computed(() => starsStore.languages),
       sortTags: tagsStore.sortTags,
       syncTagOrder: tagsStore.syncTagOrder,
+      doShowSmartFiltersDialog,
     }
   },
 })

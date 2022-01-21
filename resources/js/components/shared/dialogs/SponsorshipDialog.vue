@@ -43,7 +43,7 @@ import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { UserGroupIcon } from '@heroicons/vue/outline'
 import { Ability } from '@/types'
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
-import BaseButton from '@/components/shared//core/BaseButton.vue'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
 
 const { isOpen, hide, currentContext } = useSponsorshipDialog()
 const authorizationsStore = useAuthorizationsStore()
@@ -51,6 +51,7 @@ const authorizationsStore = useAuthorizationsStore()
 const DIALOG_MESSAGES: Record<Ability, string> = {
   [Ability.CREATE_TAG]: `To create more than ${authorizationsStore.limits?.max_tags} tags`,
   [Ability.ADD_NOTES]: 'To add notes to your starred repos',
+  [Ability.CREATE_SMART_FILTER]: 'To create smart filters',
 }
 
 const currentMessage: Ref<string | null> = computed(() =>

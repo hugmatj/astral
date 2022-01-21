@@ -76,10 +76,10 @@ return [
     | this issue will be injected.
     | See: https://github.com/innocenzi/laravel-vite/issues/31
     */
-    'asset_plugin' => [
-        'find_regex' => '/\/resources\/(.*)\.(svg|jp?g|png|webp)/',
-        'replace_with' => '/resources/$1.$2',
-    ],
+    // 'asset_plugin' => [
+    //     'find_regex' => '/\/resources\/(.*)\.(svg|jp?g|png|webp)/',
+    //     'replace_with' => '/resources/$1.$2',
+    // ],
 
     /*
     |--------------------------------------------------------------------------

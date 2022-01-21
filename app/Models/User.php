@@ -137,6 +137,11 @@ class User extends Authenticatable
         return $this->hasMany(Star::class);
     }
 
+    public function smartFilters()
+    {
+        return $this->hasMany(SmartFilter::class);
+    }
+
     public function limits()
     {
         return $this->isNotSponsor() ?

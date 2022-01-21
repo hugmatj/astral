@@ -1,0 +1,13 @@
+diff --git a/node_modules/vite/dist/node/chunks/dep-f5552faa.js b/node_modules/vite/dist/node/chunks/dep-f5552faa.js
+index eff9837..23c4804 100644
+--- a/node_modules/vite/dist/node/chunks/dep-f5552faa.js
++++ b/node_modules/vite/dist/node/chunks/dep-f5552faa.js
+@@ -4003,7 +4003,7 @@ function injectQuery(url, queryToInject) {
+     // encode percents for consistent behavior with pathToFileURL
+     // see #2614 for details
+     let resolvedUrl = new require$$0$6.URL(url.replace(/%/g, '%25'), 'relative:///');
+-    if (resolvedUrl.protocol !== 'relative:') {
++    if (resolvedUrl.protocol !== 'relative:' && queryToInject !== 'worker_file') {
+         resolvedUrl = require$$0$6.pathToFileURL(url);
+     }
+     let { protocol, pathname, search, hash } = resolvedUrl;

@@ -8,6 +8,7 @@ export const useAuthorizationsStore = defineStore({
     return {
       abilities: {
         [Ability.CREATE_TAG]: false,
+        [Ability.CREATE_SMART_FILTER]: false,
         [Ability.ADD_NOTES]: false,
       } as Authorizations,
       limits: {

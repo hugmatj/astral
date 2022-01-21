@@ -62,7 +62,7 @@ starsStore.worker.onmessage = ({ data }) => {
 
   starsStore.starredRepos = starsStore.allStars.concat(starredRepositories.edges)
   if (starsStore.pageInfo.hasNextPage) {
-    // starsStore.fetchStars(starsStore.pageInfo.endCursor)
+    starsStore.fetchStars(starsStore.pageInfo.endCursor)
   } else {
     authorizationsStore.checkForSponsorship()
   }

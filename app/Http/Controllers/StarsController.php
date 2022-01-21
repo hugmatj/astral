@@ -9,7 +9,7 @@ class StarsController extends Controller
 {
     public function destroy(Star $star)
     {
-        auth()->user()->stars()->findOrFail($star->id)->delete();
+        $star->delete();
 
         return redirect()->route('dashboard.index');
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Lib\Abilities;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TagsController extends Controller
 {
@@ -27,7 +28,9 @@ class TagsController extends Controller
     public function store(Request $request)
     {
         if (auth()->user()->cannot('create', Tag::class)) {
-            return redirect()->route('dashboard.index')->with('sponsorship_required', Abilities::CREATE_TAG);
+            return redirect()->back()->withErrors([
+                'sponsorship_required' => [Abilities::CREATE_TAG],
+            ]);
         }
 
         $request->validate([
@@ -58,7 +61,6 @@ class TagsController extends Controller
             'unique' => 'You already have a tag with that name.'
         ]);
 
-        $tag = auth()->user()->tags()->findOrFail($tag->id);
         $tag->name = $request->input('name');
         $tag->save();
 
@@ -73,7 +75,7 @@ class TagsController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        auth()->user()->tags()->findOrFail($tag->id)->delete();
+        $tag->delete();
 
         return redirect()->route('dashboard.index');
     }

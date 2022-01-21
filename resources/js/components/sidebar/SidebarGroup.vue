@@ -19,7 +19,13 @@
           </span>
         </DisclosureButton>
       </div>
-      <div v-show="open || !collapsible" class="flex-shrink-0 ml-auto">
+      <div
+        class="flex-shrink-0 ml-auto"
+        :class="{
+          'opacity-100 pointer-events-auto': open || !collapsible,
+          'opacity-0 pointer-events-none': !open,
+        }"
+      >
         <slot name="right-action"></slot>
       </div>
     </div>

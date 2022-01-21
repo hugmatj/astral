@@ -9,5 +9,6 @@ export default defineConfig()
   .merge({
     server: {
       https: true,
+      strictPort: true,
     },
   })

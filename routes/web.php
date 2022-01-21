@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CleanupController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SmartFiltersController;
 use App\Http\Controllers\StarsController;
 use App\Http\Controllers\StarTagsController;
 use App\Http\Controllers\StarNotesController;
@@ -44,6 +45,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('star/sync-tags', [StarTagsController::class, 'update'])->name('star.tags.update');
     Route::put('star/notes', StarNotesController::class)->name('star.notes.update');
     Route::delete('star/{star}', [StarsController::class, 'destroy'])->name('star.destroy');
+
+    Route::post('smart-filters', [SmartFiltersController::class, 'store'])->name('smart-filters.store');
+    Route::put('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.update');
+    Route::delete('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.destroy');
 
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
 

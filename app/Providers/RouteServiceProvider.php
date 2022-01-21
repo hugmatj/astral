@@ -58,6 +58,18 @@ class RouteServiceProvider extends ServiceProvider
                     ->group(base_path('routes/vite.php'));
             }
         });
+
+        Route::bind('tag', function ($value) {
+            return auth()->user()->tags()->findOrFail($value);
+        });
+
+        Route::bind('star', function ($value) {
+            return auth()->user()->stars()->findOrFail($value);
+        });
+
+        Route::bind('smart_filter', function ($value) {
+            return auth()->user()->smartFilters()->findOrFail($value);
+        });
     }
 
     /**

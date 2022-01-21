@@ -91,7 +91,9 @@ class StarTagsController extends Controller
         if (auth()->user()->cannot('sync', Tag::class)) {
             DB::rollBack();
 
-            return redirect()->route('dashboard.index')->with('sponsorship_required', Abilities::CREATE_TAG);
+            return redirect()->back()->withErrors([
+                'sponsorship_required' => [Abilities::CREATE_TAG],
+            ]);
         }
 
         DB::commit();

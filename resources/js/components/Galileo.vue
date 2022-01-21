@@ -9,12 +9,12 @@
         ref="input"
         v-model="searchQuery"
         type="text"
-        class="flex-grow w-full py-0 pr-3 text-gray-500 placeholder-gray-300 border-none dark:text-gray-300 pl-9 peer focus:ring-0 dark:bg-gray-700"
+        class="flex-grow w-full py-0 pr-3 text-gray-500 placeholder-gray-300 border-none dark:text-gray-300 pl-9 peer focus:ring-0 dark:bg-gray-700 focus:placeholder-gray-400"
         placeholder="Gaze through your telescope..."
         aria-keyshortcuts="/"
       />
       <SearchIcon
-        class="absolute w-5 h-5 text-gray-300 transition-colors pointer-events-none dark:text-gray-400 left-2 peer-focus:text-gray-300"
+        class="absolute w-5 h-5 text-gray-300 transition-colors pointer-events-none dark:text-gray-400 left-2 peer-focus:text-gray-400"
         aria-hidden="true"
       />
       <span

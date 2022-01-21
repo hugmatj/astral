@@ -1,33 +1,33 @@
 {
   "resources/js/app.ts": {
-    "file": "assets/app.a4e42a21.js",
+    "file": "assets/app.619fe8de.js",
     "src": "resources/js/app.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.f4eb104c.js"
+      "_vendor.9cea73bd.js"
     ],
     "dynamicImports": [
       "resources/js/Pages/Dashboard.vue"
     ],
     "css": [
-      "assets/app.3351b9b0.css"
+      "assets/app.ee5e4956.css"
     ]
   },
-  "_vendor.f4eb104c.js": {
-    "file": "assets/vendor.f4eb104c.js"
+  "_vendor.9cea73bd.js": {
+    "file": "assets/vendor.9cea73bd.js"
   },
   "resources/js/Pages/Dashboard.vue": {
-    "file": "assets/Dashboard.de2b9887.js",
+    "file": "assets/Dashboard.13ed4c2b.js",
     "src": "resources/js/Pages/Dashboard.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_vendor.f4eb104c.js"
+      "_vendor.9cea73bd.js"
     ],
     "css": [
-      "assets/Dashboard.dd8e0ea3.css"
+      "assets/Dashboard.ca4a6446.css"
     ],
     "assets": [
-      "assets/githubStars.worker.9410604a.js"
+      "assets/sample.worker.247dfc2e.js"
     ]
   }
 }

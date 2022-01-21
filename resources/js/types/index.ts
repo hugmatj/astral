@@ -37,6 +37,16 @@ export interface UserStar {
   readonly updated_at: Date
 }
 
+export interface SmartFilter {
+  readonly id: number
+  readonly user_id: number
+  name: string
+  body: string
+  created_at: Date
+  updated_at: Date
+  sort_order: number
+}
+
 export interface GitHubRepoNode {
   databaseId: number
   defaultBranchRef: {
@@ -87,6 +97,7 @@ export type FetchDirection = keyof typeof FetchDirections
 
 export enum Ability {
   CREATE_TAG = 'create_tag',
+  CREATE_SMART_FILTER = 'create_smart_filter',
   ADD_NOTES = 'add_notes',
 }
 
@@ -109,11 +120,6 @@ export interface BaseDialogReturnType {
   isOpen: Ref<boolean>
   show(): void
   hide(): void
-}
-
-export interface SmartFilter {
-  name: string
-  body: string
 }
 
 export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'nameWithOwner' | 'url' | 'description'>

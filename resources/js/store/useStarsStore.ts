@@ -138,10 +138,10 @@ export const useStarsStore = defineStore({
       })
     },
     addTagToStars(tagId: number, repos: StarMetaInput[]) {
-      Inertia.post('/stars/tag', { tagId, repos } as any)
+      Inertia.post('/stars/tag', { tagId, repos } as any, { only: ['stars', 'tags', 'abilities'] })
     },
     syncTagsToStar(starInput: StarMetaInput, tags: TagEditorTag[]) {
-      Inertia.put(`/star/sync-tags`, { ...starInput, tags } as any)
+      Inertia.put(`/star/sync-tags`, { ...starInput, tags } as any, { only: ['stars', 'tags', 'abilities', 'errors'] })
     },
     async fetchReadme(repo: GitHubRepoNode): Promise<string> {
       const userStore = useUserStore()
@@ -179,7 +179,7 @@ export const useStarsStore = defineStore({
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 
         if (userStar) {
-          Inertia.delete(`/star/${userStar.id}`)
+          Inertia.delete(`/star/${userStar.id}`, { only: ['stars', 'tags', 'abilities'] })
         }
       }
     },

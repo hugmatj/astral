@@ -38,7 +38,7 @@ class Tag extends Model
         static::addGlobalScope(new SortOrderScope);
 
         static::creating(function (self $tag) {
-            $tag->sort_order = self::where('user_id', auth()->id())->count();
+            $tag->sort_order = self::where('user_id', auth()->id())->max('sort_order') + 1;
         });
 
         static::deleted(function (self $tag) {

@@ -1,6 +1,5 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'
-import { InertiaProgress } from '@inertiajs/progress'
 import { createPinia } from 'pinia'
 import '@/../css/app.css'
 
@@ -24,6 +23,4 @@ if (el) {
         .mount(el)
     },
   })
-
-  InertiaProgress.init()
 }

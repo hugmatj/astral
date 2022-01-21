@@ -118,7 +118,8 @@ import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
-import { useSyncValueToStore } from '@/composables/useSyncValueToStore'
+import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
+import { useSyncValuesToStores } from '@/composables/useSyncValuesToStores'
 import { useListSelectionState } from '@/composables/useListSelectionState'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useSettingsDialog } from '@/composables/useSettingsDialog'
@@ -138,11 +139,15 @@ import UserMenu from '@/components/UserMenu.vue'
 import Galileo from '@/components/Galileo.vue'
 import SettingsModal from '@/components/shared/dialogs/SettingsDialog.vue'
 import GlobalToast from '@/components/GlobalToast.vue'
-import { GitHubRepo, Tag, UserStar, User, Ability, Limits, Authorizations } from '@/types'
+import { GitHubRepo, Tag, UserStar, User, Ability, Limits, Authorizations, SmartFilter } from '@/types'
 import { ArrowCircleLeftIcon, XCircleIcon as CloseIcon, MenuAlt1Icon as MenuIcon } from '@heroicons/vue/outline'
 import LogoSvg from '@/../img/logo.svg?component'
 
 const props = defineProps({
+  user: {
+    type: Object as PropType<User>,
+    required: true,
+  },
   tags: {
     type: Array as PropType<Tag[]>,
     required: true,
@@ -151,8 +156,8 @@ const props = defineProps({
     type: Array as PropType<UserStar[]>,
     required: true,
   },
-  user: {
-    type: Object as PropType<User>,
+  smartFilters: {
+    type: Array as PropType<SmartFilter[]>,
     required: true,
   },
   abilities: {
@@ -161,10 +166,6 @@ const props = defineProps({
   },
   limits: {
     type: Object as PropType<Limits>,
-    required: true,
-  },
-  flash: {
-    type: Object as PropType<Record<string, Ability>>,
     required: true,
   },
   errors: {
@@ -180,36 +181,18 @@ const authorizationsStore = useAuthorizationsStore()
 const tagsStore = useTagsStore()
 const starsStore = useStarsStore()
 const starsFilterStore = useStarsFilterStore()
+const smartFiltersStore = useSmartFiltersStore()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showSettingsModal } = useSettingsDialog()
 const { params: urlParams, clearParams } = useUrlParams()
 
-const flash = computed(() => props.flash)
-
-useSyncValueToStore(
-  computed(() => props.user),
-  userStore,
-  'user'
-)
-useSyncValueToStore(
-  computed(() => props.abilities),
-  authorizationsStore,
-  'abilities'
-)
-useSyncValueToStore(
-  computed(() => props.limits),
-  authorizationsStore,
-  'limits'
-)
-useSyncValueToStore(
-  computed(() => props.tags),
-  tagsStore,
-  'tags'
-)
-useSyncValueToStore(
-  computed(() => props.stars),
-  starsStore,
-  'userStars'
+useSyncValuesToStores(
+  [userStore, 'user', computed(() => props.user)],
+  [authorizationsStore, 'abilities', computed(() => props.abilities)],
+  [authorizationsStore, 'limits', computed(() => props.limits)],
+  [tagsStore, 'tags', computed(() => props.tags)],
+  [starsStore, 'userStars', computed(() => props.stars)],
+  [smartFiltersStore, 'smartFilters', computed(() => props.smartFilters)]
 )
 
 const isStarsListFocused = ref(false)
@@ -225,14 +208,10 @@ const { selectItem, selectedItems } = useListSelectionState(
  * sponsorship. If true, show them the Sponsor dialog.
  */
 Inertia.on('finish', () => {
-  if (flash.value.sponsorship_required) {
-    showSponsorshipDialog(flash.value.sponsorship_required)
+  if (props.errors.sponsorship_required) {
+    showSponsorshipDialog(props.errors.sponsorship_required)
   }
 })
-
-const log = (msg: string) => {
-  console.log(msg)
-}
 
 const isSidebarOpen = ref(false)
 const isReadmeOpen = ref(false)
