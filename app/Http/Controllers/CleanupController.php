@@ -20,6 +20,7 @@ class CleanupController extends Controller
     {
         $this->janitor->deleteEmptyStars();
 
+        // TODO: We should potentially move this check to run once when the user signs up, and then provide a singular route to re-check through some UI action in the Settings dialog. ( Fire confetti if true :D )
         if (config('app.check_for_sponsorship')) {
             $this->sponsorship->updateUserSponsorshipStatus();
         }

@@ -6,12 +6,30 @@
     >
       <ReadmeNotSelectedSvg aria-label="No Readme Selected" class="w-full max-w-sm" />
     </div>
-    <div v-show="contents" as="div" class="relative z-20 w-full h-full">
+    <div
+      v-show="contents"
+      as="div"
+      class="relative z-20 w-full h-full transition-colors"
+      :class="{ 'bg-gray-100 grid place-items-center': selectedRepoCount > 1 }"
+    >
       <div
-        ref="readmeEl"
-        class="p-4 prose max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto dark:prose-invert"
-        v-html="contents"
+        v-for="(stack, idx) in extraStacks"
+        :key="stack.id"
+        class="absolute h-[85vh] shadow-lg rounded-lg overflow-hidden p-12 pointer-events-none bg-white sm:max-w-2xl 2xl:max-w-4xl w-full"
+        :style="{ transform: `rotate(${stack.angle * (idx % 2 === 0 ? 1 : -1)}deg) scale(0.9)` }"
+        aria-hidden="true"
       ></div>
+      <div class="relative">
+        <div
+          ref="readmeEl"
+          class="p-4 prose transition-transform bg-white max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto dark:prose-invert dark:bg-gray-900"
+          :class="{
+            'h-[85vh] shadow-lg rounded-lg scale-90 overflow-hidden p-12 pointer-events-none': selectedRepoCount > 1,
+          }"
+          v-html="contents"
+        ></div>
+        <div v-show="selectedRepoCount > 1" class="sr-only">{{ selectedRepoCount }} Stars Selected</div>
+      </div>
     </div>
     <TransitionFade
       :show="isReadmeLoading"
@@ -31,6 +49,11 @@ import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
 import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
 import ReadmeNotSelectedSvg from '@/../img/readme-not-selected.svg?component'
 
+type StackItem = {
+  id: string
+  angle: number
+}
+
 const starsStore = useStarsStore()
 
 const contents = ref<string>('')
@@ -39,7 +62,25 @@ const isReadmeLoading = ref(false)
 const readmeEl = ref<HTMLElement>()
 const readmeContainerEl = ref<HTMLElement>()
 
-const noRepoSelected = computed(() => !starsStore.selectedRepos.length)
+const selectedRepoCount = computed(() => starsStore.selectedRepos.length)
+const noRepoSelected = computed(() => !selectedRepoCount.value)
+
+function randomIntFromRange(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+const extraStacks = ref<StackItem[]>([])
+
+watch(
+  () => starsStore.selectedRepos,
+  (selectedRepos) => {
+    extraStacks.value = selectedRepos.slice(1, 5).map(({ id }) => {
+      const existingStack = extraStacks.value.find((stack) => stack.id === id)
+      return { id, angle: existingStack?.angle ?? randomIntFromRange(2, 7) }
+    })
+  },
+  { deep: true }
+)
 
 watch(
   () => starsStore.selectedRepo,
@@ -138,6 +179,11 @@ const patchReadmeImages = () => {
         display: inline;
       }
     }
+  }
+
+  p[dir] a > img {
+    display: inline-block;
+    margin: 0;
   }
 
   /* Syntax highlighting */
