@@ -1,58 +1,72 @@
 <template>
-  <div class="relative">
-    <BaseTextInput
-      ref="inputRef"
-      :model-value="dateFns.format(selectedDate, 'yyyy-MM-dd')"
-      class="flex-grow"
-      readonly
-      @focus="showDatepicker"
-    />
+  <Popover v-slot="{ open }" class="relative">
+    <WatchValue :value="open" @change="setDatePickerVisibility($event)" />
+    <div class="relative">
+      <BaseTextInput
+        ref="inputRef"
+        :model-value="dateFns.format(selectedDate, 'yyyy-MM-dd')"
+        :class="{ 'flex-grow': true, 'ring-gray-400 dark:ring-gray-600 border-gray-400': open && isDatePickerShowing }"
+        readonly
+      />
+      <PopoverButton
+        v-show="!isDatePickerShowing && !open"
+        class="absolute inset-0 z-10 cursor-text"
+        aria-label="Show Datepicker"
+      ></PopoverButton>
+    </div>
     <Portal as="template">
-      <div
-        v-show="isDatePickerShowing"
-        class="absolute z-10 w-64 p-2 -mt-2 text-xs -translate-y-full bg-white border rounded shadow-sm datepicker"
-        :style="{
-          left: inputRect.left + 'px',
-          top: inputRect.top + 'px',
-        }"
-      >
-        <div class="relative grid h-full grid-cols-7 overflow-hidden">
-          <header
-            class="flex items-center justify-between col-span-7 px-3 pt-2 pb-4 font-semibold text-center text-gray-700"
-          >
-            <button aria-label="Previous Month" @click="previousMonth()"><ArrowSmLeftIcon class="w-4 h-4" /></button>
-            <span>{{ currentMonthLabel }} {{ currentYear }}</span>
-            <button aria-label="Next Month" @click="nextMonth()"><ArrowSmRightIcon class="w-4 h-4" /></button>
-          </header>
-          <div v-for="dayLabel in DAY_LABELS" :key="dayLabel" class="font-semibold text-center headings">
-            {{ dayLabel }}
+      <div v-show="isDatePickerShowing && open">
+        <PopoverPanel
+          static
+          class="absolute z-10 w-64 p-2 -mt-2 text-xs -translate-y-full bg-white border rounded shadow-sm datepicker"
+          :style="{
+            left: inputRect.left + 'px',
+            top: inputRect.top + 'px',
+          }"
+        >
+          <div class="relative grid h-full grid-cols-7 overflow-hidden">
+            <header
+              class="flex items-center justify-between col-span-7 px-3 pt-2 pb-4 font-semibold text-center text-gray-700"
+            >
+              <button aria-label="Previous Month" type="button" @click="previousMonth()">
+                <ArrowSmLeftIcon class="w-4 h-4" />
+              </button>
+              <span>{{ currentMonthLabel }} {{ currentYear }}</span>
+              <button aria-label="Next Month" type="button" @click="nextMonth()">
+                <ArrowSmRightIcon class="w-4 h-4" />
+              </button>
+            </header>
+            <div v-for="dayLabel in DAY_LABELS" :key="dayLabel" class="font-semibold text-center headings">
+              {{ dayLabel }}
+            </div>
+            <PopoverButton
+              v-for="(day, index) in dates"
+              :key="index"
+              class="w-full text-center border border-transparent rounded aspect-square hover:border-gray-300"
+              :class="{
+                'bg-gray-100': day.isToday,
+                'text-gray-700': day.isCurrentMonth,
+                'text-gray-300': !day.isCurrentMonth,
+                'bg-brand-100 text-brand-700 font-bold hover:border-brand-400': day.isSelected,
+              }"
+              type="button"
+              @click="setSelectedDate(day)"
+            >
+              {{ formatDateToDay(day.date) }}
+            </PopoverButton>
           </div>
-          <button
-            v-for="(day, index) in dates"
-            :key="index"
-            class="w-full text-center border border-transparent rounded aspect-square hover:border-gray-300"
-            :class="{
-              'bg-gray-100': day.isToday,
-              'text-gray-700': day.isCurrentMonth,
-              'text-gray-300': !day.isCurrentMonth,
-              'bg-brand-100 text-brand-700 font-bold hover:border-brand-400': day.isSelected,
-            }"
-            @click="setSelectedDate(day)"
-          >
-            {{ formatDateToDay(day.date) }}
-          </button>
-        </div>
+        </PopoverPanel>
       </div>
     </Portal>
-  </div>
+  </Popover>
 </template>
 <script setup lang="ts">
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
-import { Portal } from '@headlessui/vue'
+import WatchValue from '@/components/shared/core/WatchValue.vue'
+import { Popover, PopoverButton, PopoverPanel, Portal } from '@headlessui/vue'
 import { ArrowSmLeftIcon, ArrowSmRightIcon } from '@heroicons/vue/solid'
 import * as dateFns from 'date-fns'
-import { tryOnMounted } from '@vueuse/core'
 
 interface Props {
   modelValue?: string
@@ -155,7 +169,20 @@ const showDatepicker = async () => {
   isDatePickerShowing.value = true
 }
 
-const hideDatepicker = () => {
+const hideDatepicker = async () => {
   isDatePickerShowing.value = false
+
+  await nextTick()
+
+  inputRef.value?.$el.focus()
+}
+
+const setDatePickerVisibility = (isVisible: boolean) => {
+  console.log(isVisible)
+  if (isVisible) {
+    showDatepicker()
+  } else {
+    hideDatepicker()
+  }
 }
 </script>

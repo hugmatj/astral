@@ -12,13 +12,16 @@
       class="relative z-20 w-full h-full transition-colors"
       :class="{ 'bg-gray-100 grid place-items-center': selectedRepoCount > 1 }"
     >
-      <div
-        v-for="(stack, idx) in extraStacks"
-        :key="stack.id"
-        class="absolute h-[85vh] shadow-lg rounded-lg overflow-hidden p-12 pointer-events-none bg-white sm:max-w-2xl 2xl:max-w-4xl w-full"
-        :style="{ transform: `rotate(${stack.angle * (idx % 2 === 0 ? 1 : -1)}deg) scale(0.9)` }"
-        aria-hidden="true"
-      ></div>
+      <!-- TODO: These don't actually animate for some reason... -->
+      <TransitionCards>
+        <div
+          v-for="(stack, idx) in extraStacks"
+          :key="stack"
+          :data-index="idx"
+          class="absolute h-[85vh] shadow-lg rounded-lg overflow-hidden p-12 pointer-events-none bg-white sm:max-w-2xl 2xl:max-w-4xl w-full transition duration-1000 scale-90"
+          aria-hidden="true"
+        ></div>
+      </TransitionCards>
       <div class="relative">
         <div
           ref="readmeEl"
@@ -46,13 +49,9 @@ import { ref, computed, nextTick, watch } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
 import { debouncedWatch } from '@vueuse/core'
 import TransitionFade from '@/components/shared/transitions/TransitionFade.vue'
+import TransitionCards from '@/components/shared/transitions/TransitionCards.vue'
 import LoadingSpinner from '@/components/readme/LoadingSpinner.vue'
 import ReadmeNotSelectedSvg from '@/../img/readme-not-selected.svg?component'
-
-type StackItem = {
-  id: string
-  angle: number
-}
 
 const starsStore = useStarsStore()
 
@@ -65,19 +64,12 @@ const readmeContainerEl = ref<HTMLElement>()
 const selectedRepoCount = computed(() => starsStore.selectedRepos.length)
 const noRepoSelected = computed(() => !selectedRepoCount.value)
 
-function randomIntFromRange(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-const extraStacks = ref<StackItem[]>([])
+const extraStacks = ref<string[]>([])
 
 watch(
   () => starsStore.selectedRepos,
   (selectedRepos) => {
-    extraStacks.value = selectedRepos.slice(1, 5).map(({ id }) => {
-      const existingStack = extraStacks.value.find((stack) => stack.id === id)
-      return { id, angle: existingStack?.angle ?? randomIntFromRange(2, 7) }
-    })
+    extraStacks.value = selectedRepos.slice(1, 5).map(({ id }) => id)
   },
   { deep: true }
 )

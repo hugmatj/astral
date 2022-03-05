@@ -3,7 +3,6 @@ import { Inertia } from '@inertiajs/inertia'
 import { useUserStore } from '@/store/useUserStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { removeStarQuery } from '@/queries'
-import StarsWorker from '@/workers/githubStars.worker?worker'
 import keyBy from 'lodash/keyBy'
 import { Dictionary } from 'lodash'
 import {
@@ -34,7 +33,9 @@ export const useStarsStore = defineStore({
       totalRepos: 0,
       selectedRepos: [] as GitHubRepoNode[],
       draggingRepos: [] as GitHubRepoNode[],
-      worker: new StarsWorker(),
+      worker: new Worker(new URL('/resources/js/workers/githubStars.worker.ts', window.location.href), {
+        type: 'module',
+      }),
       hasFetchedFromStorage: false,
     }
   },

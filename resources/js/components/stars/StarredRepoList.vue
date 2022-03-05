@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref, watch, computed, nextTick } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
@@ -46,8 +46,8 @@ useSyncToLocalStorage(starsStore, 'pageInfo').then(() => {
   pageInfoHasSynced.value = true
 })
 
-watch([reposHaveSynced, pageInfoHasSynced], async (newValues) => {
-  if (newValues.every(Boolean) && starsStore.pageInfo.hasNextPage) {
+watch([reposHaveSynced, pageInfoHasSynced], async (syncChecks) => {
+  if (syncChecks.every(Boolean) && starsStore.pageInfo.hasNextPage) {
     // We're ready to start fetching stars
     await nextTick()
     starsStore.fetchStars(starsStore.pageInfo.endCursor)
@@ -60,11 +60,9 @@ starsStore.worker.onmessage = ({ data }) => {
   starsStore.totalRepos = starredRepositories.totalCount
   starsStore.pageInfo = starredRepositories.pageInfo
 
-  starsStore.starredRepos = starsStore.allStars.concat(starredRepositories.edges)
+  starsStore.starredRepos = starsStore.starredRepos.concat(starredRepositories.edges)
   if (starsStore.pageInfo.hasNextPage) {
     starsStore.fetchStars(starsStore.pageInfo.endCursor)
-  } else {
-    authorizationsStore.checkForSponsorship()
   }
 }
 </script>
