@@ -10,5 +10,6 @@ export default defineConfig()
     server: {
       https: true,
       strictPort: true,
+      port: 3001,
     },
   })

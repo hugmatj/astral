@@ -2,16 +2,16 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "patch-package && vite",
+    "dev": "vite",
     "build": "vite build",
     "start": "yarn dev",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,vue --ignore-path .gitignore ./resources/js",
-    "format": "prettier ./resources/js  -w -u",
+    "format": "prettier ./resources/js -w -u",
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.4.1",
+    "@headlessui/vue": "^1.5.0",
     "@heroicons/vue": "^1.0.0",
     "@inertiajs/inertia": "^0.11.0",
     "@inertiajs/inertia-vue3": "^0.6.0",
@@ -29,7 +29,7 @@
     "lodash": "^4.17.19",
     "nanoid": "^3.1.30",
     "patch-package": "^6.4.7",
-    "pinia": "^2.0.9",
+    "pinia": "^2.0.11",
     "postinstall-postinstall": "^2.1.0",
     "vue": "^3.2.0",
     "vue-virtual-scroller": "^2.0.0-alpha.1",
@@ -61,7 +61,7 @@
     "tailwindcss": "^3.0.1",
     "tailwindcss-scoped-groups": "^2.0.0",
     "typescript": "^4.5.2",
-    "vite": "^2.7.13",
+    "vite": "^2.8.0",
     "vite-plugin-mkcert": "^1.5.1",
     "vite-svg-loader": "^2.2.0"
   },
