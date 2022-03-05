@@ -178,7 +178,6 @@ const hideDatepicker = async () => {
 }
 
 const setDatePickerVisibility = (isVisible: boolean) => {
-  console.log(isVisible)
   if (isVisible) {
     showDatepicker()
   } else {
