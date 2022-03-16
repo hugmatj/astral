@@ -6,9 +6,8 @@
     "build": "vite build",
     "start": "yarn dev",
     "preview": "vite preview",
-    "lint": "eslint --ext .ts,vue --ignore-path .gitignore ./resources/js",
-    "format": "prettier ./resources/js -w -u",
-    "postinstall": "patch-package"
+    "lint": "eslint --ext .ts,vue ./resources/js --ignore-path .gitignore",
+    "format": "prettier ./resources/js -w -u"
   },
   "dependencies": {
     "@headlessui/vue": "^1.5.0",
@@ -57,15 +56,12 @@
     "postcss": "^8.4.4",
     "postcss-import": "^14.0.0",
     "postcss-nested": "^5.0.5",
-    "prettier": "2.2.1",
+    "prettier": "^2.6.0",
     "tailwindcss": "^3.0.1",
     "tailwindcss-scoped-groups": "^2.0.0",
     "typescript": "^4.5.2",
     "vite": "^2.8.0",
     "vite-plugin-mkcert": "^1.5.1",
     "vite-svg-loader": "^2.2.0"
-  },
-  "resolutions": {
-    "**/prettier": "2.2.1"
   }
 }
