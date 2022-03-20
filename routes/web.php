@@ -1,21 +1,18 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CleanupController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SmartFiltersController;
-use App\Http\Controllers\StarsController;
-use App\Http\Controllers\StarTagsController;
-use App\Http\Controllers\StarNotesController;
-use App\Http\Controllers\TagsController;
-use App\Http\Controllers\TagsSortOrderController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\WebWorkerProxyController;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TagsController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\StarsController;
+use App\Http\Controllers\CleanupController;
+use App\Http\Controllers\StarTagsController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StarNotesController;
+use App\Http\Controllers\SmartFiltersController;
+use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\TagsSortOrderController;
+use App\Http\Controllers\SmartFiltersSortOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,8 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('star/{star}', [StarsController::class, 'destroy'])->name('star.destroy');
 
     Route::post('smart-filters', [SmartFiltersController::class, 'store'])->name('smart-filters.store');
-    Route::put('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.update');
     Route::delete('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.destroy');
+    Route::put('smart-filters/reorder', SmartFiltersSortOrderController::class)->name('smart-filters.reorder');
+    Route::put('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.update');
 
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
 

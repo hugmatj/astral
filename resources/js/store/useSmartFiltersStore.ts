@@ -26,5 +26,12 @@ export const useSmartFiltersStore = defineStore({
     deleteSmartFilter(id: number) {
       Inertia.delete(`/smart-filters/${id}`, { only: ['smartFilters', 'abilities'] })
     },
+    syncSmartFiltersOrder() {
+      const reorderedSmartFilters = this.smartFilters.map((filter, index) => ({
+        id: filter.id,
+        sort_order: index,
+      }))
+      Inertia.put('/smart-filters/reorder', { smartFilters: reorderedSmartFilters } as any, { only: ['smartFilters'] })
+    },
   },
 })

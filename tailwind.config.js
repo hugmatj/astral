@@ -21,7 +21,7 @@ module.exports = {
 
   plugins: [
     require('tailwindcss-scoped-groups')({
-      groups: ['one'],
+      groups: ['one', 'two'],
     }),
     require('@tailwindcss/forms'),
     require('@tailwindcss/line-clamp'),

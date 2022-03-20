@@ -91,12 +91,18 @@
         </template>
         <template #default>
           <ul class="mt-2 space-y-2" role="listbox" aria-label="Smart Filters" tabindex="0">
-            <SidebarItem
-              v-for="smartFilter in smartFilters"
-              :key="smartFilter.id"
-              :title="smartFilter.name"
-              @click="$emit('smart-filter-selected', smartFilter)"
-            />
+            <draggable
+              v-model="smartFilters"
+              tag="transition-group"
+              item-key="id"
+              :animation="300"
+              ghost-class="tag-ghost"
+              @end="syncSmartFiltersOrder"
+            >
+              <template #item="{ element: smartFilter }">
+                <SidebarSmartFilter :smart-filter="smartFilter" />
+              </template>
+            </draggable>
           </ul>
         </template>
       </SidebarGroup>
@@ -128,6 +134,7 @@ import draggable from 'vuedraggable'
 import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import SidebarTag from '@/components/sidebar/SidebarTag.vue'
+import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
 import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
 import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
 import { useSmartFiltersDialog } from '@/composables/useSmartFiltersDialog'
@@ -142,6 +149,7 @@ export default defineComponent({
     SidebarGroup,
     SidebarItem,
     SidebarTag,
+    SidebarSmartFilter,
     SortTagsMenu,
     InboxIcon,
     StarIcon,
@@ -222,6 +230,7 @@ export default defineComponent({
       languages: computed(() => starsStore.languages),
       sortTags: tagsStore.sortTags,
       syncTagOrder: tagsStore.syncTagOrder,
+      syncSmartFiltersOrder: smartFiltersStore.syncSmartFiltersOrder,
       doShowSmartFiltersDialog,
     }
   },

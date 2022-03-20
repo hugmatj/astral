@@ -12,8 +12,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // dd(session('sponsorship_required'));
-
         return Inertia::render('Dashboard', [
             'limits' => auth()->user()->limits(),
             'abilities' => [

@@ -52,8 +52,7 @@ export default defineComponent({
     }[props.size]
 
     const classesForKindProp = {
-      base:
-        'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus-visible:ring-brand-500 font-medium active:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 border shadow-sm',
+      base: 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 focus-visible:ring-brand-500 font-medium active:bg-gray-100 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200 border shadow-sm',
       primary:
         'text-white bg-brand-600 border-transparent hover:bg-brand-700 focus-visible:ring-brand-500 font-semibold border shadow-sm',
       warning:

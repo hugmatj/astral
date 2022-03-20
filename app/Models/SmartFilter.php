@@ -14,6 +14,7 @@ class SmartFilter extends Model
     protected $fillable = [
         'name',
         'body',
+        'sort_order',
     ];
 
     protected $casts = [
@@ -33,6 +34,7 @@ class SmartFilter extends Model
         static::addGlobalScope(new SortOrderScope);
 
         static::creating(function (self $smartFilter) {
+            dd('Shit');
             $smartFilter->sort_order = self::where('user_id', auth()->id())->max('sort_order') + 1;
         });
 

@@ -15,14 +15,15 @@
       <!-- TODO: These don't actually animate for some reason... -->
       <TransitionCards>
         <div
-          v-for="(stack, idx) in extraStacks"
-          :key="stack"
-          :data-index="idx"
-          class="absolute h-[85vh] shadow-lg rounded-lg overflow-hidden p-12 pointer-events-none bg-white sm:max-w-2xl 2xl:max-w-4xl w-full transition duration-1000 scale-90"
+          v-for="{ index } in extraStacks"
+          :key="index"
+          :data-index="index"
+          :style="{ zIndex: extraStacks.length - index }"
+          class="absolute h-[85vh] shadow-lg rounded-lg overflow-hidden pointer-events-none bg-white max-w-none sm:max-w-2xl w-full p-12 scale-90"
           aria-hidden="true"
         ></div>
       </TransitionCards>
-      <div class="relative">
+      <div class="relative" :style="{ zIndex: extraStacks.length + 1 }">
         <div
           ref="readmeEl"
           class="p-4 prose transition-transform bg-white max-w-none sm:max-w-2xl 2xl:max-w-4xl sm:mx-auto dark:prose-invert dark:bg-gray-900"
@@ -64,12 +65,12 @@ const readmeContainerEl = ref<HTMLElement>()
 const selectedRepoCount = computed(() => starsStore.selectedRepos.length)
 const noRepoSelected = computed(() => !selectedRepoCount.value)
 
-const extraStacks = ref<string[]>([])
+const extraStacks = ref<{ id: string; index: number }[]>([])
 
 watch(
   () => starsStore.selectedRepos,
   (selectedRepos) => {
-    extraStacks.value = selectedRepos.slice(1, 5).map(({ id }) => id)
+    extraStacks.value = selectedRepos.slice(1, 5).map(({ id }, index) => ({ id, index }))
   },
   { deep: true }
 )

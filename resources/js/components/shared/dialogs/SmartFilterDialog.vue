@@ -15,7 +15,7 @@
           ></BaseTextInput>
         </div>
         <div ref="smartFiltersContainer" class="border-t border-gray-200 max-h-[62vh] overflow-y-auto">
-          <SmartFilters v-model="form.body" />
+          <SmartFilterEditor v-model="form.body" />
           <div ref="scrollTarget" class="scroll-target" aria-hidden="true"></div>
         </div>
         <div class="flex items-center justify-end px-4 py-3 mt-4 space-x-2 rounded bg-gray-50">
@@ -34,7 +34,7 @@ import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { DialogTitle } from '@headlessui/vue'
 import { useSmartFiltersDialog } from '@/composables/useSmartFiltersDialog'
-import SmartFilters from '@/components/smart-filters/SmartFilters.vue'
+import SmartFilterEditor from '@/components/smart-filter-editor/SmartFilterEditor.vue'
 import { defaultGroup } from '@/utils/predicates'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { useForm } from '@inertiajs/inertia-vue3'
