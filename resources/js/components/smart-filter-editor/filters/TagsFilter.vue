@@ -1,6 +1,6 @@
 <template>
   <TagsEditor
-    :value="modelValue"
+    :tags="modelValue"
     :can-create="false"
     :autocomplete-options="autocompleteOptions"
     class="flex-grow"

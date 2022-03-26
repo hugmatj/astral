@@ -98,7 +98,7 @@ export const predicateTargets: PredicateTarget[] = [
     key: 'node.stargazers.totalCount',
     type: 'Number',
     operators: numberOperators,
-    defaultValue: 0,
+    defaultValue: '0',
   },
   {
     label: 'Tags',

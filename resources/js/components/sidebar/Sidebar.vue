@@ -63,7 +63,7 @@
               tag="transition-group"
               item-key="id"
               :animation="300"
-              ghost-class="tag-ghost"
+              ghost-class="sortable-ghost"
               @end="syncTagOrder"
             >
               <template #item="{ element: tag }">
@@ -84,7 +84,7 @@
             class="inline-flex items-center w-full text-sm font-semibold text-gray-400 transition opacity-0 focus:outline-none hover:text-gray-200 group-hover:opacity-100"
             type="button"
             aria-label="Add Smart Filter"
-            @click="doShowSmartFiltersDialog"
+            @click="doShowSmartFilterDialog"
           >
             <PlusCircleIcon class="flex-shrink-0 w-5 h-5" aria-hidden="true" />
           </button>
@@ -96,7 +96,7 @@
               tag="transition-group"
               item-key="id"
               :animation="300"
-              ghost-class="tag-ghost"
+              ghost-class="sortable-ghost"
               @end="syncSmartFiltersOrder"
             >
               <template #item="{ element: smartFilter }">
@@ -137,7 +137,7 @@ import SidebarTag from '@/components/sidebar/SidebarTag.vue'
 import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
 import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
 import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
-import { useSmartFiltersDialog } from '@/composables/useSmartFiltersDialog'
+import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
 import { Tag, StarDragDataTransferData, Ability } from '@/types'
@@ -162,7 +162,7 @@ export default defineComponent({
     const starsStore = useStarsStore()
     const smartFiltersStore = useSmartFiltersStore()
     const authorizationsStore = useAuthorizationsStore()
-    const { show: showSmartFiltersDialog } = useSmartFiltersDialog()
+    const { show: showSmartFilterDialog } = useSmartFilterDialog()
     const { show: showSponsorshipDialog } = useSponsorshipDialog()
     const { show: showToast } = useGlobalToast()
 
@@ -195,9 +195,9 @@ export default defineComponent({
 
     const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
 
-    const doShowSmartFiltersDialog = () => {
+    const doShowSmartFilterDialog = () => {
       if (authorizationsStore.abilities[Ability.CREATE_SMART_FILTER]) {
-        showSmartFiltersDialog()
+        showSmartFilterDialog()
       } else {
         showSponsorshipDialog(Ability.CREATE_SMART_FILTER)
       }
@@ -231,14 +231,14 @@ export default defineComponent({
       sortTags: tagsStore.sortTags,
       syncTagOrder: tagsStore.syncTagOrder,
       syncSmartFiltersOrder: smartFiltersStore.syncSmartFiltersOrder,
-      doShowSmartFiltersDialog,
+      doShowSmartFilterDialog,
     }
   },
 })
 </script>
 
 <style>
-.tag-ghost {
+.sortable-ghost {
   opacity: 0;
 }
 </style>

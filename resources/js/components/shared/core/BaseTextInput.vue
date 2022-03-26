@@ -11,7 +11,7 @@ import { useVModel } from '@vueuse/core'
 
 interface Props {
   type?: 'text' | 'email' | 'password' | 'number'
-  modelValue?: string
+  modelValue?: string | number
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -38,7 +38,7 @@
                       active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
                       'group-two flex items-center p-2 text-xs w-full font-semibold',
                     ]"
-                    @click.stop=""
+                    @click.stop="showSmartFilterDialog(smartFilter)"
                   >
                     <PencilAltIcon
                       class="w-4 h-4 mr-1 text-gray-400 group-two-hover:text-indigo-500"
@@ -72,6 +72,7 @@ import { ref, PropType } from 'vue'
 import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import WatchValue from '@/components/shared/core/WatchValue.vue'
+import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
 import { FilterIcon } from '@heroicons/vue/outline'
 import { SmartFilter } from '@/types'
@@ -82,6 +83,8 @@ const props = defineProps({
     required: true,
   },
 })
+
+const { show: showSmartFilterDialog } = useSmartFilterDialog()
 
 const isContextMenuActive = ref(false)
 </script>

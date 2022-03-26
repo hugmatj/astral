@@ -5,7 +5,7 @@
       :class="{ 'text-gray-50': open }"
     >
       <span class="text-xs tracking-wider uppercase">Sort</span>
-      <SwitchVerticalIcon class="w-4 h-4 ml-1" />
+      <SwitchVerticalIcon class="w-4 h-4 ml-1" aria-hidden="true" />
     </MenuButton>
     <transition
       enter-active-class="transition duration-100 ease-out"

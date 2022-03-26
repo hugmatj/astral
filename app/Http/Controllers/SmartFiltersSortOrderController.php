@@ -16,7 +16,6 @@ class SmartFiltersSortOrderController extends Controller
 
         $filters = $request->input('smartFilters');
         collect($filters)->each(function ($filter) {
-            info(sprintf('Updating sort order of smart filter %d to %d', $filter['id'], $filter['sort_order']));
             auth()->user()->smartFilters()->find($filter['id'])->update(['sort_order' => $filter['sort_order']]);
         });
 

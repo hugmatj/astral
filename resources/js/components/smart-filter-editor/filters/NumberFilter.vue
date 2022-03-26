@@ -1,18 +1,18 @@
-<template><BaseTextInput v-model="value" class="flex-grow" type="number" /></template>
+<template><BaseTextInput v-model="value" type="number" /></template>
 <script setup lang="ts">
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import { useVModel } from '@vueuse/core'
 
 interface Props {
-  modelValue?: string
+  modelValue?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: '',
+  modelValue: 0,
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: number): void
 }>()
 
 const value = useVModel(props, 'modelValue', emit)

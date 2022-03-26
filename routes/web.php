@@ -44,9 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('star/{star}', [StarsController::class, 'destroy'])->name('star.destroy');
 
     Route::post('smart-filters', [SmartFiltersController::class, 'store'])->name('smart-filters.store');
-    Route::delete('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.destroy');
     Route::put('smart-filters/reorder', SmartFiltersSortOrderController::class)->name('smart-filters.reorder');
     Route::put('smart-filters/{smart_filter}', [SmartFiltersController::class, 'update'])->name('smart-filters.update');
+    Route::delete('smart-filters/{smart_filter}', [SmartFiltersController::class, 'destroy'])->name('smart-filters.destroy');
 
     Route::get('check-sponsorship', [CleanupController::class, 'index'])->name('sponsor.check');
 

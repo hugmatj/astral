@@ -1,10 +1,10 @@
 <template>
-  <BaseDialog :is-open="isOpen" :hide="hide" modal-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
+  <BaseDialog :is-open="isOpen" :hide="hideDialog" modal-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
     <div>
       <DialogTitle class="px-4 py-3 text-xl font-bold text-center text-gray-700 rounded bg-gray-50"
-        >Create Filter</DialogTitle
+        >{{ currentSmartFilter ? 'Update' : 'Create' }} Filter</DialogTitle
       >
-      <form @submit.prevent="addSmartFilter">
+      <form @submit.prevent="currentSmartFilter ? updateSmartFilter() : addSmartFilter()">
         <div class="flex flex-col items-start w-1/2 pt-2 pb-8 mt-6">
           <label for="smart-filter-name" class="inline-block text-sm">Filter Name</label>
           <BaseTextInput
@@ -19,7 +19,7 @@
           <div ref="scrollTarget" class="scroll-target" aria-hidden="true"></div>
         </div>
         <div class="flex items-center justify-end px-4 py-3 mt-4 space-x-2 rounded bg-gray-50">
-          <BaseButton kind="base" @click="hide">Cancel</BaseButton>
+          <BaseButton kind="base" @click="hideDialog">Cancel</BaseButton>
           <BaseButton kind="primary" type="submit">Save Filter</BaseButton>
         </div>
       </form>
@@ -33,7 +33,7 @@ import BaseDialog from '@/components/shared/core/BaseDialog.vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { DialogTitle } from '@headlessui/vue'
-import { useSmartFiltersDialog } from '@/composables/useSmartFiltersDialog'
+import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import SmartFilterEditor from '@/components/smart-filter-editor/SmartFilterEditor.vue'
 import { defaultGroup } from '@/utils/predicates'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
@@ -46,7 +46,7 @@ import { Errors } from '@inertiajs/inertia'
 
 const smartFiltersStore = useSmartFiltersStore()
 
-const { isOpen, hide } = useSmartFiltersDialog()
+const { isOpen, hide, currentSmartFilter } = useSmartFilterDialog()
 const { show: showToast } = useGlobalToast()
 const scrollTarget = ref<HTMLElement>()
 
@@ -55,6 +55,13 @@ const form = useForm<Pick<SmartFilter, 'name' | 'body'>>({
   body: JSON.stringify({
     groups: [cloneDeep(defaultGroup)],
   }),
+})
+
+watch(currentSmartFilter, (smartFilter) => {
+  if (smartFilter) {
+    form.name = smartFilter.name
+    form.body = smartFilter.body
+  }
 })
 
 watch(
@@ -77,7 +84,37 @@ const addSmartFilter = async () => {
       showToast(errors[Object.keys(errors)[0]], ToastType.Error)
     }
   } finally {
-    hide()
+    hideDialog()
   }
+}
+
+const updateSmartFilter = async () => {
+  try {
+    if (currentSmartFilter.value) {
+      await smartFiltersStore.updateSmartFilter(currentSmartFilter.value.id, form)
+      showToast(`The '${form.name}' smart filter was updated.`)
+    }
+  } catch (e) {
+    const errors = e as Errors
+    if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
+      showToast(errors[Object.keys(errors)[0]], ToastType.Error)
+    }
+  } finally {
+    hideDialog()
+  }
+}
+
+const hideDialog = () => {
+  hide()
+  setTimeout(() => {
+    resetForm()
+  }, 200)
+}
+
+const resetForm = () => {
+  form.name = ''
+  form.body = JSON.stringify({
+    groups: [cloneDeep(defaultGroup)],
+  })
 }
 </script>

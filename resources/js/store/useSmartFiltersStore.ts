@@ -23,6 +23,19 @@ export const useSmartFiltersStore = defineStore({
         })
       })
     },
+    updateSmartFilter(id: number, smartFilter: Pick<SmartFilter, 'name' | 'body'>): Promise<Page<PageProps> | Errors> {
+      return new Promise((resolve, reject) => {
+        Inertia.put(`/smart-filters/${id}`, smartFilter, {
+          only: ['smartFilters', 'errors'],
+          onSuccess: (page) => {
+            resolve(page)
+          },
+          onError: (errors) => {
+            reject(errors)
+          },
+        })
+      })
+    },
     deleteSmartFilter(id: number) {
       Inertia.delete(`/smart-filters/${id}`, { only: ['smartFilters', 'abilities'] })
     },
