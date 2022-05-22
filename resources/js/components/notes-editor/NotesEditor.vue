@@ -10,7 +10,7 @@
       >
         <div class="absolute inset-0 transition-opacity duration-300 bg-gray-500/75" @click.self="hide"></div>
       </TransitionChild>
-      <div class="relative w-6/12 h-full py-8 overflow-hidden">
+      <div class="relative w-1/2 lg:w-3/4 h-full py-8 overflow-hidden">
         <TransitionChild
           as="template"
           enter-from="opacity-0 -translate-x-full"

@@ -1,6 +1,7 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'
 import { createPinia } from 'pinia'
+import Particles from 'particles.vue3'
 import '@/../css/app.css'
 
 const el = document.getElementById('app')
@@ -19,6 +20,7 @@ if (el) {
     setup({ el, app, props, plugin }) {
       createApp({ render: () => h(app, props) })
         .use(plugin)
+        .use(Particles)
         .use(createPinia())
         .mount(el)
     },

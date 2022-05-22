@@ -8,6 +8,7 @@ use App\Http\Controllers\StarsController;
 use App\Http\Controllers\CleanupController;
 use App\Http\Controllers\StarTagsController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MigrationController;
 use App\Http\Controllers\StarNotesController;
 use App\Http\Controllers\SmartFiltersController;
 use App\Http\Controllers\UserSettingsController;
@@ -30,7 +31,11 @@ Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallba
 
 Route::redirect('/login', '/auth/github')->name('login');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::get('/migrate', [MigrationController::class, 'index'])
+    ->middleware('auth')
+    ->name('migrate.index');
+
+Route::group(['middleware' => ['auth', 'migrated']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');

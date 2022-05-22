@@ -146,6 +146,16 @@ class User extends Authenticatable
     {
         return $this->isNotSponsor() ?
             config('limits') :
-            collect(config('limits'))->map(fn($item, $key) => -1)->toArray();
+            collect(config('limits'))->map(fn() => -1)->toArray();
+    }
+
+    public function flags()
+    {
+        return $this->hasMany(UserFlag::class);
+    }
+
+    public function getFlag($key): bool
+    {
+        return (bool)optional($this->flags()->where('key', $key)->first())->value ?? false;
     }
 }
