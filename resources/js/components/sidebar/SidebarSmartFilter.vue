@@ -53,7 +53,7 @@
                       active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
                       'group-two flex items-center p-2 text-xs w-full font-semibold',
                     ]"
-                    @click.stop=""
+                    @click.stop="deleteSmartFilter"
                   >
                     <TrashIcon class="w-4 h-4 mr-1 text-gray-400 group-two-hover:text-indigo-500" aria-hidden="true" />
                     <span>Delete</span>
@@ -73,6 +73,9 @@ import SidebarItem from '@/components/sidebar/SidebarItem.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import WatchValue from '@/components/shared/core/WatchValue.vue'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
+import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
+import { useConfirm } from '@/composables/useConfirm'
+import { useGlobalToast } from '@/composables/useGlobalToast'
 import { DotsHorizontalIcon, PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
 import { FilterIcon } from '@heroicons/vue/outline'
 import { SmartFilter } from '@/types'
@@ -84,7 +87,22 @@ const props = defineProps({
   },
 })
 
+const smartFiltersStore = useSmartFiltersStore()
 const { show: showSmartFilterDialog } = useSmartFilterDialog()
+const { isConfirmed } = useConfirm()
+const { show: showToast } = useGlobalToast()
 
 const isContextMenuActive = ref(false)
+
+const deleteSmartFilter = async () => {
+  if (
+    await isConfirmed(`Are you sure you want to delete the "${props.smartFilter.name}" smart filter?`, {
+      confirmLabel: "Yes, I'm sure",
+      cancelLabel: 'Nevermind',
+    })
+  ) {
+    smartFiltersStore.deleteSmartFilter(props.smartFilter.id)
+    showToast(`'${props.smartFilter.name}' was deleted.`)
+  }
+}
 </script>

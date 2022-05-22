@@ -1,3 +1,5 @@
+import { RepoLanguage, Tag } from '@/types'
+
 export interface Predicate {
   selectedTarget: string
   operator: string
@@ -12,6 +14,7 @@ export interface PredicateGroup {
 export interface PredicateOperator {
   key: string
   label: string
+  check: (...args: any[]) => boolean
 }
 
 export type PredicateTargetType = 'String' | 'Number' | 'State' | 'Tags' | 'Language' | 'Date'
@@ -35,40 +38,99 @@ export const defaultGroup: PredicateGroup = {
   predicates: [{ ...defaultPredicate }],
 }
 
-const stringOperators: PredicateOperator[] = [
-  { key: 'is', label: 'is' },
-  { key: 'contains', label: 'contains' },
-  { key: 'notContains', label: "doesn't contain" },
-  { key: 'isnt', label: "isn't" },
+export const stringOperators: PredicateOperator[] = [
+  {
+    key: 'is',
+    label: 'is',
+    check: (source: string, target: string) => source.trim().toLowerCase() === target.trim().toLowerCase(),
+  },
+  {
+    key: 'isnt',
+    label: "isn't",
+    check: (source: string, target: string) => source.trim().toLowerCase() !== target.trim().toLowerCase(),
+  },
+  {
+    key: 'contains',
+    label: 'contains',
+    check: (source: string, substring: string) => source.trim().toLowerCase().includes(substring.trim().toLowerCase()),
+  },
+  {
+    key: 'notContains',
+    label: "doesn't contain",
+    check: (source: string, substring: string) => !source.trim().toLowerCase().includes(substring.trim().toLowerCase()),
+  },
 ]
 
-const numberOperators: PredicateOperator[] = [
-  { key: 'greaterThan', label: '>' },
-  { key: 'greaterThanOrEqualTo', label: '>=' },
-  { key: 'equals', label: '=' },
-  { key: 'lessThan', label: '<' },
-  { key: 'lessThanOrEqualTo', label: '<=' },
+export const numberOperators: PredicateOperator[] = [
+  {
+    key: 'greaterThan',
+    label: '>',
+    check: (source: number, target: number) => Number(source) > Number(target),
+  },
+  {
+    key: 'greaterThanOrEqualTo',
+    label: '>=',
+    check: (source: number, target: number) => Number(source) >= Number(target),
+  },
+  { key: 'equals', label: '=', check: (source: number, target: number) => Number(source) === Number(target) },
+  { key: 'lessThan', label: '<', check: (source: number, target: number) => Number(source) < Number(target) },
+  {
+    key: 'lessThanOrEqualTo',
+    label: '<=',
+    check: (source: number, target: number) => Number(source) >= Number(target),
+  },
 ]
 
-const tagOperators: PredicateOperator[] = [
-  { key: 'hasAnyTags', label: 'has any' },
-  { key: 'hasAllTags', label: 'has all' },
-  { key: 'hasNoneTags', label: 'has none' },
+export const tagOperators: PredicateOperator[] = [
+  {
+    key: 'hasAnyTags',
+    label: 'has any',
+    check: (source: Tag[], target: Tag[]) =>
+      target.map((t) => t.name).some((val) => source.map((t) => t.name).includes(val)),
+  },
+  {
+    key: 'hasAllTags',
+    label: 'has all',
+    check: (source: Tag[], target: Tag[]) =>
+      target.map((t) => t.name).every((val) => source.map((t) => t.name).includes(val)),
+  },
+  {
+    key: 'hasNoneTags',
+    label: 'has none',
+    check: (source: Tag[], target: Tag[]) =>
+      !target.map((t) => t.name).some((val) => source.map((t) => t.name).includes(val)),
+  },
 ]
 
-const dateOperators: PredicateOperator[] = [
-  { key: 'before', label: 'before' },
-  { key: 'after', label: 'after' },
+export const dateOperators: PredicateOperator[] = [
+  {
+    key: 'before',
+    label: 'before',
+    check: (source: string, target: string) => new Date(source).getTime() < new Date(target).getTime(),
+  },
+  {
+    key: 'after',
+    label: 'after',
+    check: (source: string, target: string) => new Date(source).getTime() > new Date(target).getTime(),
+  },
 ]
 
-const languageOperators: PredicateOperator[] = [
-  { key: 'hasAnyLanguage', label: 'has any' },
-  { key: 'hasNoneLanguage', label: 'has none' },
+export const languageOperators: PredicateOperator[] = [
+  {
+    key: 'hasAnyLanguage',
+    label: 'has any',
+    check: (source: string, target: RepoLanguage[]) => target.map((l) => l.name).includes(source),
+  },
+  {
+    key: 'hasNoneLanguage',
+    label: 'has none',
+    check: (source: string, target: RepoLanguage[]) => !target.map((l) => l.name).includes(source),
+  },
 ]
 
-const stateOperators: PredicateOperator[] = [
-  { key: 'isState', label: 'is' },
-  { key: 'isntState', label: "isn't" },
+export const stateOperators: PredicateOperator[] = [
+  { key: 'isState', label: 'is', check: (target) => Boolean(target) === true },
+  { key: 'isntState', label: "isn't", check: (target) => Boolean(target) === false },
 ]
 
 export const predicateTargets: PredicateTarget[] = [

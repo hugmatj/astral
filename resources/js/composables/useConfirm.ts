@@ -14,7 +14,7 @@ type ConfirmOptions = Pick<ConfirmConfig, 'confirmLabel' | 'cancelLabel'>
 const confirmConfig = reactive<ConfirmConfig>({
   isOpen: false,
   message: '',
-  confirmLabel: 'Proceed',
+  confirmLabel: 'Ok',
   cancelLabel: 'Cancel',
   confirm: () => ({}),
   cancel: () => ({}),

@@ -100,7 +100,11 @@
               @end="syncSmartFiltersOrder"
             >
               <template #item="{ element: smartFilter }">
-                <SidebarSmartFilter :smart-filter="smartFilter" />
+                <SidebarSmartFilter
+                  :smart-filter="smartFilter"
+                  :is-active="smartFilterIsSelected(smartFilter)"
+                  @click="$emit('smart-filter-selected', smartFilter)"
+                />
               </template>
             </draggable>
           </ul>
@@ -140,7 +144,7 @@ import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
 import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
-import { Tag, StarDragDataTransferData, Ability } from '@/types'
+import { Tag, StarDragDataTransferData, Ability, SmartFilter } from '@/types'
 import { Errors } from '@inertiajs/inertia'
 
 export default defineComponent({
@@ -155,7 +159,14 @@ export default defineComponent({
     StarIcon,
     PlusCircleIcon,
   },
-  emits: ['tag-selected', 'language-selected', 'all-stars-selected', 'untagged-selected', 'smart-filter-selected'],
+  emits: [
+    'tag-selected',
+    'smart-filter-selected',
+    'language-selected',
+    'all-stars-selected',
+    'untagged-selected',
+    'smart-filter-selected',
+  ],
   setup() {
     const starsFilterStore = useStarsFilterStore()
     const tagsStore = useTagsStore()
@@ -191,6 +202,9 @@ export default defineComponent({
 
     const tagIsSelected = (tag: Tag): boolean => tag.id === starsFilterStore.selectedTag?.id
 
+    const smartFilterIsSelected = (smartFilter: SmartFilter): boolean =>
+      smartFilter.id === starsFilterStore.selectedSmartFilter?.id
+
     const languageIsSelected = (language: string): boolean => language === starsFilterStore.selectedLanguage
 
     const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
@@ -210,6 +224,7 @@ export default defineComponent({
       newTag,
       starsFilterStore,
       tagIsSelected,
+      smartFilterIsSelected,
       languageIsSelected,
       doAddTag,
       onStarsDropped,

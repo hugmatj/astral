@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Tag } from '@/types'
+import { RepoLanguage, SmartFilter, Tag } from '@/types'
 
 const BASE_FILTERS = {
   ALL: 'all',
@@ -21,6 +21,7 @@ export const useStarsFilterStore = defineStore({
       selectedFilter: BASE_FILTERS.ALL as BaseFilter,
       selectedTag: null as Nullable<Tag>,
       selectedLanguage: null as Nullable<string>,
+      selectedSmartFilter: null as Nullable<SmartFilter>,
       searchQuery: '',
     }
   },
@@ -37,7 +38,12 @@ export const useStarsFilterStore = defineStore({
       }
     },
     isFilteringByAll(): boolean {
-      return this.selectedFilter === BASE_FILTERS.ALL && !this.isFilteringByTag && !this.isFilteringByLanguage
+      return (
+        this.selectedFilter === BASE_FILTERS.ALL &&
+        !this.isFilteringByTag &&
+        !this.isFilteringByLanguage &&
+        !this.isFilteringBySmartFilter
+      )
     },
     isFilteringByUntagged(): boolean {
       return this.selectedFilter === BASE_FILTERS.UNTAGGED && !this.isFilteringByTag
@@ -51,6 +57,9 @@ export const useStarsFilterStore = defineStore({
     isFilteringBySearch(): boolean {
       return !!this.searchQuery
     },
+    isFilteringBySmartFilter(): boolean {
+      return !!this.selectedSmartFilter
+    },
   },
   actions: {
     clearSelectedTag() {
@@ -59,14 +68,31 @@ export const useStarsFilterStore = defineStore({
     clearSelectedLanguage() {
       this.selectedLanguage = null
     },
+    clearSelectSmartFilter() {
+      this.selectedSmartFilter = null
+    },
     setFilterByAll() {
       this.clearSelectedTag()
       this.clearSelectedLanguage()
+      this.clearSelectSmartFilter()
       this.selectedFilter = BASE_FILTERS.ALL
     },
     setFilterByUntagged() {
       this.clearSelectedTag()
       this.selectedFilter = BASE_FILTERS.UNTAGGED
+    },
+    setSelectedTag(tag: Tag) {
+      this.clearSelectSmartFilter()
+      this.selectedTag = tag
+    },
+    setSelectedLanguage(language: string) {
+      this.clearSelectSmartFilter()
+      this.selectedLanguage = language
+    },
+    setSelectedSmartFilter(filter: SmartFilter) {
+      this.clearSelectedTag()
+      this.clearSelectedLanguage()
+      this.selectedSmartFilter = filter
     },
   },
 })

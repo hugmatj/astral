@@ -50,6 +50,7 @@
             @all-stars-selected="onAllStarsSelected"
             @untagged-selected="onUntaggedSelected"
             @tag-selected="onTagSelected"
+            @smart-filter-selected="onSmartFilterSelected"
             @language-selected="onLanguageSelected"
           />
         </div>
@@ -230,13 +231,22 @@ const onUntaggedSelected = () => {
 
 const onTagSelected = (tag: Tag) => {
   isSidebarOpen.value = false
-  starsFilterStore.selectedTag = tag
+  starsFilterStore.setSelectedTag(tag)
+  urlParams.smartFilter = null
   urlParams.tag = tag.name
+}
+
+const onSmartFilterSelected = (smartFilter: SmartFilter) => {
+  isSidebarOpen.value = false
+  starsFilterStore.setSelectedSmartFilter(smartFilter)
+  clearParams()
+  urlParams.smartFilter = smartFilter.name
 }
 
 const onLanguageSelected = (language: string) => {
   isSidebarOpen.value = false
-  starsFilterStore.selectedLanguage = language
+  starsFilterStore.setSelectedLanguage(language)
+  urlParams.smartFilter = null
   urlParams.language = language
 }
 
@@ -276,7 +286,7 @@ watch(
 
 @media screen and (min-width: 640px) {
   .dashboard-grid {
-    grid-template-columns: 280px 400px 1fr;
+    grid-template-columns: 320px 400px 1fr;
     grid-template-rows: 64px calc(100vh - 64px);
   }
 }

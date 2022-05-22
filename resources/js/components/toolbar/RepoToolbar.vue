@@ -25,6 +25,7 @@ import { useStarsStore } from '@/store/useStarsStore'
 import { useUserStore } from '@/store/useUserStore'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
 import { useUpgradeAuthScopeDialog } from '@/composables/useUpgradeAuthScopeDialog'
+import { useConfirm } from '@/composables/useConfirm'
 import { useNotesEditor } from '@/composables/useNotesEditor'
 import EmptyNoteIcon from '@/components/shared/icons/notes-editor/EmptyNoteIcon.vue'
 import ExistingNoteIcon from '@/components/shared/icons/notes-editor/ExistingNoteIcon.vue'
@@ -39,6 +40,7 @@ const { isOpen: isNotesEditorOpen, toggle: toggleNotesEditor } = useNotesEditor(
 const authorizationsStore = useAuthorizationsStore()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showUpgradeAuthScopeDialog } = useUpgradeAuthScopeDialog()
+const { isConfirmed } = useConfirm()
 
 // TODO: Should this just be a getter in the store?
 const currentStarHasNotes = computed(() => !!starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId]?.notes)
@@ -51,11 +53,16 @@ const handleToggleNotesEditor = () => {
   }
 }
 
-const removeSelectedStar = () => {
+const removeSelectedStar = async () => {
   if (userStore.user?.scope !== AuthScope.PUBLIC_REPO) {
     showUpgradeAuthScopeDialog()
   } else {
-    if (window.confirm(`Are you sure you want to unstar ${starsStore.selectedRepo.nameWithOwner}?`)) {
+    if (
+      await isConfirmed(`Are you sure you want to unstar ${starsStore.selectedRepo.nameWithOwner}?`, {
+        confirmLabel: "Yes, I'm sure",
+        cancelLabel: 'Nevermind',
+      })
+    ) {
       starsStore.removeStar(starsStore.selectedRepo.id)
     }
   }

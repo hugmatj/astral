@@ -88,12 +88,10 @@ export interface PaginationResponse {
   hasNextPage: boolean
 }
 
-export enum FetchDirections {
+export enum FetchDirection {
   ASC = 'ASC',
   DESC = 'DESC',
 }
-
-export type FetchDirection = keyof typeof FetchDirections
 
 export enum Ability {
   CREATE_TAG = 'create_tag',
