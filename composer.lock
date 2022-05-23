@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0460a5162a60324089018298156b699e",
+    "content-hash": "cda940fc7628f011ed14d521a6d575e1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1973,29 +1973,29 @@
         },
         {
             "name": "innocenzi/laravel-vite",
-            "version": "0.1.27",
+            "version": "v0.2.0-beta.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/innocenzi/laravel-vite.git",
-                "reference": "50bc07018bd6a2b6c88e074c62bfb0909275f327"
+                "reference": "c2db2deb25b241322429bd4e5ca9e90184aea1bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/innocenzi/laravel-vite/zipball/50bc07018bd6a2b6c88e074c62bfb0909275f327",
-                "reference": "50bc07018bd6a2b6c88e074c62bfb0909275f327",
+                "url": "https://api.github.com/repos/innocenzi/laravel-vite/zipball/c2db2deb25b241322429bd4e5ca9e90184aea1bb",
+                "reference": "c2db2deb25b241322429bd4e5ca9e90184aea1bb",
                 "shasum": ""
             },
             "require": {
                 "facade/ignition-contracts": "^1.0",
                 "guzzlehttp/guzzle": "^6.0|^7.2",
                 "illuminate/contracts": "^8.0|^9.0",
-                "php": "^7.4|^8.0",
+                "php": "^8.0",
                 "spatie/laravel-package-tools": "^1.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.2.1",
+                "friendsofphp/php-cs-fixer": "^3.5",
                 "orchestra/testbench": "^6.0|^7.0",
-                "pestphp/pest": "^1.20.0",
+                "pestphp/pest": "^1.21",
                 "phpunit/phpunit": "^9.3",
                 "symfony/process": "^5.3|^6.0"
             },
@@ -2038,7 +2038,7 @@
             ],
             "support": {
                 "issues": "https://github.com/innocenzi/laravel-vite/issues",
-                "source": "https://github.com/innocenzi/laravel-vite/tree/0.1.27"
+                "source": "https://github.com/innocenzi/laravel-vite/tree/v0.2.0-beta.12"
             },
             "funding": [
                 {
@@ -2046,7 +2046,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-31T14:50:39+00:00"
+            "time": "2022-05-18T16:27:32+00:00"
         },
         {
             "name": "knplabs/github-api",

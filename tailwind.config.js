@@ -12,9 +12,19 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        orbitron: ['Orbitron', ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
         xxs: ['0.625rem', '0.875rem'],
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(-10%)' },
+          '50%': { transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        float: 'float 3s ease-in-out infinite',
       },
     },
   },

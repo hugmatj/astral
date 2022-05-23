@@ -1,15 +1,35 @@
 <template>
-  <div class="w-screen h-screen absolute inset-0 bg-gray-900">
-    <Particles id="tsparticles" url="/particles-config.json" :particlesInit="particlesInit" />
-    <!-- <div class="w-full max-w-5xl mx-auto mt-12"></div> -->
+  <div
+    class="fixed inset-0 bg-gray-900 flex items-center bg-repeat bg-[length:1000px_1000px]"
+    :style="{ backgroundImage: 'url(/img/migrate-bg.svg)' }"
+  >
+    <div class="mx-auto w-full flex max-w-screen-lg justify-between">
+      <MigrateAstronautSvg class="w-full max-w-xs motion-safe:animate-float h-auto" />
+      <div class="pl-24">
+        <h2 class="font-bold text-white text-6xl shadow-[0_0_10px_10px_#111827] bg-gray-900">
+          Welcome to the<br />new
+          <span class="text-brand-500 [text-shadow:0_0_10px_rgba(16,185,129,0.3)]">Astral</span>
+        </h2>
+        <p class="text-white leading-loose shadow-[0_0_10px_10px_#111827] bg-gray-900 mt-8">
+          Before you get started we need to migrate some of your data to the new version. Depending on the number of
+          stars you have, this could take from a few seconds to a couple minutes.
+        </p>
+        <div class="mt-8">
+          <button
+            class="bg-brand-600 rounded-full text-white font-bold px-6 py-4 text-2xl shadow-lg shadow-brand-900 hover:bg-brand-500 transition-all hover:shadow-brand-800 hover:shadow-xl relative active:top-px"
+          >
+            Begin Migration
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { PropType } from 'vue'
 import { UserStar } from '@/types'
-import BaseButton from '@/components/shared/core/BaseButton.vue'
-import { loadFull } from 'tsparticles'
+import MigrateAstronautSvg from '@/../img/migrate-waving-astronaut.svg?component'
 
 const props = defineProps({
   stars: {
@@ -17,8 +37,4 @@ const props = defineProps({
     required: true,
   },
 })
-
-const particlesInit = async (engine) => {
-  await loadFull(engine);
-}
 </script>
