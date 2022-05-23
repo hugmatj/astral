@@ -19,7 +19,7 @@ module.exports = {
       },
       keyframes: {
         float: {
-          '0%, 100%': { transform: 'translateY(-10%)' },
+          '0%, 100%': { transform: 'translateY(-7%)' },
           '50%': { transform: 'translateY(0)' },
         },
       },
