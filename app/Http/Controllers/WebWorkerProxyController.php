@@ -8,7 +8,7 @@ class WebWorkerProxyController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $BASE_URL = config('vite.dev_url');
+        $BASE_URL = config('vite.configs.default.dev_server.url');
         $path = $request->path();
         $fgcContext = stream_context_create([
             'ssl' => [

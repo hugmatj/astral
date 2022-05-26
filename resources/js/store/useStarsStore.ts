@@ -58,7 +58,8 @@ export const useStarsStore = defineStore({
     untaggedStars(): GitHubRepo[] {
       return this.allStars.filter((repo) => {
         const userStar: UserStar = this.userStarsByRepoId[repo.node.databaseId]
-        return !userStar || !userStar.tags.length
+
+        return !userStar || !userStar.tags?.length
       })
     },
     filteredRepos(): GitHubRepo[] {

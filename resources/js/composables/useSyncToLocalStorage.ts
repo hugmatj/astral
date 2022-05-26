@@ -12,7 +12,6 @@ export const useSyncToLocalStorage = async <TStore extends Store, TKey extends k
   key: TKey
 ): Promise<void> => {
   let storedValue: Nullable<TStore[TKey]> = null
-
   watch(
     () => store[key],
     async (newVal) => {

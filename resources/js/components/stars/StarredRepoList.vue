@@ -24,7 +24,6 @@
 <script lang="ts" setup>
 import { ref, watch, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
-import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
@@ -35,7 +34,6 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
  * 3. fetch any new repos in ASC order using the first repo's cursor, fetch until `hasNextPage` is false
  **/
 const starsStore = useStarsStore()
-const authorizationsStore = useAuthorizationsStore()
 const reposHaveSynced = ref(false)
 const pageInfoHasSynced = ref(false)
 
