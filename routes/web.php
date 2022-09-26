@@ -35,7 +35,7 @@ Route::get('/migrate', [MigrationController::class, 'index'])
     ->middleware('auth')
     ->name('migrate.index');
 
-Route::group(['middleware' => ['auth', 'migrated']], function () {
+Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');

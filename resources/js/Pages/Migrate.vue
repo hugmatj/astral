@@ -8,7 +8,7 @@
       <div class="pl-24 space-y-8">
         <h2 class="font-bold text-white text-6xl shadow-[0_0_10px_10px_#111827] bg-gray-900 leading-tight">
           Welcome to the<br />new
-          <LogoSvg class="h-6 sm:h-12 text-brand-500 fill-current inline-flex relative -top-1" aria-label="Astral" />
+          <LogoSvg class="h-6 sm:h-12 text-brand-500 fill-current inline-flex relative -top-1 px" aria-label="Astral" />
         </h2>
         <p class="text-white leading-loose shadow-[0_0_10px_10px_#111827] bg-gray-900">
           Before you get started we need to migrate some of your data to the new version. Depending on the number of
