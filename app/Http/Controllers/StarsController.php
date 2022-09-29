@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Star;
-use Illuminate\Http\Request;
 
 class StarsController extends Controller
 {

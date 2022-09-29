@@ -45,7 +45,7 @@ const searchQuery = computed({
   },
 })
 
-onKeyStroke('/', (e) => {
+onKeyStroke('/', e => {
   if (!isFocusedElementEditable() && document.activeElement !== input.value) {
     e.preventDefault()
     input.value?.focus()

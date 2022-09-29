@@ -25,7 +25,8 @@ class SmartFilter extends Model
         'body' => '{}',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -36,6 +37,5 @@ class SmartFilter extends Model
         static::creating(function (self $smartFilter) {
             $smartFilter->sort_order = self::where('user_id', auth()->id())->max('sort_order') + 1;
         });
-
     }
 }

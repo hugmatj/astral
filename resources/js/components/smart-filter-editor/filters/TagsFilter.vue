@@ -1,10 +1,10 @@
 <template>
   <TagsEditor
-    :tags="modelValue"
+    :tags="modelValue ?? []"
     :can-create="false"
     :autocomplete-options="autocompleteOptions"
     class="flex-grow"
-    @change="$emit('update:modelValue', $event)"
+    @change="emit('update:modelValue', $event)"
   />
 </template>
 <script setup lang="ts">
@@ -17,9 +17,7 @@ interface Props {
   modelValue?: TagEditorTag[]
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: () => [],
-})
+const { modelValue = [] } = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: TagEditorTag[]): void
@@ -28,6 +26,6 @@ const emit = defineEmits<{
 const tagsStore = useTagsStore()
 
 const autocompleteOptions = computed(() => {
-  return tagsStore.tags.map((tag) => tag.name)
+  return tagsStore.tags.map(tag => tag.name)
 })
 </script>

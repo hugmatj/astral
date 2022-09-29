@@ -1,17 +1,21 @@
 import { watch, ComputedRef } from 'vue'
 import { Store } from 'pinia'
 
-type SyncTuple<TStore extends Store, TKey extends keyof TStore['$state']> = [TStore, TKey, ComputedRef<TStore[TKey]>]
+type StoreSyncTuple<TStore extends Store, TKey extends keyof TStore['$state']> = [
+  TStore,
+  TKey,
+  ComputedRef<TStore[TKey]>
+]
 
-type MappedSyncTuples<T extends any[]> = {
-  [K in keyof T]: T[K] extends Store ? SyncTuple<T[K], keyof T[K]['$state']> : never
+type MappedStoreSyncTuples<T> = {
+  [K in keyof T]: T[K] extends Store ? StoreSyncTuple<T[K], keyof T[K]['$state']> & { length: 3 } : never
 }
 
-export const useSyncValuesToStores = <T extends any[]>(...mappings: MappedSyncTuples<T>): void => {
+export const useSyncValuesToStores = <T extends any[]>(...mappings: MappedStoreSyncTuples<T>): void => {
   mappings.forEach(([store, key, propGetter]) => {
     watch(
       propGetter,
-      (propValue) => {
+      propValue => {
         store[key] = propValue
       },
       {

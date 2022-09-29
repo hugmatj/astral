@@ -29,7 +29,7 @@
 import { ExclamationIcon } from '@heroicons/vue/outline'
 import { useConfirm } from '@/composables/useConfirm'
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
-import BaseButton from '@/Components/shared/core/BaseButton.vue'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
 
 const { confirmConfig } = useConfirm()
 </script>

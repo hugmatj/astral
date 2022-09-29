@@ -68,7 +68,7 @@ const removeSelectedStar = async () => {
   }
 }
 
-onKeyStroke('n', (e) => {
+onKeyStroke('n', e => {
   if (!isFocusedElementEditable()) {
     e.preventDefault()
     handleToggleNotesEditor()

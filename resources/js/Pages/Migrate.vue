@@ -79,7 +79,7 @@ useSyncToLocalStorage(starsStore, 'pageInfo').then(() => {
   pageInfoHasSynced.value = true
 })
 
-watch([reposHaveSynced, pageInfoHasSynced], async (syncChecks) => {
+watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
   if (syncChecks.every(Boolean) && starsStore.pageInfo.hasNextPage) {
     // We're ready to start fetching stars
     await nextTick()

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { Errors, Inertia, Page, PageProps } from '@inertiajs/inertia'
 import { SmartFilter } from '@/types'
+import { moveSort } from '@/utils'
 
 export const useSmartFiltersStore = defineStore({
   id: 'smart-filters',
@@ -14,10 +15,10 @@ export const useSmartFiltersStore = defineStore({
       return new Promise((resolve, reject) => {
         Inertia.post('/smart-filters', smartFilter, {
           only: ['smartFilters', 'abilities', 'errors'],
-          onSuccess: (page) => {
+          onSuccess: page => {
             resolve(page)
           },
-          onError: (errors) => {
+          onError: errors => {
             reject(errors)
           },
         })
@@ -27,10 +28,10 @@ export const useSmartFiltersStore = defineStore({
       return new Promise((resolve, reject) => {
         Inertia.put(`/smart-filters/${id}`, smartFilter, {
           only: ['smartFilters', 'errors'],
-          onSuccess: (page) => {
+          onSuccess: page => {
             resolve(page)
           },
-          onError: (errors) => {
+          onError: errors => {
             reject(errors)
           },
         })
@@ -39,11 +40,12 @@ export const useSmartFiltersStore = defineStore({
     deleteSmartFilter(id: number) {
       Inertia.delete(`/smart-filters/${id}`, { only: ['smartFilters', 'abilities'] })
     },
-    syncSmartFiltersOrder() {
-      const reorderedSmartFilters = this.smartFilters.map((filter, index) => ({
-        id: filter.id,
+    syncSmartFiltersOrder(oldIndex: number, newIndex: number) {
+      const reorderedSmartFilters = moveSort(this.smartFilters, oldIndex, newIndex).map((smartFilter, index) => ({
+        id: smartFilter.id,
         sort_order: index,
       }))
+
       Inertia.put('/smart-filters/reorder', { smartFilters: reorderedSmartFilters } as any, { only: ['smartFilters'] })
     },
   },

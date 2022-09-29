@@ -69,7 +69,7 @@ const extraStacks = ref<{ id: string; index: number }[]>([])
 
 watch(
   () => starsStore.selectedRepos,
-  (selectedRepos) => {
+  selectedRepos => {
     extraStacks.value = selectedRepos.slice(1, 5).map(({ id }, index) => ({ id, index }))
   },
   { deep: true }
@@ -77,7 +77,7 @@ watch(
 
 watch(
   () => starsStore.selectedRepo,
-  (selectedRepo) => {
+  selectedRepo => {
     if (Object.keys(selectedRepo).length) {
       isReadmeLoading.value = true
     }
@@ -86,7 +86,7 @@ watch(
 
 debouncedWatch(
   () => starsStore.selectedRepo,
-  async (selectedRepo) => {
+  async selectedRepo => {
     if (Object.keys(selectedRepo).length) {
       if (readmeContainerEl.value && readmeEl.value) {
         const readmeContents = await starsStore.fetchReadme(selectedRepo)
@@ -111,9 +111,9 @@ const patchReadmeAnchors = () => {
     return false
   }
 
-  Array.from(readmeEl.value.querySelectorAll('a')).forEach((anchor) => {
+  Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
     if (anchor.href.replace(location.href, '').startsWith('#')) {
-      anchor.addEventListener('click', (e) => {
+      anchor.addEventListener('click', e => {
         e.preventDefault()
         if (readmeContainerEl.value && readmeEl.value) {
           const anchorTop: number =
@@ -144,7 +144,7 @@ const patchReadmeImages = () => {
     return false
   }
 
-  Array.from(readmeEl.value.querySelectorAll('img')).forEach((img) => {
+  Array.from(readmeEl.value.querySelectorAll('img')).forEach(img => {
     const repoName = starsStore.selectedRepo.nameWithOwner
     const repoBranch = starsStore.selectedRepo.defaultBranchRef.name
     const imgSrc = img.getAttribute('src')

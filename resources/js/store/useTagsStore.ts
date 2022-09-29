@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { Errors, Inertia, Page, PageProps } from '@inertiajs/inertia'
 import orderBy from 'lodash/orderBy'
 import { FetchDirection, Tag, TagSortMethod } from '@/types'
+import { moveSort } from '@/utils'
 
 export const useTagsStore = defineStore({
   id: 'tags',
@@ -18,10 +19,10 @@ export const useTagsStore = defineStore({
           { name: tagName },
           {
             only: ['tags', 'abilities', 'errors'],
-            onSuccess: (page) => {
+            onSuccess: page => {
               resolve(page)
             },
-            onError: (errors) => {
+            onError: errors => {
               reject(errors)
             },
           }
@@ -30,13 +31,20 @@ export const useTagsStore = defineStore({
     },
     sortTags(method: TagSortMethod, direction: Lowercase<FetchDirection>) {
       this.tags = orderBy(this.tags, method, direction)
-      this.syncTagOrder()
-    },
-    syncTagOrder() {
+
       const reorderedTags = this.tags.map((tag, index) => ({
         id: tag.id,
         sort_order: index,
       }))
+
+      Inertia.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
+    },
+    syncTagOrder(oldIndex: number, newIndex: number) {
+      const reorderedTags = moveSort(this.tags, oldIndex, newIndex).map((tag, index) => ({
+        id: tag.id,
+        sort_order: index,
+      }))
+
       Inertia.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
     },
     deleteTag(id: number) {

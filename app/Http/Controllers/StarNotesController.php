@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Star;
 use App\Lib\Abilities;
+use App\Models\Star;
 use Illuminate\Http\Request;
 
 class StarNotesController extends Controller
@@ -16,7 +16,7 @@ class StarNotesController extends Controller
 
         $request->validate([
             'repoId' => 'required|numeric',
-            'notes' => 'present|nullable|json'
+            'notes' => 'present|nullable|json',
         ]);
 
         auth()->user()->stars()->updateOrCreate(['repo_id' => $request->input('repoId')], ['notes' => $request->input('notes')]);

@@ -31,6 +31,7 @@ module.exports = {
     'vue/script-setup-uses-vars': 'error',
     'vue/multi-word-component-names': 'off',
     'vue/no-v-html': 'off',
+    'vue/no-setup-props-destructure': 'off',
   },
   globals: {
     defineProps: 'readonly',

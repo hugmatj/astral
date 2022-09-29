@@ -1,19 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TagsController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\StarsController;
 use App\Http\Controllers\CleanupController;
-use App\Http\Controllers\StarTagsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MigrationController;
-use App\Http\Controllers\StarNotesController;
 use App\Http\Controllers\SmartFiltersController;
-use App\Http\Controllers\UserSettingsController;
-use App\Http\Controllers\TagsSortOrderController;
 use App\Http\Controllers\SmartFiltersSortOrderController;
+use App\Http\Controllers\StarNotesController;
+use App\Http\Controllers\StarsController;
+use App\Http\Controllers\StarTagsController;
+use App\Http\Controllers\TagsController;
+use App\Http\Controllers\TagsSortOrderController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSettingsController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

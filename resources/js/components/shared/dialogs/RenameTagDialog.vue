@@ -38,7 +38,7 @@
 import { ref, watch, nextTick } from 'vue'
 import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
-import BaseButton from '@/Components/shared/core/BaseButton.vue'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import { useForm } from '@inertiajs/inertia-vue3'
 

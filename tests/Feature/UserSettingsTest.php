@@ -1,6 +1,6 @@
 <?php
 
-it('saves the correct value to the user\'s settings', function() {
+it('saves the correct value to the user\'s settings', function () {
     $this->login();
 
     expect(auth()->user()->readSetting('autosave_notes'))->toBeTrue();
@@ -14,7 +14,7 @@ it('saves the correct value to the user\'s settings', function() {
     expect(auth()->user()->readSetting('autosave_notes'))->toBeTrue();
 });
 
-it("only allows valid keys to be passed", function () {
+it('only allows valid keys to be passed', function () {
     $this
         ->login()
         ->put(route('settings.update'), ['key' => 'a_disallowed_key', 'enabled' => true])
@@ -23,7 +23,7 @@ it("only allows valid keys to be passed", function () {
     expect(auth()->user()->readSetting('a_disallowed_key'))->toBeNull();
 });
 
-it("ensures the enabled value is a bool", function () {
+it('ensures the enabled value is a bool', function () {
     $this->login();
 
     expect(auth()->user()->readSetting('autosave_notes'))->toBeTrue();

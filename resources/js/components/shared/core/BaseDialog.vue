@@ -1,7 +1,9 @@
 <template>
   <TransitionRoot as="template" :show="isOpen">
     <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hide">
-      <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div
+        class="flex items-start sm:items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0"
+      >
         <TransitionChild
           as="template"
           enter="ease-out duration-300"

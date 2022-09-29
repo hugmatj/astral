@@ -188,13 +188,13 @@ watch(
   }
 )
 
-watch(isOpen, (newVal) => {
+watch(isOpen, newVal => {
   if (newVal) {
     editor.value?.commands.focus('end')
   }
 })
 
-watch(isSaving, (newVal) => {
+watch(isSaving, newVal => {
   if (newVal) {
     isSaveToastVisible.value = true
     setTimeout(() => {

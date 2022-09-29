@@ -1,12 +1,10 @@
 <?php
 
-use App\Models\User;
 use App\Models\Star;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Http;
-use Mockery\MockInterface;
 
-it('deletes all of the user\'s data when ther user deletes their account', function() {
+it('deletes all of the user\'s data when ther user deletes their account', function () {
     //Ensure revokeGrant() does not make an actual request
     Http::fake();
 

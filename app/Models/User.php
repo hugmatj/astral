@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Exceptions\InvalidAccessTokenException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
-use App\Exceptions\InvalidAccessTokenException;
 
 class User extends Authenticatable
 {
@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function writeSetting(string $name, $value, bool $save = true): self
     {
-        throw_if(!in_array($name, self::AVAILABLE_SETTINGS), new \Exception('Setting not available'));
+        throw_if(! in_array($name, self::AVAILABLE_SETTINGS), new \Exception('Setting not available'));
 
         $this->settings = array_merge($this->settings, [$name => $value]);
 
@@ -146,7 +146,7 @@ class User extends Authenticatable
     {
         return $this->isNotSponsor() ?
             config('limits') :
-            collect(config('limits'))->map(fn() => -1)->toArray();
+            collect(config('limits'))->map(fn () => -1)->toArray();
     }
 
     public function flags()
@@ -156,6 +156,6 @@ class User extends Authenticatable
 
     public function getFlag($key): bool
     {
-        return (bool)optional($this->flags()->where('key', $key)->first())->value ?? false;
+        return (bool) optional($this->flags()->where('key', $key)->first())->value ?? false;
     }
 }

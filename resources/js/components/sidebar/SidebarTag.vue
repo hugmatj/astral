@@ -22,6 +22,7 @@
           <MenuButton
             class="top-0 right-0 w-5 h-5 text-gray-300 transition-opacity opacity-0 hover:text-gray-200 group-hover:opacity-100"
             :class="[open && 'opacity-100']"
+            @click.stop=""
           >
             <DotsHorizontalIcon />
           </MenuButton>

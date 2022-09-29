@@ -11,7 +11,7 @@ export default defineComponent({
   setup(props, { emit }) {
     watch(
       () => props.value,
-      (val) => {
+      val => {
         emit('change', val)
       }
     )

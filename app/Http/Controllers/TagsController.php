@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Lib\Abilities;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class TagsController extends Controller
 {
@@ -37,7 +36,7 @@ class TagsController extends Controller
             'name' => 'bail|required|string|unique:tags,name,NULL,id,user_id,'.auth()->id(),
         ], [
             'required' => 'You must give a name to your tag.',
-            'unique' => 'You already have a tag with that name.'
+            'unique' => 'You already have a tag with that name.',
         ]);
 
         auth()->user()->tags()->create(['name' => $request->input('name')]);
@@ -58,7 +57,7 @@ class TagsController extends Controller
             'name' => 'bail|required|string|unique:tags,name,'.$tag->id.',id,user_id,'.auth()->id(),
         ], [
             'required' => 'You must give a name to your tag.',
-            'unique' => 'You already have a tag with that name.'
+            'unique' => 'You already have a tag with that name.',
         ]);
 
         $tag->name = $request->input('name');

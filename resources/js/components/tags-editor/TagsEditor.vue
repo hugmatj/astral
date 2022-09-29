@@ -25,7 +25,7 @@
           v-model="tagText"
           type="text"
           class="w-full min-w-0 p-0 text-base leading-none bg-transparent border-0 sm:text-sm focus:outline-none focus:border-0 focus:ring-0"
-          placeholder="Add a tag..."
+          :placeholder="placeholder"
           role="combobox"
           :aria-activedescendant="autocompleteUUID"
           autocomplete="off"
@@ -43,7 +43,7 @@
             left: inputRect.left + 'px',
             top: inputRect.top + inputRect.height + 'px',
           }"
-          :source="autocompleteOptions"
+          :source="visibleAutocompleteOptions"
           :search="tagText"
           @select="addTagWithName($event)"
           @show="autocompleteShowing = true"
@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, PropType, reactive, ref, unref, watch } from 'vue'
+import { computed, nextTick, reactive, ref, unref, watch } from 'vue'
 import { useTagsStore } from '@/store/useTagsStore'
 import AutocompleteMenu from '@/components/tags-editor/AutocompleteMenu.vue'
 import { XIcon } from '@heroicons/vue/solid'
@@ -63,24 +63,14 @@ import { TagEditorTag } from '@/types'
 import { whenever } from '@vueuse/core'
 import { nanoid } from 'nanoid'
 
-const props = defineProps({
-  tags: {
-    type: Array as PropType<TagEditorTag[]>,
-    default: () => [],
-  },
-  canCreate: {
-    type: Boolean,
-    default: true,
-  },
-  placeholder: {
-    type: String,
-    default: 'Add a tag...',
-  },
-  autocompleteOptions: {
-    type: Array as PropType<string[]>,
-    default: () => [],
-  },
-})
+interface Props {
+  tags?: TagEditorTag[]
+  canCreate?: boolean
+  placeholder?: string
+  autocompleteOptions?: string[]
+}
+
+const { tags = [], canCreate = true, placeholder = 'Add a tag...', autocompleteOptions = [] } = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'change', value: TagEditorTag[]): void
@@ -91,22 +81,32 @@ const tagsStore = useTagsStore()
 const autocompleteUUID = nanoid()
 const tagText = ref('')
 const input = ref<HTMLInputElement | null>(null)
-const mutableTags = ref<TagEditorTag[]>(props.tags.map((tag) => ({ id: tag.id, name: tag.name })))
+const normalizedTags = Array.isArray(tags) ? tags : []
+const mutableTags = ref<TagEditorTag[]>(normalizedTags.map(tag => ({ id: tag.id, name: tag.name })))
 let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
   top: 0,
   left: 0,
   height: 20,
 })
+
 const autocompleteShowing = ref(false)
 
-const autocompleteOptions = computed(() => {
-  return props.autocompleteOptions.filter((option) => {
-    return !mutableTags.value.map((tag) => tag.name).includes(option)
+const visibleAutocompleteOptions = computed(() => {
+  return autocompleteOptions.filter(option => {
+    return !mutableTags.value.map(tag => tag.name).includes(option)
   })
 })
 
 whenever(input, () => {
   positionAutocompleteMenu()
+})
+
+watch(tags, newValue => {
+  if (Array.isArray(newValue)) {
+    mutableTags.value = newValue.map(tag => ({ id: tag.id, name: tag.name }))
+  }
+
+  mutableTags.value = []
 })
 
 watch(mutableTags.value, () => {
@@ -124,23 +124,23 @@ const positionAutocompleteMenu = () => {
 }
 
 const tagsHasTag = (tag: string) => {
-  return mutableTags.value.map((tag) => tag.name?.toLowerCase()).includes(tag?.toLowerCase())
+  return mutableTags.value.map(tag => tag.name?.toLowerCase()).includes(tag?.toLowerCase())
 }
 
 const tagsHaveChanged = computed(() => {
   return !(
-    props.tags.length === mutableTags.value.length &&
-    props.tags
-      .map((tag) => tag.name)
-      .every((tag) => {
-        return mutableTags.value.map((tag) => tag.name).includes(tag)
+    tags.length === mutableTags.value.length &&
+    tags
+      .map(tag => tag.name)
+      .every(tag => {
+        return mutableTags.value.map(tag => tag.name).includes(tag)
       })
   )
 })
 
 const addTagWithName = (name: string) => {
   if (name && !tagsHasTag(name)) {
-    const existingTag = tagsStore.tags.find((tag) => tag.name === name)
+    const existingTag = tagsStore.tags.find(tag => tag.name === name)
 
     mutableTags.value.push({ name: name, id: existingTag ? existingTag.id : Date.now() })
     tagText.value = ''
@@ -148,7 +148,7 @@ const addTagWithName = (name: string) => {
   }
 }
 const addTagFromInput = () => {
-  if (props.canCreate) {
+  if (canCreate) {
     addTagWithName(tagText.value.trim())
   }
 }

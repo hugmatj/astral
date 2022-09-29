@@ -128,7 +128,7 @@ const filterBody = reactive<Record<'groups', PredicateGroup[]>>({
 
 watch(
   () => props.modelValue,
-  (value) => {
+  value => {
     Object.assign(filterBody, JSON.parse(value) as PredicateGroup[])
   },
   { immediate: true }
@@ -136,7 +136,7 @@ watch(
 
 watch(
   filterBody,
-  (filter) => {
+  filter => {
     emit('update:modelValue', JSON.stringify(filter))
   },
   { deep: true }
@@ -147,7 +147,7 @@ const setPredicateOperator = (e: Event, predicate: Predicate) => {
 }
 
 const selectedPredicateTarget = (predicate: Predicate) => {
-  return predicateTargets.find((target) => target.key === predicate.selectedTarget)
+  return predicateTargets.find(target => target.key === predicate.selectedTarget)
 }
 
 const setDefaultArgumentValue = (predicate: Predicate) => {
@@ -155,6 +155,7 @@ const setDefaultArgumentValue = (predicate: Predicate) => {
     if (typeof selectedPredicateTarget(predicate)?.defaultValue === 'function') {
       predicate.argument = selectedPredicateTarget(predicate)?.defaultValue()
     } else {
+      console.log('SUHHHH', selectedPredicateTarget(predicate)?.defaultValue)
       predicate.argument = selectedPredicateTarget(predicate)?.defaultValue
     }
   }
@@ -164,7 +165,7 @@ const currentOperator = (predicate: Predicate) => {
   if (
     selectedPredicateTarget(predicate) &&
     selectedPredicateTarget(predicate)
-      ?.operators.map((o) => o.key)
+      ?.operators.map(o => o.key)
       .includes(predicate.operator)
   ) {
     return predicate.operator

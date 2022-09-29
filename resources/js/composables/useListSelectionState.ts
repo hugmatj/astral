@@ -19,7 +19,7 @@ const { shift, cmd, ctrl } = useMagicKeys()
  * event when the window blur event fires.
  */
 useEventListener(window, 'blur', () => {
-  ;['shift', 'meta', 'control'].forEach((key) => {
+  ;['shift', 'meta', 'control'].forEach(key => {
     window.dispatchEvent(new KeyboardEvent('keyup', { key }))
   })
 })
@@ -65,7 +65,7 @@ export const useListSelectionState = <T>(
     return -1
   })
 
-  watch(lastShiftSelectedIndex, (v) => console.log('Last shift-selected index is now:', v))
+  watch(lastShiftSelectedIndex, v => console.log('Last shift-selected index is now:', v))
 
   const itemAtIndex = (i: number): T => {
     return allItems()[i]
@@ -170,7 +170,7 @@ export const useListSelectionState = <T>(
         }
       }
     }
-    itemsInRange.forEach((item) => {
+    itemsInRange.forEach(item => {
       appendItemToSelection(item)
     })
 
@@ -310,7 +310,7 @@ export const useListSelectionState = <T>(
     }
   }
 
-  onKeyStroke('ArrowDown', (e) => {
+  onKeyStroke('ArrowDown', e => {
     if (!isFocusedElementEditable() && isEnabled.value) {
       selectNextItem()
 
@@ -318,7 +318,7 @@ export const useListSelectionState = <T>(
     }
   })
 
-  onKeyStroke('ArrowUp', (e) => {
+  onKeyStroke('ArrowUp', e => {
     if (!isFocusedElementEditable() && isEnabled.value) {
       selectPrevItem()
 

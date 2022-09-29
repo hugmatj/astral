@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebWorkerProxyController;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 $workerPath = 'js/workers/githubStars.worker.ts';
 $jsPath = config('vite.aliases')['@'];
@@ -19,8 +19,8 @@ preg_match_all("#import .+ from '(?<path>@/\w+)'#", $workerContents, $importMatc
 
 // Replace the import paths with their actual resource path
 $imports = collect($importMatches['path'])->map(function ($path) use ($jsPath) {
-    if (!Str::endsWith($path, ".ts")) {
-        $path = $path."/index.ts";
+    if (! Str::endsWith($path, '.ts')) {
+        $path = $path.'/index.ts';
     }
 
     return Str::replaceFirst('@', $jsPath, $path);

@@ -44,23 +44,18 @@ useSyncToLocalStorage(starsStore, 'pageInfo').then(() => {
   pageInfoHasSynced.value = true
 })
 
-watch([reposHaveSynced, pageInfoHasSynced], async (syncChecks) => {
+watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
   if (syncChecks.every(Boolean) && starsStore.pageInfo.hasNextPage) {
     // We're ready to start fetching stars
     await nextTick()
-    starsStore.fetchStars(starsStore.pageInfo.endCursor)
+    while (starsStore.pageInfo.hasNextPage) {
+      const { viewer } = await starsStore.fetchStars(starsStore.pageInfo.endCursor)
+
+      starsStore.totalRepos = viewer.starredRepositories.totalCount
+      starsStore.pageInfo = viewer.starredRepositories.pageInfo
+
+      starsStore.starredRepos = starsStore.starredRepos.concat(viewer.starredRepositories.edges)
+    }
   }
 })
-
-starsStore.worker.onmessage = ({ data }) => {
-  const { starredRepositories } = data.viewer
-
-  starsStore.totalRepos = starredRepositories.totalCount
-  starsStore.pageInfo = starredRepositories.pageInfo
-
-  starsStore.starredRepos = starsStore.starredRepos.concat(starredRepositories.edges)
-  if (starsStore.pageInfo.hasNextPage) {
-    starsStore.fetchStars(starsStore.pageInfo.endCursor)
-  }
-}
 </script>

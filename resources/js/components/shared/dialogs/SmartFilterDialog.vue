@@ -57,7 +57,7 @@ const form = useForm<Pick<SmartFilter, 'name' | 'body'>>({
   }),
 })
 
-watch(currentSmartFilter, (smartFilter) => {
+watch(currentSmartFilter, smartFilter => {
   if (smartFilter) {
     form.name = smartFilter.name
     form.body = smartFilter.body

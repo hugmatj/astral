@@ -23,5 +23,4 @@ class SmartFilterPolicy
     {
         return $user->isSponsor();
     }
-
 }

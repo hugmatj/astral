@@ -1,15 +1,26 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import laravel from 'vite-plugin-laravel'
-import mkcert from 'vite-plugin-mkcert'
+import laravel from 'laravel-vite-plugin'
 import svgLoader from 'vite-svg-loader'
-import * as path from 'path'
 
 export default defineConfig({
-  plugins: [vue(), laravel(), mkcert(), svgLoader({ svgo: false })],
+  plugins: [
+    vue({
+      reactivityTransform: true,
+      template: {
+        transformAssetUrls: {
+          base: null,
+          includeAbsolute: false,
+        },
+      },
+    }),
+    laravel({
+      input: ['resources/js/app.ts'],
+      valetTls: 'astral.test',
+    }),
+    svgLoader({ svgo: false }),
+  ],
   server: {
-    https: true,
-    strictPort: true,
     port: 3001,
   },
 })

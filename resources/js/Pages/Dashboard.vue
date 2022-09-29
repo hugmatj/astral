@@ -1,12 +1,5 @@
 <template>
   <div class="absolute top-0 left-0 w-screen h-screen overflow-hidden bg-gray-50">
-    <SponsorshipDialog />
-    <RenameTagDialog />
-    <SettingsModal />
-    <UpgradeOAuthScopeDialog />
-    <SmartFiltersDialog />
-    <GlobalToast />
-    <ConfirmDialog />
     <div class="grid h-screen dashboard-grid">
       <!-- Nav -->
       <div
@@ -24,7 +17,7 @@
           </button>
         </div>
         <div class="flex items-center justify-start flex-shrink-0 w-1/3">
-          <LogoSvg class="h-6 sm:h-8" aria-label="Astral" />
+          <LogoSvg class="h-6 sm:h-8 text-white fill-current" aria-label="Astral" />
         </div>
         <div class="flex justify-end w-1/3 sm:w-2/3">
           <UserMenu @show-settings="showSettingsModal" />
@@ -108,6 +101,13 @@
         </div>
       </div>
     </div>
+    <SponsorshipDialog />
+    <RenameTagDialog />
+    <SettingsModal />
+    <UpgradeOAuthScopeDialog />
+    <SmartFiltersDialog />
+    <GlobalToast />
+    <ConfirmDialog />
   </div>
 </template>
 
@@ -199,7 +199,7 @@ useSyncValuesToStores(
 const isStarsListFocused = ref(false)
 
 const { selectItem, selectedItems } = useListSelectionState(
-  computed(() => starsStore.filteredRepos.map((repo) => repo.node)),
+  computed(() => starsStore.filteredRepos.map(repo => repo.node)),
   isStarsListFocused
 )
 
@@ -255,15 +255,15 @@ const onRepoSelected = (repo: GitHubRepo) => {
   selectItem(repo.node)
 }
 
-watch(selectedItems, (repos) => {
+watch(selectedItems, repos => {
   starsStore.selectedRepos = repos
 })
 
 watch(
   urlParams,
-  (params) => {
+  params => {
     if (params.tag) {
-      const tag = tagsStore.tags.find((tag) => tag.name === params.tag)
+      const tag = tagsStore.tags.find(tag => tag.name === params.tag)
 
       if (tag) {
         starsFilterStore.selectedTag = tag

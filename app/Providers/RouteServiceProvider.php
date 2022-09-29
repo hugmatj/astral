@@ -5,9 +5,9 @@ namespace App\Providers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\App;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -52,11 +52,11 @@ class RouteServiceProvider extends ServiceProvider
              * Workaround for ensuring that the Web Worker and its dependencies are
              * served from the Vite dev server
             */
-            if (App::environment() === 'local') {
-                Route::middleware('web')
-                    ->namespace($this->namespace)
-                    ->group(base_path('routes/vite.php'));
-            }
+            // if (App::environment() === 'local') {
+            //     Route::middleware('web')
+            //         ->namespace($this->namespace)
+            //         ->group(base_path('routes/vite.php'));
+            // }
         });
 
         Route::bind('tag', function ($value) {

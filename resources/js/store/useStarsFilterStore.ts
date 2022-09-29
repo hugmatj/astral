@@ -28,8 +28,8 @@ export const useStarsFilterStore = defineStore({
   getters: {
     search(): SearchInput {
       const queryParts = this.searchQuery.trim().toLowerCase().split(':').filter(Boolean)
-      const tags = queryParts.filter((part) => part.startsWith('#')).map((tag) => tag.substring(1))
-      const strings = queryParts.filter((part) => !part.startsWith('#'))
+      const tags = queryParts.filter(part => part.startsWith('#')).map(tag => tag.substring(1))
+      const strings = queryParts.filter(part => !part.startsWith('#'))
 
       return {
         query: this.searchQuery,

@@ -28,6 +28,6 @@ const emit = defineEmits<{
 const starsStore = useStarsStore()
 
 const autocompleteOptions = computed(() => {
-  return starsStore.languages.map((language) => language.name)
+  return starsStore.languages.map(language => language.name)
 })
 </script>

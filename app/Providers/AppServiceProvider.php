@@ -5,7 +5,6 @@ namespace App\Providers;
 use Astral\Lib\Sponsorship;
 use Astral\Lib\StarsJanitor;
 use Illuminate\Support\ServiceProvider;
-use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {

@@ -8,6 +8,7 @@ use App\Lib\StarsJanitor;
 class CleanupController extends Controller
 {
     protected $janitor;
+
     protected $sponsorship;
 
     public function __construct(StarsJanitor $janitor, Sponsorship $sponsorship)

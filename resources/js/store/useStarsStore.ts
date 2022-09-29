@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { Inertia } from '@inertiajs/inertia'
 import { useUserStore } from '@/store/useUserStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
-import { removeStarQuery } from '@/queries'
+import { fetchStarsQuery, removeStarQuery } from '@/queries'
 import keyBy from 'lodash/keyBy'
 import { Dictionary, every, some, reject, get } from 'lodash'
 import {
@@ -42,9 +42,6 @@ export const useStarsStore = defineStore({
       totalRepos: 0,
       selectedRepos: [] as GitHubRepoNode[],
       draggingRepos: [] as GitHubRepoNode[],
-      worker: new Worker(new URL('/resources/js/workers/githubStars.worker.ts', window.location.href), {
-        type: 'module',
-      }),
       hasFetchedFromStorage: false,
     }
   },
@@ -56,7 +53,7 @@ export const useStarsStore = defineStore({
       return this.starredRepos
     },
     untaggedStars(): GitHubRepo[] {
-      return this.allStars.filter((repo) => {
+      return this.allStars.filter(repo => {
         const userStar: UserStar = this.userStarsByRepoId[repo.node.databaseId]
 
         return !userStar || !userStar.tags?.length
@@ -70,10 +67,10 @@ export const useStarsStore = defineStore({
 
       if (starsFilterStore.isFilteringByTag || starsFilterStore.isFilteringByLanguage) {
         if (starsFilterStore.isFilteringByTag) {
-          filteredRepos = filteredRepos.filter((repo) => {
+          filteredRepos = filteredRepos.filter(repo => {
             const userStar = this.userStarsByRepoId[repo.node.databaseId]
 
-            return !!userStar && !!selectedTag && userStar.tags.map((tag) => tag.id).includes(selectedTag.id)
+            return !!userStar && !!selectedTag && userStar.tags.map(tag => tag.id).includes(selectedTag.id)
           })
         }
 
@@ -102,11 +99,11 @@ export const useStarsStore = defineStore({
           ...stateOperators,
         ]
 
-        filteredRepos = this.allStars.filter((repo) => {
+        filteredRepos = this.allStars.filter(repo => {
           return predicate.groups.every((group: PredicateGroup) => {
             // @ts-ignore
             return get(logicalTypeMap, group.logicalType)(group.predicates, (p: Predicate) => {
-              const operator: Maybe<PredicateOperator> = operators.find((o) => o.key === p.operator)
+              const operator: Maybe<PredicateOperator> = operators.find(o => o.key === p.operator)
               if (operator) {
                 if (get(repo, p.selectedTarget)) {
                   return operator.check(get(repo, p.selectedTarget), p.argument)
@@ -128,13 +125,13 @@ export const useStarsStore = defineStore({
             .filter(Boolean)
             .join(' ')
             .toLowerCase()
-          const repoHasStringMatches = search.strings.every((searchString) => repoTextHaystack.includes(searchString))
+          const repoHasStringMatches = search.strings.every(searchString => repoTextHaystack.includes(searchString))
 
           if (search.tags.length) {
-            const repoTagNames = (this.userStarsByRepoId[repo.node.databaseId]?.tags || []).map((tag) =>
+            const repoTagNames = (this.userStarsByRepoId[repo.node.databaseId]?.tags || []).map(tag =>
               tag.name.toLowerCase()
             )
-            const repoHasTagMatches = search.tags.every((tag) => repoTagNames.includes(tag))
+            const repoHasTagMatches = search.tags.every(tag => repoTagNames.includes(tag))
 
             return repoHasTagMatches && repoHasStringMatches
           } else {
@@ -148,7 +145,7 @@ export const useStarsStore = defineStore({
     languages(): RepoLanguage[] {
       return Object.entries(
         this.allStars
-          .map((repo) => {
+          .map(repo => {
             return repo.node.primaryLanguage?.name || ''
           })
           .filter(Boolean)
@@ -174,14 +171,22 @@ export const useStarsStore = defineStore({
     },
   },
   actions: {
-    fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirection.DESC) {
+    async fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirection.DESC) {
       const userStore = useUserStore()
+      const result = await (
+        await fetch('https://api.github.com/graphql', {
+          method: 'POST',
+          headers: {
+            Authorization: `bearer ${userStore.user?.access_token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: fetchStarsQuery(cursor, direction),
+          }),
+        })
+      ).json()
 
-      this.worker.postMessage({
-        token: userStore.user?.access_token,
-        cursor,
-        direction,
-      })
+      return result.data
     },
     addTagToStars(tagId: number, repos: StarMetaInput[]) {
       Inertia.post('/stars/tag', { tagId, repos } as any, { only: ['stars', 'tags', 'abilities'] })
@@ -205,7 +210,7 @@ export const useStarsStore = defineStore({
     },
     async removeStar(id: string) {
       const userStore = useUserStore()
-      const repo: Maybe<GitHubRepo> = this.starredRepos.find((repo) => repo.node.id === id)
+      const repo: Maybe<GitHubRepo> = this.starredRepos.find(repo => repo.node.id === id)
 
       await fetch('https://api.github.com/graphql', {
         method: 'POST',
@@ -219,8 +224,8 @@ export const useStarsStore = defineStore({
       })
 
       if (repo) {
-        const userStar: Maybe<UserStar> = this.userStars.find((star) => star.repo_id === repo.node.databaseId)
-        this.selectedRepos = this.selectedRepos.filter((selectedRepo) => selectedRepo.id !== id)
+        const userStar: Maybe<UserStar> = this.userStars.find(star => star.repo_id === repo.node.databaseId)
+        this.selectedRepos = this.selectedRepos.filter(selectedRepo => selectedRepo.id !== id)
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 
         if (userStar) {

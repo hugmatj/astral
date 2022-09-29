@@ -14,7 +14,7 @@ export const useSyncToLocalStorage = async <TStore extends Store, TKey extends k
   let storedValue: Nullable<TStore[TKey]> = null
   watch(
     () => store[key],
-    async (newVal) => {
+    async newVal => {
       await localForage.setItem(key as string, JSON.parse(JSON.stringify(newVal)))
     }
   )

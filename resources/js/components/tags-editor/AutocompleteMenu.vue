@@ -70,7 +70,7 @@ export default defineComponent({
       }
 
       return props.source
-        .filter((haystack) => fuzzysearch(props.search.toLowerCase(), haystack.toLowerCase()))
+        .filter(haystack => fuzzysearch(props.search.toLowerCase(), haystack.toLowerCase()))
         .slice(0, 5)
     })
     const hasResults = computed(() => !!visibleItems.value.length)
@@ -82,7 +82,7 @@ export default defineComponent({
       }
     })
 
-    watch(hasResults, (shouldShow) => {
+    watch(hasResults, shouldShow => {
       isVisible.value = shouldShow
       emit(shouldShow ? 'show' : 'hide')
     })
@@ -96,21 +96,21 @@ export default defineComponent({
       emit('select', visibleItems.value[currentIndex.value])
     }
 
-    onKeyStroke('ArrowDown', (e) => {
+    onKeyStroke('ArrowDown', e => {
       if (isVisible.value) {
         e.preventDefault()
         currentIndex.value = Math.min(visibleItems.value.length - 1, currentIndex.value + 1)
       }
     })
 
-    onKeyStroke('ArrowUp', (e) => {
+    onKeyStroke('ArrowUp', e => {
       if (isVisible.value) {
         e.preventDefault()
         currentIndex.value = Math.max(0, currentIndex.value - 1)
       }
     })
 
-    onKeyStroke('Enter', (e) => {
+    onKeyStroke('Enter', e => {
       if (isVisible.value) {
         e.preventDefault()
         selectActiveItem()

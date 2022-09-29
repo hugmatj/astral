@@ -13,22 +13,22 @@
       aria-role="status"
       aria-live="assertive"
     >
-      <CheckCircleIcon v-if="currentType === toastType.Success" class="w-5 h-5 mr-1" aria-hidden="true" />
-      <XCircleIcon v-if="currentType === toastType.Error" class="w-5 h-5 mr-1" aria-hidden="true" />
-      <span class="sr-only">{{ currentType === toastType.Success ? 'Success: ' : 'Error: ' }}</span>
+      <CheckCircleIcon v-if="currentType === ToastType.Success" class="w-5 h-5 mr-1" aria-hidden="true" />
+      <XCircleIcon v-if="currentType === ToastType.Error" class="w-5 h-5 mr-1" aria-hidden="true" />
+      <span class="sr-only">{{ currentType === ToastType.Success ? 'Success: ' : 'Error: ' }}</span>
       {{ currentMessage }}
     </div>
   </TransitionRoot>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
 import { TransitionRoot } from '@headlessui/vue'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
 
 const { isVisible, currentMessage, currentType } = useGlobalToast()
-const toastType = ref(ToastType)
+
 const toastClasses = computed(() => {
   return {
     [ToastType.Success]: 'bg-green-200 text-green-700',

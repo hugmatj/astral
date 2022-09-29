@@ -119,11 +119,11 @@ export default defineComponent({
     const isEditingTags = ref(false)
 
     const isSelected = computed(() =>
-      starsStore.selectedRepos.map((repo) => repo.databaseId).includes(props.repo.node.databaseId)
+      starsStore.selectedRepos.map(repo => repo.databaseId).includes(props.repo.node.databaseId)
     )
 
     const autocompleteOptions = computed(() => {
-      return tagsStore.tags.map((tag) => tag.name)
+      return tagsStore.tags.map(tag => tag.name)
     })
 
     const syncTagsToStar = (repoNode: GitHubRepoNode, tags: TagEditorTag[]) => {

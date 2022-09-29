@@ -85,20 +85,19 @@ export const tagOperators: PredicateOperator[] = [
   {
     key: 'hasAnyTags',
     label: 'has any',
-    check: (source: Tag[], target: Tag[]) =>
-      target.map((t) => t.name).some((val) => source.map((t) => t.name).includes(val)),
+    check: (source: Tag[], target: Tag[]) => target.map(t => t.name).some(val => source.map(t => t.name).includes(val)),
   },
   {
     key: 'hasAllTags',
     label: 'has all',
     check: (source: Tag[], target: Tag[]) =>
-      target.map((t) => t.name).every((val) => source.map((t) => t.name).includes(val)),
+      target.map(t => t.name).every(val => source.map(t => t.name).includes(val)),
   },
   {
     key: 'hasNoneTags',
     label: 'has none',
     check: (source: Tag[], target: Tag[]) =>
-      !target.map((t) => t.name).some((val) => source.map((t) => t.name).includes(val)),
+      !target.map(t => t.name).some(val => source.map(t => t.name).includes(val)),
   },
 ]
 
@@ -119,18 +118,18 @@ export const languageOperators: PredicateOperator[] = [
   {
     key: 'hasAnyLanguage',
     label: 'has any',
-    check: (source: string, target: RepoLanguage[]) => target.map((l) => l.name).includes(source),
+    check: (source: string, target: RepoLanguage[]) => target.map(l => l.name).includes(source),
   },
   {
     key: 'hasNoneLanguage',
     label: 'has none',
-    check: (source: string, target: RepoLanguage[]) => !target.map((l) => l.name).includes(source),
+    check: (source: string, target: RepoLanguage[]) => !target.map(l => l.name).includes(source),
   },
 ]
 
 export const stateOperators: PredicateOperator[] = [
-  { key: 'isState', label: 'is', check: (target) => Boolean(target) === true },
-  { key: 'isntState', label: "isn't", check: (target) => Boolean(target) === false },
+  { key: 'isState', label: 'is', check: target => Boolean(target) === true },
+  { key: 'isntState', label: "isn't", check: target => Boolean(target) === false },
 ]
 
 export const predicateTargets: PredicateTarget[] = [

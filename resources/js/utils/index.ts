@@ -18,4 +18,14 @@ export const isFocusedElementEditable = (): boolean => {
   return activeElement.hasAttribute('contenteditable')
 }
 
-export const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
+export const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms))
+
+export const moveSort = <T>(array: T[], oldIndex: number, newIndex: number): T[] => {
+  const itemRemovedArray = [...array.slice(0, oldIndex), ...array.slice(oldIndex + 1, array.length)]
+
+  return [
+    ...itemRemovedArray.slice(0, newIndex),
+    array[oldIndex],
+    ...itemRemovedArray.slice(newIndex, itemRemovedArray.length),
+  ]
+}

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
-use App\Models\Star;
-use Inertia\Inertia;
 use App\Lib\Abilities;
 use App\Models\SmartFilter;
+use App\Models\Star;
+use App\Models\Tag;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {

@@ -129,7 +129,7 @@ const dates = computed(() => {
   endDate = dateFns.addDays(endDate, trailingPaddingDays)
 
   return dateFns.eachDayOfInterval({ start: startDate, end: endDate }).map(
-    (date) =>
+    date =>
       ({
         date,
         isCurrentMonth: dateFns.isSameMonth(cursor, date),
