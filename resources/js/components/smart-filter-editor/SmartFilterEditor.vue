@@ -155,7 +155,6 @@ const setDefaultArgumentValue = (predicate: Predicate) => {
     if (typeof selectedPredicateTarget(predicate)?.defaultValue === 'function') {
       predicate.argument = selectedPredicateTarget(predicate)?.defaultValue()
     } else {
-      console.log('SUHHHH', selectedPredicateTarget(predicate)?.defaultValue)
       predicate.argument = selectedPredicateTarget(predicate)?.defaultValue
     }
   }

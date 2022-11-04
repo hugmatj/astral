@@ -182,7 +182,8 @@ const editor = useEditor({
 watch(
   () => starsStore.selectedRepo,
   () => {
-    let notes = JSON.parse(userStar.value?.notes || '{}')
+    const notes = JSON.parse(userStar.value?.notes || '{}')
+
     editor.value?.commands.setContent(Object.keys(notes).length ? notes : '<p></p>')
     editor.value?.commands.focus('end')
   }
