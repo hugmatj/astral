@@ -187,6 +187,7 @@ const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showSettingsModal } = useSettingsDialog()
 const { params: urlParams, clearParams } = useUrlParams()
 
+// TODO: Fix types
 useSyncValuesToStores(
   [userStore, 'user', computed(() => props.user)],
   [authorizationsStore, 'abilities', computed(() => props.abilities)],

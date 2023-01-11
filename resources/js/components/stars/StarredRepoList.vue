@@ -1,25 +1,21 @@
 <template>
-  <!-- <div
+  <VirtualScroller
     v-if="starsStore.filteredRepos.length"
-    class="relative flex-grow col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
+    :default-size="156"
+    :items="starsStore.filteredRepos"
+    class="relative flex-grow bg-white"
     role="listbox"
     aria-label="Stars List"
     aria-multiselectable="true"
     tabindex="0"
-  > -->
-  <VirtualScroller
-    :default-size="156"
-    :items="starsStore.filteredRepos"
-    class="relative flex-grow col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
   >
-    <template #item="{ ref: item, offset, index }">
+    <template #item="{ ref: item }">
       <slot :repo="(item as GitHubRepo)" />
     </template>
   </VirtualScroller>
-  <!-- </div> -->
-  <!-- <div v-else class="flex items-center justify-center h-full">
+  <div v-else class="flex items-center justify-center h-full">
     <p class="text-center text-gray-500">No results found</p>
-  </div> -->
+  </div>
 </template>
 
 <script lang="ts" setup>
