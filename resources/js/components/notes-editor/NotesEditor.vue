@@ -136,7 +136,6 @@ import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
-import CodeBlock from '@tiptap/extension-code-block'
 import { TransitionChild, TransitionRoot } from '@headlessui/vue'
 import debounce from 'lodash/debounce'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
@@ -165,7 +164,6 @@ const editor = useEditor({
     Placeholder.configure({
       placeholder: 'Add some notes about this repo...',
     }),
-    CodeBlock,
   ],
   onUpdate: debounce(({ editor }) => {
     if (userStore.user?.settings.autosave_notes) {

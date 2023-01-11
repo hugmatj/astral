@@ -104,7 +104,7 @@ const MONTH_LABELS = [
 
 const isDatePickerShowing = ref(false)
 const inputRef = ref<typeof BaseTextInput | null>(null)
-let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
+const inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
   top: 0,
   left: 0,
   height: 38,
@@ -122,8 +122,8 @@ const dates = computed(() => {
   const cursor = dateCursor.value
   let startDate = dateFns.startOfMonth(cursor)
   let endDate = dateFns.endOfMonth(cursor)
-  let leadPaddingDays = dateFns.getDay(startDate)
-  let trailingPaddingDays = 6 - dateFns.getDay(endDate)
+  const leadPaddingDays = dateFns.getDay(startDate)
+  const trailingPaddingDays = 6 - dateFns.getDay(endDate)
 
   startDate = dateFns.addDays(startDate, -leadPaddingDays)
   endDate = dateFns.addDays(endDate, trailingPaddingDays)
