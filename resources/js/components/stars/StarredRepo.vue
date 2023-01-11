@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800 group"
+    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800 group border-b border-gray-300"
     :class="{ 'bg-gray-100 dark:bg-gray-800 shadow-inner': isSelected }"
     draggable="true"
     role="option"

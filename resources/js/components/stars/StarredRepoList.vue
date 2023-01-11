@@ -1,32 +1,37 @@
 <template>
-  <DynamicScroller
+  <!-- <div
     v-if="starsStore.filteredRepos.length"
-    :items="starsStore.filteredRepos"
-    :min-item-size="156"
-    key-field="cursor"
     class="relative flex-grow col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
     role="listbox"
     aria-label="Stars List"
     aria-multiselectable="true"
     tabindex="0"
+  > -->
+  <VirtualScroller
+    :default-size="156"
+    :items="starsStore.filteredRepos"
+    class="relative flex-grow col-span-1 row-start-2 row-end-3 bg-white sm:col-start-2"
   >
-    <template #default="{ item: repo, active }">
-      <DynamicScrollerItem :item="repo" :active="active" class="relative border-b border-gray-300 dark:border-gray-600">
-        <slot :repo="repo" />
-      </DynamicScrollerItem>
+    <template #item="{ ref: item, offset, index }">
+      <slot :repo="(item as GitHubRepo)" />
     </template>
-  </DynamicScroller>
-  <div v-else class="flex items-center justify-center h-full">
+  </VirtualScroller>
+  <!-- </div> -->
+  <!-- <div v-else class="flex items-center justify-center h-full">
     <p class="text-center text-gray-500">No results found</p>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
 import { ref, watch, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useSyncToLocalStorage } from '@/composables/useSyncToLocalStorage'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { createVirtualScroller } from 'vue-typed-virtual-list'
+import { GitHubRepo } from '@/types'
+
+const VirtualScroller = createVirtualScroller<GitHubRepo>()
 
 /** Stars Fetch Lifecycle
  * 1. if hasNextPage is true, fetch using whatever the end cursor is, even if it's null
