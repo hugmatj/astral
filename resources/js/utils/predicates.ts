@@ -11,10 +11,17 @@ export interface PredicateGroup {
   predicates: Predicate[]
 }
 
+type PredicateOperatorCheck =
+  | ((source: string, target: string) => boolean)
+  | ((source: number, target: number) => boolean)
+  | ((source: Tag[], target: Tag[]) => boolean)
+  | ((source: string, target: RepoLanguage[]) => boolean)
+  | ((target: string | number) => boolean)
+
 export interface PredicateOperator {
   key: string
   label: string
-  check: (...args: any[]) => boolean
+  check: PredicateOperatorCheck
 }
 
 export type PredicateTargetType = 'String' | 'Number' | 'State' | 'Tags' | 'Language' | 'Date'
@@ -128,8 +135,8 @@ export const languageOperators: PredicateOperator[] = [
 ]
 
 export const stateOperators: PredicateOperator[] = [
-  { key: 'isState', label: 'is', check: target => Boolean(target) === true },
-  { key: 'isntState', label: "isn't", check: target => Boolean(target) === false },
+  { key: 'isState', label: 'is', check: (target: string | number) => Boolean(target) === true },
+  { key: 'isntState', label: "isn't", check: (target: string | number) => Boolean(target) === false },
 ]
 
 export const predicateTargets: PredicateTarget[] = [
