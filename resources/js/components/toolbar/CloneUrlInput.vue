@@ -68,7 +68,7 @@ const selectUrlText = (e: FocusEvent) => {
 
 onKeyStroke('c', e => {
   const inputEl: HTMLInputElement = input.value?.$el
-  if (!isFocusedElementEditable() && inputEl) {
+  if (!isFocusedElementEditable() && inputEl && !e.metaKey && !e.ctrlKey) {
     e.preventDefault()
     inputEl.focus()
   }
