@@ -89,7 +89,7 @@ export default defineComponent({
                 role: 'region',
                 ariaLive: 'polite',
               },
-              this.count
+              this.count.toLocaleString()
             ),
           !!this.hasContextMenu && this.$slots.contextMenu && this.$slots.contextMenu(),
         ]),

@@ -18,6 +18,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['off', { argsIgnorePattern: '^_' }],
     'vue/no-v-html': 'off',
     'vue/no-setup-props-destructure': 'off',
+    'vue/multi-word-component-names': 'off',
   },
   globals: {
     defineProps: 'readonly',

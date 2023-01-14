@@ -8,9 +8,9 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="absolute inset-0 transition-opacity duration-300 bg-gray-500/75" @click.self="hide"></div>
+        <div class="absolute inset-0 bg-gray-500/75 transition-opacity duration-300" @click.self="hide"></div>
       </TransitionChild>
-      <div class="relative w-1/2 lg:w-3/4 h-full py-8 overflow-hidden">
+      <div class="relative h-full w-1/2 overflow-hidden py-8 lg:w-3/4">
         <TransitionChild
           as="template"
           enter-from="opacity-0 -translate-x-full"
@@ -18,11 +18,11 @@
           leave-from="opacity-100 translate-x-0"
           leave-to="opacity-0 -translate-x-full"
         >
-          <div class="relative h-full p-4 transition duration-300 transform bg-white shadow rounded-r-md">
-            <div v-if="editor" class="flex items-center p-2 bg-gray-100 rounded">
+          <div class="relative h-full transform rounded-r-md bg-white p-4 shadow transition duration-300">
+            <div v-if="editor" class="flex items-center rounded bg-gray-100 p-2">
               <!-- Bold Button -->
               <button
-                class="p-1 rounded hover:bg-gray-200"
+                class="rounded p-1 hover:bg-gray-200"
                 :class="{
                   'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('bold'),
                 }"
@@ -32,11 +32,11 @@
                 <BoldIcon class="h-5" />
               </button>
 
-              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
+              <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
 
               <!-- Italics Button -->
               <button
-                class="p-1 rounded hover:bg-gray-200"
+                class="rounded p-1 hover:bg-gray-200"
                 :class="{
                   'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('italic'),
                 }"
@@ -46,11 +46,11 @@
                 <ItalicsIcon class="h-5" />
               </button>
 
-              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
+              <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
 
               <!-- Underline Button -->
               <button
-                class="p-1 rounded hover:bg-gray-200"
+                class="rounded p-1 hover:bg-gray-200"
                 :class="{
                   'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('underline'),
                 }"
@@ -60,11 +60,11 @@
                 <UnderlineIcon class="h-5" />
               </button>
 
-              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
+              <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
 
               <!-- Code Button -->
               <button
-                class="p-1 rounded hover:bg-gray-200"
+                class="rounded p-1 hover:bg-gray-200"
                 :class="{
                   'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('code'),
                 }"
@@ -74,11 +74,11 @@
                 <CodeIcon class="h-5" />
               </button>
 
-              <span class="inline-block mx-2 text-xs font-bold text-gray-300">|</span>
+              <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
 
               <!-- CodeBlock Button -->
               <button
-                class="p-1 rounded hover:bg-gray-200"
+                class="rounded p-1 hover:bg-gray-200"
                 :class="{
                   'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('codeBlock'),
                 }"
@@ -100,7 +100,7 @@
               >
             </div>
 
-            <EditorContent :editor="editor" class="h-full mt-4" />
+            <EditorContent :editor="editor" class="mt-4 h-full" />
 
             <TransitionRoot
               :show="isSaveToastVisible"
@@ -111,7 +111,7 @@
               as="template"
             >
               <div
-                class="absolute bottom-0 right-0 z-30 px-3 py-2 mb-4 mr-4 text-sm font-semibold transition transform rounded-full bg-brand-200 text-brand-700"
+                class="absolute bottom-0 right-0 z-30 mb-4 mr-4 transform rounded-full bg-brand-200 px-3 py-2 text-sm font-semibold text-brand-700 transition"
                 aria-role="status"
                 aria-live="assertive"
               >
@@ -127,7 +127,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/vue3'
 import { useEditor, EditorContent, Editor } from '@tiptap/vue-3'
 import { useNotesEditor } from '@/composables/useNotesEditor'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -207,7 +207,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
     isSaving.value = true
     const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
 
-    Inertia.put(
+    router.put(
       '/star/notes',
       {
         repoId: starsStore.selectedRepo.databaseId,

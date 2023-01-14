@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { Errors, Inertia, Page, PageProps } from '@inertiajs/inertia'
+import { router } from '@inertiajs/vue3'
+import { Errors, Page, PageProps } from '@inertiajs/core'
 import orderBy from 'lodash/orderBy'
 import { FetchDirection, Tag, TagSortMethod } from '@/types'
 import { moveSort } from '@/utils'
@@ -14,7 +15,7 @@ export const useTagsStore = defineStore({
   actions: {
     addTag(tagName: string): Promise<Page<PageProps> | Errors> {
       return new Promise((resolve, reject) => {
-        Inertia.post(
+        router.post(
           '/tags',
           { name: tagName },
           {
@@ -37,7 +38,7 @@ export const useTagsStore = defineStore({
         sort_order: index,
       }))
 
-      Inertia.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
+      router.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
     },
     syncTagOrder(oldIndex: number, newIndex: number) {
       const reorderedTags = moveSort(this.tags, oldIndex, newIndex).map((tag, index) => ({
@@ -45,10 +46,10 @@ export const useTagsStore = defineStore({
         sort_order: index,
       }))
 
-      Inertia.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
+      router.put('/tags/reorder', { tags: reorderedTags } as any, { only: ['tags'] })
     },
     deleteTag(id: number) {
-      Inertia.delete(`/tags/${id}`, { only: ['tags'] })
+      router.delete(`/tags/${id}`, { only: ['tags'] })
     },
   },
 })

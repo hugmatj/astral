@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { User } from '@/types'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/core'
 import { useStarsStore } from '@/store/useStarsStore'
 
 export const useUserStore = defineStore({
@@ -17,7 +17,7 @@ export const useUserStore = defineStore({
       starsStore.starredRepos = []
       starsStore.resetPageInfo()
 
-      Inertia.delete('/user')
+      router.delete('/user')
     },
   },
 })

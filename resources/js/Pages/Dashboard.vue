@@ -1,39 +1,39 @@
 <template>
-  <div class="absolute top-0 left-0 w-screen h-screen overflow-hidden bg-gray-50">
-    <div class="grid h-screen dashboard-grid">
+  <div class="absolute top-0 left-0 h-screen w-screen overflow-hidden bg-gray-50">
+    <div class="dashboard-grid grid h-screen">
       <!-- Nav -->
       <div
-        class="flex items-center px-4 transition-transform duration-300 bg-brand-600 col-span-full"
+        class="col-span-full flex items-center bg-brand-600 px-4 transition-transform duration-300"
         :class="{
           'translate-x-8': isSidebarOpen,
         }"
       >
-        <div class="flex items-center w-1/3 sm:hidden">
+        <div class="flex w-1/3 items-center sm:hidden">
           <button
-            class="inline-flex items-center justify-center w-6 h-6 text-white"
+            class="inline-flex h-6 w-6 items-center justify-center text-white"
             @click="isSidebarOpen = !isSidebarOpen"
           >
             <MenuIcon />
           </button>
         </div>
-        <div class="flex items-center justify-start flex-shrink-0 w-1/3">
-          <LogoSvg class="h-6 sm:h-8 text-white fill-current" aria-label="Astral" />
+        <div class="flex w-1/3 flex-shrink-0 items-center justify-start">
+          <LogoSvg class="h-6 fill-current text-white sm:h-8" aria-label="Astral" />
         </div>
-        <div class="flex justify-end w-1/3 sm:w-2/3">
+        <div class="flex w-1/3 justify-end sm:w-2/3">
           <UserMenu @show-settings="showSettingsModal" />
         </div>
       </div>
       <!-- Sidebar -->
       <div
-        class="absolute inset-0 z-20 flex col-start-1 row-start-2 row-end-3 transition-colors duration-300 ease-in-out bg-gray-900 sm:relative sm:pointer-events-auto backdrop-filter"
+        class="absolute inset-0 z-20 col-start-1 row-start-2 row-end-3 flex bg-gray-900 backdrop-filter transition-colors duration-300 ease-in-out sm:pointer-events-auto sm:relative"
         :aria-hidden="!isSidebarOpen"
         :class="{
-          'bg-opacity-0 pointer-events-none': !isSidebarOpen,
+          'pointer-events-none bg-opacity-0': !isSidebarOpen,
           'bg-opacity-75 backdrop-blur-sm': isSidebarOpen,
         }"
       >
         <div
-          class="w-3/4 transition-transform duration-300 ease-in-out transform-gpu sm:translate-x-0 sm:w-full"
+          class="w-3/4 transform-gpu transition-transform duration-300 ease-in-out sm:w-full sm:translate-x-0"
           :class="{
             '-translate-x-full': !isSidebarOpen,
             'translate-x-0': isSidebarOpen,
@@ -49,18 +49,18 @@
         </div>
         <button
           v-show="isSidebarOpen"
-          class="flex justify-center flex-grow pt-5"
+          class="flex flex-grow justify-center pt-5"
           aria-label="Close Sidebar"
           @click="isSidebarOpen = !isSidebarOpen"
         >
-          <div class="inline-flex items-center justify-center w-10 h-10 text-4xl text-white" aria-hidden="true">
+          <div class="inline-flex h-10 w-10 items-center justify-center text-4xl text-white" aria-hidden="true">
             <CloseIcon />
           </div>
         </button>
       </div>
       <!-- Starred Repo List -->
       <div
-        class="relative flex flex-col transition-transform duration-300 border-r border-gray-300 dark:border-gray-600"
+        class="relative flex flex-col border-r border-gray-300 transition-transform duration-300 dark:border-gray-600"
         :class="{
           'translate-x-8': isSidebarOpen,
         }"
@@ -82,19 +82,19 @@
       </div>
       <!-- Selected Star Info -->
       <div
-        class="absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transition-transform duration-300 ease-in-out bg-white pointer-events-auto dark:bg-gray-900 transform-gpu sm:translate-x-0 sm:relative"
+        class="pointer-events-auto absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transform-gpu bg-white transition-transform duration-300 ease-in-out dark:bg-gray-900 sm:relative sm:translate-x-0"
         :class="{
-          'translate-x-full pointer-events-none': !isReadmeOpen,
+          'pointer-events-none translate-x-full': !isReadmeOpen,
           'translate-x-0': isReadmeOpen,
         }"
       >
         <button
-          class="absolute top-0 left-0 z-10 inline-flex items-center justify-center w-6 h-6 mt-20 ml-5 text-gray-700 rounded-full bg-gray-50 sm:hidden"
+          class="absolute top-0 left-0 z-10 mt-20 ml-5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 text-gray-700 sm:hidden"
           @click="isReadmeOpen = false"
         >
           <ArrowCircleLeftIcon />
         </button>
-        <div class="relative flex flex-col h-full">
+        <div class="relative flex h-full flex-col">
           <RepoToolbar v-if="starsStore.isAnyRepoSelected" />
           <Readme />
           <NotesEditor v-if="starsStore.isAnyRepoSelected" :is-open="true" />
@@ -113,7 +113,8 @@
 
 <script lang="ts" setup>
 import { ref, watch, PropType, computed } from 'vue'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/vue3'
+import { Errors } from '@inertiajs/core'
 import { useUserStore } from '@/store/useUserStore'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
 import { useTagsStore } from '@/store/useTagsStore'
@@ -170,7 +171,7 @@ const props = defineProps({
     required: true,
   },
   errors: {
-    type: Object,
+    type: Object as PropType<Errors>,
     default: () => {
       return {}
     },
@@ -187,7 +188,6 @@ const { show: showSponsorshipDialog } = useSponsorshipDialog()
 const { show: showSettingsModal } = useSettingsDialog()
 const { params: urlParams, clearParams } = useUrlParams()
 
-// TODO: Fix types
 useSyncValuesToStores(
   [userStore, 'user', computed(() => props.user)],
   [authorizationsStore, 'abilities', computed(() => props.abilities)],
@@ -209,9 +209,9 @@ const { selectItem, selectedItems } = useListSelectionState(
  * the user attempted to do something that requires an active
  * sponsorship. If true, show them the Sponsor dialog.
  */
-Inertia.on('finish', () => {
+router.on('finish', () => {
   if (props.errors.sponsorship_required) {
-    showSponsorshipDialog(props.errors.sponsorship_required)
+    showSponsorshipDialog(props.errors.sponsorship_required as Ability)
   }
 })
 

@@ -14,14 +14,14 @@
               class="block w-full"
               placeholder="Enter a name for your tag"
             />
-            <p v-if="form.errors.name" class="mt-2 text-xs font-semibold text-left text-red-500">
+            <p v-if="form.errors.name" class="mt-2 text-left text-xs font-semibold text-red-500">
               {{ form.errors.name }}
             </p>
           </div>
 
           <!-- TODO: We're skipping the actions slot here because it's easier to wrap everything in a form this way. Is there a better way? -->
           <div
-            class="flex flex-col-reverse items-center justify-center mt-6 space-y-3 space-y-reverse sm:flex-row sm:space-y-0 sm:space-x-3"
+            class="mt-6 flex flex-col-reverse items-center justify-center space-y-3 space-y-reverse sm:flex-row sm:space-y-0 sm:space-x-3"
           >
             <BaseButton class="w-full" @click="hide">Cancel</BaseButton>
             <BaseButton button-type="submit" kind="primary" class="w-full" :disabled="form.processing">
@@ -40,7 +40,7 @@ import { useRenameTagDialog } from '@/composables/useRenameTagDialog'
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
-import { useForm } from '@inertiajs/inertia-vue3'
+import { useForm } from '@inertiajs/vue3'
 
 const { isOpen, hide, currentTag } = useRenameTagDialog()
 const form = useForm({

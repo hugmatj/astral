@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { Errors, Inertia, Page, PageProps } from '@inertiajs/inertia'
+import { router } from '@inertiajs/vue3'
+import { Errors, Page, PageProps } from '@inertiajs/core'
 import { SmartFilter } from '@/types'
 import { moveSort } from '@/utils'
 
@@ -13,7 +14,7 @@ export const useSmartFiltersStore = defineStore({
   actions: {
     addSmartFilter(smartFilter: Pick<SmartFilter, 'name' | 'body'>): Promise<Page<PageProps> | Errors> {
       return new Promise((resolve, reject) => {
-        Inertia.post('/smart-filters', smartFilter, {
+        router.post('/smart-filters', smartFilter, {
           only: ['smartFilters', 'abilities', 'errors'],
           onSuccess: page => {
             resolve(page)
@@ -26,7 +27,7 @@ export const useSmartFiltersStore = defineStore({
     },
     updateSmartFilter(id: number, smartFilter: Pick<SmartFilter, 'name' | 'body'>): Promise<Page<PageProps> | Errors> {
       return new Promise((resolve, reject) => {
-        Inertia.put(`/smart-filters/${id}`, smartFilter, {
+        router.put(`/smart-filters/${id}`, smartFilter, {
           only: ['smartFilters', 'errors'],
           onSuccess: page => {
             resolve(page)
@@ -38,7 +39,7 @@ export const useSmartFiltersStore = defineStore({
       })
     },
     deleteSmartFilter(id: number) {
-      Inertia.delete(`/smart-filters/${id}`, { only: ['smartFilters', 'abilities'] })
+      router.delete(`/smart-filters/${id}`, { only: ['smartFilters', 'abilities'] })
     },
     syncSmartFiltersOrder(oldIndex: number, newIndex: number) {
       const reorderedSmartFilters = moveSort(this.smartFilters, oldIndex, newIndex).map((smartFilter, index) => ({
@@ -46,7 +47,7 @@ export const useSmartFiltersStore = defineStore({
         sort_order: index,
       }))
 
-      Inertia.put('/smart-filters/reorder', { smartFilters: reorderedSmartFilters } as any, { only: ['smartFilters'] })
+      router.put('/smart-filters/reorder', { smartFilters: reorderedSmartFilters } as any, { only: ['smartFilters'] })
     },
   },
 })

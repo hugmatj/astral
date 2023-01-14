@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full p-4 overflow-y-auto bg-gray-900 dark:border-r dark:border-gray-600">
+  <div class="h-full overflow-y-auto bg-gray-900 p-4 dark:border-r dark:border-gray-600">
     <div class="mt-6 space-y-6">
       <SidebarGroup title="Stars">
         <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars" tabindex="0">
@@ -30,20 +30,20 @@
           <SortTagsMenu v-if="tags.length > 1" class="-mt-1" @sort-tags="tagsStore.sortTags" />
         </template>
         <template #default>
-          <div class="relative flex items-center h-10 mt-2">
+          <div class="relative mt-2 flex h-10 items-center">
             <button
-              class="inline-flex items-center w-full text-sm font-semibold text-gray-500 transition-colors focus:outline-none focus:text-gray-400 hover:text-gray-400"
+              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-none"
               :class="{ 'pointer-events-none': isNewTagFormShowing }"
               type="button"
               @click="showNewTagForm"
             >
-              <PlusCircleIcon class="flex-shrink-0 w-5 h-5" aria-hidden="true" />
+              <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
               <span class="ml-2">Add a tag...</span>
             </button>
             <form
-              class="absolute top-0 left-0 w-full transition-opacity duration-150 opacity-0 pointer-events-none"
+              class="pointer-events-none absolute top-0 left-0 w-full opacity-0 transition-opacity duration-150"
               :class="{
-                'opacity-100 pointer-events-auto': isNewTagFormShowing,
+                'pointer-events-auto opacity-100': isNewTagFormShowing,
               }"
               @submit.prevent="doAddTag(newTag)"
             >
@@ -52,7 +52,7 @@
                 v-model="newTag"
                 type="text"
                 placeholder="Enter a tag name..."
-                class="w-full bg-white border-0 rounded-sm focus:ring-2 focus:ring-transparent sm:text-sm dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400"
+                class="w-full rounded-sm border-0 bg-white focus:ring-2 focus:ring-transparent dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 sm:text-sm"
                 @blur="isNewTagFormShowing = false"
               />
             </form>
@@ -80,15 +80,15 @@
           </ul>
         </template>
       </SidebarGroup>
-      <SidebarGroup title="Smart Filters" collapsible class="relative group">
+      <SidebarGroup title="Smart Filters" collapsible class="group relative">
         <template #right-action>
           <button
-            class="inline-flex items-center w-full text-sm font-semibold text-gray-400 transition opacity-0 focus:outline-none hover:text-gray-200 group-hover:opacity-100"
+            class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-none group-hover:opacity-100"
             type="button"
             aria-label="Add Smart Filter"
             @click="doShowSmartFilterDialog"
           >
-            <PlusCircleIcon class="flex-shrink-0 w-5 h-5" aria-hidden="true" />
+            <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
           </button>
         </template>
         <template #default>
@@ -131,8 +131,8 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref, computed } from 'vue'
-import { Errors } from '@inertiajs/inertia'
+import { ref, computed } from 'vue'
+import { Errors } from '@inertiajs/core'
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'

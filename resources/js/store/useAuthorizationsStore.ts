@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/core'
 import { Ability, Limit, Limits, Authorizations } from '@/types'
 
 export const useAuthorizationsStore = defineStore({
@@ -18,7 +18,7 @@ export const useAuthorizationsStore = defineStore({
   },
   actions: {
     checkForSponsorship() {
-      Inertia.get('/check-sponsorship')
+      router.get('/check-sponsorship')
     },
   },
 })

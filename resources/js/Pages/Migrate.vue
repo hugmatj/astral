@@ -65,7 +65,7 @@ const userStore = useUserStore()
 const reposHaveSynced = ref(false)
 const pageInfoHasSynced = ref(false)
 
-const isReadyToBeginMigration = ref(false)
+const isReadyToBeginMigration = ref(true)
 
 useSyncValuesToStores(
   [userStore, 'user', computed(() => props.user)],
@@ -91,15 +91,15 @@ const beginMigration = () => {
   starsStore.fetchStars(starsStore.pageInfo.endCursor)
 }
 
-starsStore.worker.onmessage = ({ data }) => {
-  const { starredRepositories } = data.viewer
+// starsStore.worker.onmessage = ({ data }) => {
+//   const { starredRepositories } = data.viewer
 
-  starsStore.totalRepos = starredRepositories.totalCount
-  starsStore.pageInfo = starredRepositories.pageInfo
+//   starsStore.totalRepos = starredRepositories.totalCount
+//   starsStore.pageInfo = starredRepositories.pageInfo
 
-  starsStore.starredRepos = starsStore.starredRepos.concat(starredRepositories.edges)
-  if (starsStore.pageInfo.hasNextPage) {
-    starsStore.fetchStars(starsStore.pageInfo.endCursor)
-  }
-}
+//   starsStore.starredRepos = starsStore.starredRepos.concat(starredRepositories.edges)
+//   if (starsStore.pageInfo.hasNextPage) {
+//     starsStore.fetchStars(starsStore.pageInfo.endCursor)
+//   }
+// }
 </script>

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/core'
 import { useUserStore } from '@/store/useUserStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { fetchStarsQuery, removeStarQuery } from '@/queries'
@@ -27,6 +27,9 @@ import {
   PredicateOperator,
   PredicateTarget,
 } from '@/utils/predicates'
+
+type LogicalOperatorFunction = (predicates: Predicate[], predicateCheck: (predicate: Predicate) => boolean) => boolean
+
 export const useStarsStore = defineStore({
   id: 'stars',
   state() {
@@ -101,17 +104,21 @@ export const useStarsStore = defineStore({
 
         filteredRepos = this.allStars.filter(repo => {
           return predicate.groups.every((group: PredicateGroup) => {
-            // @ts-ignore
-            return get(logicalTypeMap, group.logicalType)(group.predicates, (p: Predicate) => {
-              const operator: Maybe<PredicateOperator> = operators.find(o => o.key === p.operator)
-              if (operator) {
-                if (get(repo, p.selectedTarget)) {
-                  return operator.check(get(repo, p.selectedTarget), p.argument)
+            return (get(logicalTypeMap, group.logicalType) as LogicalOperatorFunction)(
+              group.predicates,
+              (p: Predicate) => {
+                const operator: Maybe<PredicateOperator> = operators.find(o => o.key === p.operator)
+                if (operator) {
+                  if (get(repo, p.selectedTarget)) {
+                    return operator.check(get(repo, p.selectedTarget), p.argument)
+                  } else {
+                    return operator.check(get(repo, (p.argument as PredicateTarget).key))
+                  }
                 } else {
-                  return operator.check(get(repo, (p.argument as PredicateTarget).key))
+                  return false
                 }
               }
-            })
+            )
           })
         })
       }
@@ -189,10 +196,10 @@ export const useStarsStore = defineStore({
       return result.data
     },
     addTagToStars(tagId: number, repos: StarMetaInput[]) {
-      Inertia.post('/stars/tag', { tagId, repos } as any, { only: ['stars', 'tags', 'abilities'] })
+      router.post('/stars/tag', { tagId, repos } as any, { only: ['stars', 'tags', 'abilities'] })
     },
     syncTagsToStar(starInput: StarMetaInput, tags: TagEditorTag[]) {
-      Inertia.put(`/star/sync-tags`, { ...starInput, tags } as any, { only: ['stars', 'tags', 'abilities', 'errors'] })
+      router.put(`/star/sync-tags`, { ...starInput, tags } as any, { only: ['stars', 'tags', 'abilities', 'errors'] })
     },
     async fetchReadme(repo: GitHubRepoNode): Promise<string> {
       const userStore = useUserStore()
@@ -229,7 +236,7 @@ export const useStarsStore = defineStore({
         this.starredRepos.splice(this.starredRepos.indexOf(repo), 1)
 
         if (userStar) {
-          Inertia.delete(`/star/${userStar.id}`, { only: ['stars', 'tags', 'abilities'] })
+          router.delete(`/star/${userStar.id}`, { only: ['stars', 'tags', 'abilities'] })
         }
       }
     },

@@ -1,6 +1,6 @@
 <template>
   <BaseDialog :is-open="isOpen" :hide="hide" modal-classes="sm:max-w-xl px-0 pt-0 pb-0 sm:p-0">
-    <DialogTitle class="w-full p-4 text-xl font-bold text-gray-700 bg-gray-100 border-b border-gray-200 rounded-t-lg"
+    <DialogTitle class="w-full rounded-t-lg border-b border-gray-200 bg-gray-100 p-4 text-xl font-bold text-gray-700"
       >Settings</DialogTitle
     >
     <div class="divide-y divide-gray-300">
@@ -29,7 +29,7 @@
       <div class="px-4 py-5">
         <div class="flex items-center">
           <p class="text-sm font-bold text-gray-600">GitHub Access</p>
-          <BaseButton class="ml-auto" kind="danger" size="sm" @click="Inertia.post('/revoke-grant')"
+          <BaseButton class="ml-auto" kind="danger" size="sm" @click="router.post('/revoke-grant')"
             >Revoke Access</BaseButton
           >
         </div>
@@ -42,7 +42,7 @@
       <div class="px-4 py-5">
         <div class="flex items-center">
           <p class="text-sm font-bold text-gray-600">Delete Account</p>
-          <div class="flex items-center ml-auto space-x-3">
+          <div class="ml-auto flex items-center space-x-3">
             <div v-show="isRequestingDeleteConfirmation">
               <label for="confirm-user-delete" class="sr-only">Enter your username to confirm</label>
               <BaseTextInput
@@ -70,14 +70,14 @@
 
 <script setup lang="ts">
 import { computed, ref, nextTick } from 'vue'
-import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { DialogTitle } from '@headlessui/vue'
 import BaseDialog from '@/components/shared/core/BaseDialog.vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import BaseToggle from '@/components/shared/core/BaseToggle.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { useSettingsDialog } from '@/composables/useSettingsDialog'
 import { useUserStore } from '@/store/useUserStore'
-import { Inertia } from '@inertiajs/inertia'
+import { router } from '@inertiajs/vue3'
 
 const { isOpen, hide } = useSettingsDialog()
 const userStore = useUserStore()
@@ -94,7 +94,7 @@ const deleteButtonIsDisabled = computed(() => {
 })
 
 const updateUserSetting = (setting: string, enabled: boolean) => {
-  Inertia.put(
+  router.put(
     '/settings',
     { key: setting, enabled },
     {

@@ -61,11 +61,11 @@
     <div class="flex items-center mt-4 space-x-4 text-gray-500 dark:text-gray-400">
       <div class="flex items-center">
         <StarIcon class="w-4 h-4" />
-        <span class="ml-1 text-xs font-medium">{{ repo.node.stargazers.totalCount }}</span>
+        <span class="ml-1 text-xs font-medium">{{ repo.node.stargazers.totalCount.toLocaleString() }}</span>
       </div>
       <div class="flex items-center">
         <ShareIcon class="w-4 h-4" />
-        <span class="ml-1 text-xs font-medium">{{ repo.node.forkCount }}</span>
+        <span class="ml-1 text-xs font-medium">{{ repo.node.forkCount.toLocaleString() }}</span>
       </div>
       <a
         class="flex items-center transition-colors group-scope"

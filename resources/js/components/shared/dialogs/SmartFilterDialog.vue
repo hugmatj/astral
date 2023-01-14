@@ -1,24 +1,24 @@
 <template>
   <BaseDialog :is-open="isOpen" :hide="hideDialog" modal-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
     <div>
-      <DialogTitle class="px-4 py-3 text-xl font-bold text-center text-gray-700 rounded bg-gray-50"
+      <DialogTitle class="rounded bg-gray-50 px-4 py-3 text-center text-xl font-bold text-gray-700"
         >{{ currentSmartFilter ? 'Update' : 'Create' }} Filter</DialogTitle
       >
       <form @submit.prevent="currentSmartFilter ? updateSmartFilter() : addSmartFilter()">
-        <div class="flex flex-col items-start w-1/2 pt-2 pb-8 mt-6">
+        <div class="mt-6 flex w-1/2 flex-col items-start pt-2 pb-8">
           <label for="smart-filter-name" class="inline-block text-sm">Filter Name</label>
           <BaseTextInput
             id="smart-filter-name"
             v-model="form.name"
-            class="w-full mt-2"
+            class="mt-2 w-full"
             placeholder="Give your filter a name..."
           ></BaseTextInput>
         </div>
-        <div ref="smartFiltersContainer" class="border-t border-gray-200 max-h-[62vh] overflow-y-auto">
+        <div ref="smartFiltersContainer" class="max-h-[62vh] overflow-y-auto border-t border-gray-200">
           <SmartFilterEditor v-model="form.body" />
           <div ref="scrollTarget" class="scroll-target" aria-hidden="true"></div>
         </div>
-        <div class="flex items-center justify-end px-4 py-3 mt-4 space-x-2 rounded bg-gray-50">
+        <div class="mt-4 flex items-center justify-end space-x-2 rounded bg-gray-50 px-4 py-3">
           <BaseButton kind="base" @click="hideDialog">Cancel</BaseButton>
           <BaseButton kind="primary" type="submit">Save Filter</BaseButton>
         </div>
@@ -29,6 +29,8 @@
 
 <script lang="ts" setup>
 import { watch, ref, nextTick } from 'vue'
+import { useForm } from '@inertiajs/vue3'
+import { Errors } from '@inertiajs/core'
 import BaseDialog from '@/components/shared/core/BaseDialog.vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
@@ -37,12 +39,10 @@ import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
 import SmartFilterEditor from '@/components/smart-filter-editor/SmartFilterEditor.vue'
 import { defaultGroup } from '@/utils/predicates'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
-import { useForm } from '@inertiajs/inertia-vue3'
 import cloneDeep from 'lodash/cloneDeep'
 import { SmartFilter } from '@/types'
 import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
 import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
-import { Errors } from '@inertiajs/inertia'
 
 const smartFiltersStore = useSmartFiltersStore()
 
