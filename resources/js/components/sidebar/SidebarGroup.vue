@@ -1,6 +1,6 @@
 <template>
   <Disclosure v-slot="{ open }" as="div" :default-open="true">
-    <div class="flex items-center w-full">
+    <div class="flex w-full items-center">
       <div class="flex items-center">
         <DisclosureButton
           class="flex items-center text-gray-500"
@@ -9,21 +9,21 @@
         >
           <CaretIcon
             v-if="collapsible"
-            class="relative flex-shrink-0 w-5 h-5 transform"
+            class="relative h-5 w-5 flex-shrink-0 transform"
             :class="{ 'rotate-90': open }"
             style="top: -1px"
             aria-hidden="true"
           />
-          <span class="text-xs font-bold tracking-wider uppercase select-none">
+          <span class="select-none text-xs font-bold uppercase tracking-wider">
             {{ title }}
           </span>
         </DisclosureButton>
       </div>
       <div
-        class="flex-shrink-0 ml-auto"
+        class="ml-auto flex-shrink-0"
         :class="{
-          'opacity-100 pointer-events-auto': open || !collapsible,
-          'opacity-0 pointer-events-none': !open,
+          'pointer-events-auto opacity-100': open || !collapsible,
+          'pointer-events-none opacity-0': !open,
         }"
       >
         <slot name="right-action"></slot>

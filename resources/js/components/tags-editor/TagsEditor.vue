@@ -1,30 +1,30 @@
 <template>
   <div
-    class="flex items-center px-1 pt-2 pb-0 bg-white border border-gray-300 rounded-md shadow-sm ring-2 ring-transparent cursor-text focus-within:border-indigo-500 focus-within:ring-indigo-100"
+    class="flex cursor-text items-center rounded-md border border-gray-300 bg-white px-1 pt-2 pb-0 shadow-sm ring-2 ring-transparent focus-within:border-indigo-500 focus-within:ring-indigo-100"
     @click.stop
   >
-    <ul class="relative flex flex-wrap items-center w-full">
+    <ul class="relative flex w-full flex-wrap items-center">
       <li
         v-for="(tag, i) in mutableTags"
         :key="tag.name"
-        class="text-indigo-800 bg-indigo-100 px-2 py-0.5 mx-1 mb-2 rounded-sm text-xs font-semibold tracking-wide flex items-center"
+        class="mx-1 mb-2 flex items-center rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800"
       >
         <span>{{ tag.name }}</span>
         <button
-          class="pl-1 cursor-pointer delete-star-tag"
+          class="delete-star-tag cursor-pointer pl-1"
           :aria-label="`Delete tag ${tag.name}`"
           @mousedown.prevent
           @click.stop="deleteTagAtIndex(i)"
         >
-          <XIcon class="w-3 h-3 fill-current" />
+          <XIcon class="h-3 w-3 fill-current" />
         </button>
       </li>
-      <li class="relative flex-grow mx-1 mb-2 leading-none isolate" style="flex-basis: 82px">
+      <li class="relative isolate mx-1 mb-2 flex-grow leading-none" style="flex-basis: 82px">
         <input
           ref="input"
           v-model="tagText"
           type="text"
-          class="w-full min-w-0 p-0 text-base leading-none bg-transparent border-0 sm:text-sm focus:outline-none focus:border-0 focus:ring-0"
+          class="w-full min-w-0 border-0 bg-transparent p-0 text-base leading-none focus:border-0 focus:outline-none focus:ring-0 sm:text-sm"
           :placeholder="placeholder"
           role="combobox"
           :aria-activedescendant="autocompleteUUID"

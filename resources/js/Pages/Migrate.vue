@@ -1,16 +1,16 @@
 <template>
   <div
-    class="fixed inset-0 bg-gray-900 flex items-center bg-repeat bg-[length:1000px_1000px]"
+    class="fixed inset-0 flex items-center bg-gray-900 bg-[length:1000px_1000px] bg-repeat"
     :style="{ backgroundImage: 'url(/img/migrate-bg.svg)' }"
   >
-    <div class="mx-auto w-full flex max-w-screen-lg justify-between">
-      <MigrateAstronautSvg class="w-full max-w-xs motion-safe:animate-float h-auto" aria-hidden="true" />
-      <div class="pl-24 space-y-8">
-        <h2 class="font-bold text-white text-6xl shadow-[0_0_10px_10px_#111827] bg-gray-900 leading-tight">
+    <div class="mx-auto flex w-full max-w-screen-lg justify-between">
+      <MigrateAstronautSvg class="h-auto w-full max-w-xs motion-safe:animate-float" aria-hidden="true" />
+      <div class="space-y-8 pl-24">
+        <h2 class="bg-gray-900 text-6xl font-bold leading-tight text-white shadow-[0_0_10px_10px_#111827]">
           Welcome to the<br />new
-          <LogoSvg class="h-6 sm:h-12 text-brand-500 fill-current inline-flex relative -top-1 px" aria-label="Astral" />
+          <LogoSvg class="px relative -top-1 inline-flex h-6 fill-current text-brand-500 sm:h-12" aria-label="Astral" />
         </h2>
-        <p class="text-white leading-loose shadow-[0_0_10px_10px_#111827] bg-gray-900">
+        <p class="bg-gray-900 leading-loose text-white shadow-[0_0_10px_10px_#111827]">
           Before you get started we need to migrate some of your data to the new version. Depending on the number of
           stars you have, this could take from a few seconds to a couple minutes.
         </p>
@@ -18,7 +18,7 @@
           <button
             type="button"
             :disabled="!isReadyToBeginMigration"
-            class="bg-brand-600 rounded-full text-white font-bold px-6 py-4 text-2xl shadow-lg shadow-brand-900 hover:bg-brand-500 transition-all hover:shadow-brand-800 hover:shadow-xl relative active:top-px disabled:opacity-50 disabled:pointer-events-none"
+            class="relative rounded-full bg-brand-600 px-6 py-4 text-2xl font-bold text-white shadow-lg shadow-brand-900 transition-all hover:bg-brand-500 hover:shadow-xl hover:shadow-brand-800 active:top-px disabled:pointer-events-none disabled:opacity-50"
             @click="beginMigration"
           >
             Begin Migration

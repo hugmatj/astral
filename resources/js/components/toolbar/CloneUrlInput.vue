@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center">
     <div>
-      <label for="repo_clone_url" class="text-sm font-semibold text-gray-600 cursor-pointer">Clone:</label>
+      <label for="repo_clone_url" class="cursor-pointer text-sm font-semibold text-gray-600">Clone:</label>
       <BaseTextInput
         id="repo_clone_url"
         ref="input"
@@ -13,11 +13,11 @@
         @focus="selectUrlText"
       />
     </div>
-    <RadioGroup v-model="currentUrlType" class="px-3 isolate">
+    <RadioGroup v-model="currentUrlType" class="isolate px-3">
       <RadioGroupLabel class="sr-only">Clone URL Type</RadioGroupLabel>
       <RadioGroupOption v-slot="{ checked }" as="template" value="ssh">
         <div
-          class="py-0.5 px-1.5 font-bold text-center rounded-full text-xxs cursor-pointer"
+          class="cursor-pointer rounded-full py-0.5 px-1.5 text-center text-xxs font-bold"
           :class="{
             'bg-transparent text-gray-600 dark:text-gray-400': !checked,
             'bg-gray-600 text-white dark:bg-gray-500': checked,
@@ -28,7 +28,7 @@
       </RadioGroupOption>
       <RadioGroupOption v-slot="{ checked }" as="template" value="https">
         <div
-          class="py-0.5 px-1.5 font-bold text-center rounded-full text-xxs cursor-pointer"
+          class="cursor-pointer rounded-full py-0.5 px-1.5 text-center text-xxs font-bold"
           :class="{
             'bg-transparent text-gray-600 dark:text-gray-400': !checked,
             'bg-gray-600 text-white dark:bg-gray-500': checked,

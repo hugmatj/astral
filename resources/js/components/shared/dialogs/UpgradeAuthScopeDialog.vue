@@ -1,20 +1,20 @@
 <template>
   <ActionDialog :is-open="isOpen" :hide="hide">
     <template #icon>
-      <div class="flex items-center justify-center w-12 h-12 mx-auto bg-yellow-100 rounded-full">
-        <ExclamationIcon class="w-6 h-6 text-yellow-800" aria-hidden="true" /></div
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100">
+        <ExclamationIcon class="h-6 w-6 text-yellow-800" aria-hidden="true" /></div
     ></template>
     <template #title>Elevated Privileges Required</template>
     <template #body>
       <p class="leading-relaxed text-gray-500">
         Unstarring repositories requires your authorization scope to be upgraded from
         <code
-          class="inline-flex items-center py-0.5 rounded-md text-sm font-semibold bg-yellow-100 text-yellow-800 px-1.5"
+          class="inline-flex items-center rounded-md bg-yellow-100 py-0.5 px-1.5 text-sm font-semibold text-yellow-800"
           >read:user</code
         >
         to
         <code
-          class="inline-flex items-center px-1.5 py-0.5 rounded-md text-sm font-semibold bg-yellow-100 text-yellow-800"
+          class="inline-flex items-center rounded-md bg-yellow-100 px-1.5 py-0.5 text-sm font-semibold text-yellow-800"
           >public_repo</code
         >. If you would like to learn more about authorization scopes, you can consult the
         <a

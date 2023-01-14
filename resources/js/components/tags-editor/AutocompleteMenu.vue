@@ -3,7 +3,7 @@
     <TransitionFade :show="shouldShow" as="div">
       <ul
         v-show="shouldShow"
-        class="absolute z-50 py-1 min-w-[150px] bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg"
+        class="absolute z-50 min-w-[150px] divide-y divide-gray-100 rounded-md border border-gray-200 bg-white py-1 shadow-lg"
         role="combobox"
         v-bind="$attrs"
         :hidden="!shouldShow"
@@ -22,8 +22,8 @@
           <div
             class="w-full px-4 py-2 text-xs"
             :class="{
-              'text-gray-700 font-medium': index !== currentIndex,
-              'bg-brand-500 text-white font-semibold': index === currentIndex,
+              'font-medium text-gray-700': index !== currentIndex,
+              'bg-brand-500 font-semibold text-white': index === currentIndex,
             }"
           >
             {{ item }}

@@ -1,16 +1,16 @@
 <template>
   <div
-    class="flex items-center flex-shrink-0 h-16 px-4 border-b border-gray-300 bg-gray-50 dark:bg-gray-800 dark:border-gray-600"
+    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-600 dark:bg-gray-800"
   >
     <BaseButton size="sm" @click="handleToggleNotesEditor()">
-      <component :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon" class="h-4 -ml-2" />
+      <component :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon" class="-ml-2 h-4" />
       <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} Notes</span>
     </BaseButton>
     <BaseButton size="sm" class="ml-2" @click="removeSelectedStar">
-      <StarIcon class="h-4 -ml-1" />
+      <StarIcon class="-ml-1 h-4" />
       <span class="ml-1">Unstar</span>
     </BaseButton>
-    <div class="flex-shrink-0 ml-auto">
+    <div class="ml-auto flex-shrink-0">
       <CloneUrlInput />
     </div>
   </div>

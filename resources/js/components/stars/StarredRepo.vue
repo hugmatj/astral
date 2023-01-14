@@ -1,7 +1,7 @@
 <template>
   <div
-    class="relative p-4 bg-white shadow-sm cursor-pointer dark:bg-gray-800 group border-b border-gray-300"
-    :class="{ 'bg-gray-100 dark:bg-gray-800 shadow-inner': isSelected }"
+    class="group relative cursor-pointer border-b border-gray-300 bg-white p-4 shadow-sm dark:bg-gray-800"
+    :class="{ 'bg-gray-100 shadow-inner dark:bg-gray-800': isSelected }"
     draggable="true"
     role="option"
     :aria-selected="isSelected"
@@ -11,7 +11,7 @@
   >
     <div
       aria-hidden
-      class="absolute top-0 left-0 w-1 transition-transform transform bg-brand-600 -bottom-px"
+      class="absolute top-0 left-0 -bottom-px w-1 transform bg-brand-600 transition-transform"
       :class="{
         'translate-x-0': isSelected,
         '-translate-x-full': !isSelected,
@@ -29,10 +29,10 @@
       @change="syncTagsToStar(repo.node, $event)"
       @blur="isEditingTags = false"
     />
-    <ul v-if="!isEditingTags" class="inline-flex flex-wrap items-start mt-4">
+    <ul v-if="!isEditingTags" class="mt-4 inline-flex flex-wrap items-start">
       <li
         v-if="shouldShowLanguageTag && repo.node.primaryLanguage?.name"
-        class="text-brand-800 bg-brand-100 dark:bg-brand-800 dark:text-brand-200 px-2 py-0.5 rounded-sm text-xs cursor-pointer font-semibold tracking-wide mr-1 mb-1"
+        class="mr-1 mb-1 cursor-pointer rounded-sm bg-brand-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-brand-800 dark:bg-brand-800 dark:text-brand-200"
         role="button"
         @click.stop="$emit('language-selected', repo.node.primaryLanguage?.name)"
       >
@@ -41,14 +41,14 @@
       <li
         v-for="tag in tags"
         :key="tag.id"
-        class="text-indigo-800 bg-indigo-100 dark:bg-indigo-800 dark:text-indigo-200 px-2 py-0.5 rounded-sm text-xs cursor-pointer font-semibold tracking-wide mr-1 mb-1"
+        class="mr-1 mb-1 cursor-pointer rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800 dark:bg-indigo-800 dark:text-indigo-200"
         role="button"
         @click.stop="$emit('tag-selected', tag)"
       >
         {{ tag.name }}
       </li>
       <li
-        class="transition-opacity text-gray-600 bg-gray-200 dark:bg-gray-600 dark:text-gray-200 px-2 py-0.5 rounded-sm text-xs font-semibold cursor-pointer tracking-wide opacity-0 group-hover:opacity-100"
+        class="cursor-pointer rounded-sm bg-gray-200 px-2 py-0.5 text-xs font-semibold tracking-wide text-gray-600 opacity-0 transition-opacity group-hover:opacity-100 dark:bg-gray-600 dark:text-gray-200"
         :class="{
           'opacity-100': !tags.length && !repo.node.primaryLanguage?.name,
         }"
@@ -58,24 +58,24 @@
         Edit Tags
       </li>
     </ul>
-    <div class="flex items-center mt-4 space-x-4 text-gray-500 dark:text-gray-400">
+    <div class="mt-4 flex items-center space-x-4 text-gray-500 dark:text-gray-400">
       <div class="flex items-center">
-        <StarIcon class="w-4 h-4" />
+        <StarIcon class="h-4 w-4" />
         <span class="ml-1 text-xs font-medium">{{ repo.node.stargazers.totalCount.toLocaleString() }}</span>
       </div>
       <div class="flex items-center">
-        <ShareIcon class="w-4 h-4" />
+        <ShareIcon class="h-4 w-4" />
         <span class="ml-1 text-xs font-medium">{{ repo.node.forkCount.toLocaleString() }}</span>
       </div>
       <a
-        class="flex items-center transition-colors group-scope"
+        class="group-scope flex items-center transition-colors"
         :href="repo.node.url"
         target="_blank"
         rel="noopener noreferrer"
         @click.stop
       >
-        <GlobeIcon class="w-4 h-4" />
-        <span class="ml-1 text-xs font-medium group-scope-hover:underline">Visit</span>
+        <GlobeIcon class="h-4 w-4" />
+        <span class="group-scope-hover:underline ml-1 text-xs font-medium">Visit</span>
       </a>
     </div>
   </div>

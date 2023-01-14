@@ -13,7 +13,7 @@
     </div>
     <div
       v-if="$slots.actions"
-      class="flex flex-col-reverse items-center justify-center mt-6 space-y-3 space-y-reverse sm:flex-row sm:space-y-0 sm:space-x-3"
+      class="mt-6 flex flex-col-reverse items-center justify-center space-y-3 space-y-reverse sm:flex-row sm:space-y-0 sm:space-x-3"
     >
       <slot name="actions" />
     </div>

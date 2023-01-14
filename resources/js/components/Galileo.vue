@@ -1,24 +1,24 @@
 <template>
   <div
-    class="flex items-center flex-shrink-0 h-16 px-4 bg-white border-b border-gray-300 dark:bg-gray-900 dark:border-gray-600"
+    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-white px-4 dark:border-gray-600 dark:bg-gray-900"
   >
     <div
-      class="relative flex items-center w-full py-2 transition-colors bg-white border border-transparent rounded-md shadow ring-gray-300 dark:ring-gray-600 ring-1 focus-within:border-gray-400 dark:focus-within:border-gray-600 focus-within:ring-gray-400 dark:bg-gray-700"
+      class="relative flex w-full items-center rounded-md border border-transparent bg-white py-2 shadow ring-1 ring-gray-300 transition-colors focus-within:border-gray-400 focus-within:ring-gray-400 dark:bg-gray-700 dark:ring-gray-600 dark:focus-within:border-gray-600"
     >
       <input
         ref="input"
         v-model="searchQuery"
         type="text"
-        class="flex-grow w-full py-0 pr-3 text-gray-500 placeholder-gray-300 border-none dark:text-gray-300 pl-9 peer focus:ring-0 dark:bg-gray-700 focus:placeholder-gray-400"
+        class="peer w-full flex-grow border-none py-0 pr-3 pl-9 text-gray-500 placeholder-gray-300 focus:placeholder-gray-400 focus:ring-0 dark:bg-gray-700 dark:text-gray-300"
         placeholder="Gaze through your telescope..."
         aria-keyshortcuts="/"
       />
       <SearchIcon
-        class="absolute w-5 h-5 text-gray-300 transition-colors pointer-events-none dark:text-gray-400 left-2 peer-focus:text-gray-400"
+        class="pointer-events-none absolute left-2 h-5 w-5 text-gray-300 transition-colors peer-focus:text-gray-400 dark:text-gray-400"
         aria-hidden="true"
       />
       <span
-        class="absolute hidden px-2 py-1 text-xs font-bold text-gray-300 transition-opacity border border-gray-300 rounded-sm pointer-events-none sm:block bg-gray-50 right-2 peer-focus:opacity-0 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400"
+        class="pointer-events-none absolute right-2 hidden rounded-sm border border-gray-300 bg-gray-50 px-2 py-1 text-xs font-bold text-gray-300 transition-opacity peer-focus:opacity-0 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 sm:block"
         aria-hidden="true"
         >/</span
       >

@@ -133,22 +133,27 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { Errors } from '@inertiajs/core'
+import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
+import { Sortable } from 'sortablejs-vue3'
+
+import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
+import SidebarItem from '@/components/sidebar/SidebarItem.vue'
+import SidebarTag from '@/components/sidebar/SidebarTag.vue'
+import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
+import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
+
+import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
+import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
+import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
+
+import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
+
 import { useTagsStore } from '@/store/useTagsStore'
 import { useStarsStore } from '@/store/useStarsStore'
 import { useStarsFilterStore } from '@/store/useStarsFilterStore'
 import { useSmartFiltersStore } from '@/store/useSmartFiltersStore'
 import { useAuthorizationsStore } from '@/store/useAuthorizationsStore'
-import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
-import SidebarGroup from '@/components/sidebar/SidebarGroup.vue'
-import SidebarItem from '@/components/sidebar/SidebarItem.vue'
-import SidebarTag from '@/components/sidebar/SidebarTag.vue'
-import SidebarSmartFilter from '@/components/sidebar/SidebarSmartFilter.vue'
-import { Sortable } from 'sortablejs-vue3'
-import SortTagsMenu from '@/components/sidebar/SortTagsMenu.vue'
-import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
-import { useSmartFilterDialog } from '@/composables/useSmartFilterDialog'
-import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
-import { SPONSORSHIP_REQUIRED_ERROR } from '@/constants'
+
 import { Tag, StarDragDataTransferData, Ability, SmartFilter } from '@/types'
 
 const emit = defineEmits<{

@@ -4,8 +4,8 @@
       class="inline-flex items-center text-gray-400 transition-colors hover:text-gray-200"
       :class="{ 'text-gray-50': open }"
     >
-      <span class="text-xs tracking-wider uppercase">Sort</span>
-      <SwitchVerticalIcon class="w-4 h-4 ml-1" aria-hidden="true" />
+      <span class="text-xs uppercase tracking-wider">Sort</span>
+      <SwitchVerticalIcon class="ml-1 h-4 w-4" aria-hidden="true" />
     </MenuButton>
     <transition
       enter-active-class="transition duration-100 ease-out"
@@ -16,7 +16,7 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <MenuItems
-        class="absolute z-20 w-40 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg right-2 sm:right-0 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        class="absolute right-2 z-20 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0"
       >
         <div class="py-1">
           <MenuItem v-slot="{ active }">
@@ -24,11 +24,11 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center p-2 text-xs w-full font-semibold',
+                'group flex w-full items-center p-2 text-xs font-semibold',
               ]"
               @click="emit('sortTags', 'name', 'asc')"
             >
-              <NameAZIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <NameAZIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Alphabetical (A-Z)</span>
             </button>
           </MenuItem>
@@ -37,11 +37,11 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center p-2 text-xs w-full font-semibold',
+                'group flex w-full items-center p-2 text-xs font-semibold',
               ]"
               @click="emit('sortTags', 'name', 'desc')"
             >
-              <NameZAIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <NameZAIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Alphabetical (Z-A)</span>
             </button>
           </MenuItem>
@@ -50,11 +50,11 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center p-2 text-xs w-full font-semibold',
+                'group flex w-full items-center p-2 text-xs font-semibold',
               ]"
               @click="emit('sortTags', 'stars_count', 'desc')"
             >
-              <StarsCountHighIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <StarsCountHighIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Most Stars</span>
             </button>
           </MenuItem>
@@ -63,11 +63,11 @@
               type="button"
               :class="[
                 active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex items-center p-2 text-xs w-full font-semibold',
+                'group flex w-full items-center p-2 text-xs font-semibold',
               ]"
               @click="emit('sortTags', 'stars_count', 'asc')"
             >
-              <StarsCountLowIcon class="w-4 h-4 mr-1 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+              <StarsCountLowIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
               <span>Fewest Stars</span>
             </button>
           </MenuItem>

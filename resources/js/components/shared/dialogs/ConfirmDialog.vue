@@ -5,8 +5,8 @@
     modal-classes="sm:max-w-md px-4 pt-5 pb-4 sm:p-6"
   >
     <template #icon>
-      <div class="flex items-center justify-center flex-shrink-0 w-12 h-12 mx-auto bg-red-100 rounded-full">
-        <ExclamationIcon class="w-6 h-6 text-red-600" aria-hidden="true" />
+      <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+        <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
       </div>
     </template>
     <template #body>

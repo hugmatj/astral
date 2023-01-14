@@ -13,7 +13,7 @@
       <slot :repo="(item as GitHubRepo)" />
     </template>
   </VirtualScroller>
-  <div v-else class="flex items-center justify-center h-full">
+  <div v-else class="flex h-full items-center justify-center">
     <p class="text-center text-gray-500">No results found</p>
   </div>
 </template>

@@ -5,7 +5,7 @@
       <BaseTextInput
         ref="inputRef"
         :model-value="dateFns.format(selectedDate, 'yyyy-MM-dd')"
-        :class="{ 'flex-grow': true, 'ring-gray-400 dark:ring-gray-600 border-gray-400': open && isDatePickerShowing }"
+        :class="{ 'flex-grow': true, 'border-gray-400 ring-gray-400 dark:ring-gray-600': open && isDatePickerShowing }"
         readonly
       />
       <PopoverButton
@@ -18,7 +18,7 @@
       <div v-show="isDatePickerShowing && open">
         <PopoverPanel
           static
-          class="absolute z-10 w-64 p-2 -mt-2 text-xs -translate-y-full bg-white border rounded shadow-sm datepicker"
+          class="datepicker absolute z-10 -mt-2 w-64 -translate-y-full rounded border bg-white p-2 text-xs shadow-sm"
           :style="{
             left: inputRect.left + 'px',
             top: inputRect.top + 'px',
@@ -26,28 +26,28 @@
         >
           <div class="relative grid h-full grid-cols-7 overflow-hidden">
             <header
-              class="flex items-center justify-between col-span-7 px-3 pt-2 pb-4 font-semibold text-center text-gray-700"
+              class="col-span-7 flex items-center justify-between px-3 pt-2 pb-4 text-center font-semibold text-gray-700"
             >
               <button aria-label="Previous Month" type="button" @click="previousMonth()">
-                <ArrowSmLeftIcon class="w-4 h-4" />
+                <ArrowSmLeftIcon class="h-4 w-4" />
               </button>
               <span>{{ currentMonthLabel }} {{ currentYear }}</span>
               <button aria-label="Next Month" type="button" @click="nextMonth()">
-                <ArrowSmRightIcon class="w-4 h-4" />
+                <ArrowSmRightIcon class="h-4 w-4" />
               </button>
             </header>
-            <div v-for="dayLabel in DAY_LABELS" :key="dayLabel" class="font-semibold text-center headings">
+            <div v-for="dayLabel in DAY_LABELS" :key="dayLabel" class="headings text-center font-semibold">
               {{ dayLabel }}
             </div>
             <PopoverButton
               v-for="(day, index) in dates"
               :key="index"
-              class="w-full text-center border border-transparent rounded aspect-square hover:border-gray-300"
+              class="aspect-square w-full rounded border border-transparent text-center hover:border-gray-300"
               :class="{
                 'bg-gray-100': day.isToday,
                 'text-gray-700': day.isCurrentMonth,
                 'text-gray-300': !day.isCurrentMonth,
-                'bg-brand-100 text-brand-700 font-bold hover:border-brand-400': day.isSelected,
+                'bg-brand-100 font-bold text-brand-700 hover:border-brand-400': day.isSelected,
               }"
               type="button"
               @click="setSelectedDate(day)"

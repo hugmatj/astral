@@ -8,13 +8,13 @@
     as="template"
   >
     <div
-      class="absolute bottom-0 right-0 z-30 flex items-center px-3 py-2 mb-4 mr-4 text-sm font-semibold transition duration-300 transform rounded-full"
+      class="absolute bottom-0 right-0 z-30 mb-4 mr-4 flex transform items-center rounded-full px-3 py-2 text-sm font-semibold transition duration-300"
       :class="toastClasses"
       aria-role="status"
       aria-live="assertive"
     >
-      <CheckCircleIcon v-if="currentType === ToastType.Success" class="w-5 h-5 mr-1" aria-hidden="true" />
-      <XCircleIcon v-if="currentType === ToastType.Error" class="w-5 h-5 mr-1" aria-hidden="true" />
+      <CheckCircleIcon v-if="currentType === ToastType.Success" class="mr-1 h-5 w-5" aria-hidden="true" />
+      <XCircleIcon v-if="currentType === ToastType.Error" class="mr-1 h-5 w-5" aria-hidden="true" />
       <span class="sr-only">{{ currentType === ToastType.Success ? 'Success: ' : 'Error: ' }}</span>
       {{ currentMessage }}
     </div>

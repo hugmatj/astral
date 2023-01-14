@@ -6,7 +6,7 @@
     :is-highlighted="isHighlighted"
     :has-context-menu="true"
     :is-context-menu-active="isContextMenuActive"
-    class="py-1 rounded-md sidebar-tag"
+    class="sidebar-tag rounded-md py-1"
     @dragover="onDragOver"
     @dragleave="onDragLeave"
     @drop="onDrop"
@@ -20,7 +20,7 @@
         <Menu v-slot="{ open }" as="div" class="relative">
           <WatchValue :value="open" @change="isContextMenuActive = !!$event" />
           <MenuButton
-            class="top-0 right-0 w-5 h-5 text-gray-300 transition-opacity opacity-0 hover:text-gray-200 group-hover:opacity-100"
+            class="top-0 right-0 h-5 w-5 text-gray-300 opacity-0 transition-opacity hover:text-gray-200 group-hover:opacity-100"
             :class="[open && 'opacity-100']"
             @click.stop=""
           >
@@ -35,19 +35,19 @@
             leave-to-class="transform scale-95 opacity-0"
           >
             <MenuItems
-              class="absolute z-20 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg w-28 right-2 sm:right-0 ring-1 ring-black ring-opacity-5 focus:outline-none"
+              class="absolute right-2 z-20 mt-2 w-28 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:right-0"
             >
               <div class="py-1">
                 <MenuItem v-slot="{ active }">
                   <button
                     :class="[
                       active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                      'group-one flex items-center p-2 text-xs w-full font-semibold',
+                      'group-one flex w-full items-center p-2 text-xs font-semibold',
                     ]"
                     @click.stop="showRenameTagDialog(tag)"
                   >
                     <PencilAltIcon
-                      class="w-4 h-4 mr-1 text-gray-400 group-one-hover:text-indigo-500"
+                      class="mr-1 h-4 w-4 text-gray-400 group-one-hover:text-indigo-500"
                       aria-hidden="true"
                     />
                     <span>Rename</span>
@@ -57,11 +57,11 @@
                   <button
                     :class="[
                       active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                      'group-one flex items-center p-2 text-xs w-full font-semibold',
+                      'group-one flex w-full items-center p-2 text-xs font-semibold',
                     ]"
                     @click.stop="deleteTag"
                   >
-                    <TrashIcon class="w-4 h-4 mr-1 text-gray-400 group-one-hover:text-indigo-500" aria-hidden="true" />
+                    <TrashIcon class="mr-1 h-4 w-4 text-gray-400 group-one-hover:text-indigo-500" aria-hidden="true" />
                     <span>Delete</span>
                   </button>
                 </MenuItem>

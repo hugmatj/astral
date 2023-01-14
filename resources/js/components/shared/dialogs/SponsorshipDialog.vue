@@ -1,8 +1,8 @@
 <template>
   <ActionDialog :is-open="isOpen" :hide="hide">
     <template #icon>
-      <div class="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full">
-        <UserGroupIcon class="w-6 h-6 text-green-600" aria-hidden="true" />
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+        <UserGroupIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
       </div>
     </template>
     <template #title>Sponsorship Required</template>

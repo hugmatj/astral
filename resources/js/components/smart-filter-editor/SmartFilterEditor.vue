@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(group, i) in filterBody.groups" :key="`group-${i}`" class="py-8 border-b border-gray-200 group">
+    <div v-for="(group, i) in filterBody.groups" :key="`group-${i}`" class="group border-b border-gray-200 py-8">
       <div class="flex items-center">
         <BaseSelect v-model="group.logicalType" class="w-auto">
           <option value="any">Any</option>
@@ -9,21 +9,21 @@
         </BaseSelect>
         <BaseButton
           v-if="filterBody.groups.length > 1"
-          class="ml-auto space-x-1 transition-opacity opacity-0 btn btn-grey hover:bg-red-50 group-hover:opacity-100"
+          class="btn btn-grey ml-auto space-x-1 opacity-0 transition-opacity hover:bg-red-50 group-hover:opacity-100"
           kind="danger-borderless"
           size="sm"
           @click="removeGroup(i)"
         >
-          <MinusCircleIcon class="w-4 h-4" aria-hidden="true" />
+          <MinusCircleIcon class="h-4 w-4" aria-hidden="true" />
           <span>Remove Group</span></BaseButton
         >
       </div>
       <div
         v-for="(predicate, j) in group.predicates"
         :key="`group-${i}-predicate-${j}`"
-        class="flex items-center w-full mt-4"
+        class="mt-4 flex w-full items-center"
       >
-        <div class="flex items-center w-full space-x-2">
+        <div class="flex w-full items-center space-x-2">
           <BaseSelect v-model="predicate.selectedTarget" @change="setDefaultArgumentValue(predicate)">
             <option
               v-for="(target, k) in predicateTargets"
@@ -52,30 +52,30 @@
             v-model="predicate.argument"
           />
         </div>
-        <div class="flex-shrink-0 pl-2 ml-auto space-x-2">
+        <div class="ml-auto flex-shrink-0 space-x-2 pl-2">
           <button
             type="button"
-            class="inline-flex items-center justify-center w-8 h-8 text-lg font-semibold text-gray-400 transition-colors bg-gray-100 border-2 border-gray-400 rounded-full shadow-md hover:text-gray-500 hover:border-gray-500 active:bg-gray-200"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200"
             aria-label="Add Row"
             @click="appendRow(i)"
           >
-            <PlusIcon class="w-5 h-5" />
+            <PlusIcon class="h-5 w-5" />
           </button>
           <button
             v-if="group.predicates.length > 1"
             type="button"
-            class="inline-flex items-center justify-center w-8 h-8 text-lg font-semibold text-gray-400 transition-colors bg-gray-100 border-2 border-gray-400 rounded-full shadow-md hover:text-gray-500 hover:border-gray-500 active:bg-gray-200"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200"
             aria-label="Remove Row"
             @click="removeRow(i, j)"
           >
-            <MinusIcon class="w-5 h-5" />
+            <MinusIcon class="h-5 w-5" />
           </button>
         </div>
       </div>
     </div>
     <div class="mt-4">
-      <BaseButton class="space-x-1 btn btn-grey hover:bg-brand-50" kind="primary-borderless" @click="appendGroup">
-        <PlusIcon class="w-5 h-5" aria-hidden="true" />
+      <BaseButton class="btn btn-grey space-x-1 hover:bg-brand-50" kind="primary-borderless" @click="appendGroup">
+        <PlusIcon class="h-5 w-5" aria-hidden="true" />
         <span>Add Group</span>
       </BaseButton>
     </div>

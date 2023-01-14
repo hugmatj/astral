@@ -7,7 +7,7 @@
     "github",
     "stars"
   ],
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "require": {
     "php": "^8.2",
     "doctrine/dbal": "^3.3",
