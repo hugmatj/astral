@@ -26,12 +26,12 @@ export interface PredicateOperator {
 
 export type PredicateTargetType = 'String' | 'Number' | 'State' | 'Tags' | 'Language' | 'Date'
 
-export interface PredicateTarget {
+export interface PredicateTarget<T> {
   label: string
   key: string
   type: PredicateTargetType
   operators: PredicateOperator[]
-  defaultValue?: unknown | (() => unknown)
+  defaultValue?: T | (() => T)
 }
 
 export const defaultPredicate: Predicate = {
@@ -167,7 +167,7 @@ export const stateOperators: PredicateOperator[] = [
   { key: 'isntState', label: "isn't", check: (target: string | number) => Boolean(target) === false },
 ]
 
-export const predicateTargets: PredicateTarget[] = [
+export const predicateTargets: PredicateTarget<string | Tag[] | RepoLanguage[] | Record<string, string>>[] = [
   {
     label: 'Name',
     key: 'node.nameWithOwner',
@@ -201,14 +201,14 @@ export const predicateTargets: PredicateTarget[] = [
     key: 'tags',
     type: 'Tags',
     operators: tagOperators,
-    defaultValue: [],
+    defaultValue: [] as Tag[],
   },
   {
     label: 'Language',
     key: 'node.primaryLanguage.name',
     type: 'Language',
     operators: languageOperators,
-    defaultValue: [],
+    defaultValue: [] as RepoLanguage[],
   },
   {
     label: 'State',
