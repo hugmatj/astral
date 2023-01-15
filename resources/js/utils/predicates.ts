@@ -12,11 +12,11 @@ export interface PredicateGroup {
 }
 
 type PredicateOperatorCheck =
+  | ((target: string | number) => boolean)
   | ((source: string, target: string) => boolean)
   | ((source: number, target: number) => boolean)
   | ((source: Tag[], target: Tag[]) => boolean)
   | ((source: string, target: RepoLanguage[]) => boolean)
-  | ((target: string | number) => boolean)
 
 export interface PredicateOperator {
   key: string
@@ -92,19 +92,35 @@ export const tagOperators: PredicateOperator[] = [
   {
     key: 'hasAnyTags',
     label: 'has any',
-    check: (source: Tag[], target: Tag[]) => target.map(t => t.name).some(val => source.map(t => t.name).includes(val)),
+    check: (source: Tag[], target: Tag[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      return target.map(t => t.name).some(val => source.map(t => t.name).includes(val))
+    },
   },
   {
     key: 'hasAllTags',
     label: 'has all',
-    check: (source: Tag[], target: Tag[]) =>
-      target.map(t => t.name).every(val => source.map(t => t.name).includes(val)),
+    check: (source: Tag[], target: Tag[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      return target.map(t => t.name).every(val => source.map(t => t.name).includes(val))
+    },
   },
   {
     key: 'hasNoneTags',
     label: 'has none',
-    check: (source: Tag[], target: Tag[]) =>
-      !target.map(t => t.name).some(val => source.map(t => t.name).includes(val)),
+    check: (source: Tag[], target: Tag[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      return !target.map(t => t.name).some(val => source.map(t => t.name).includes(val))
+    },
   },
 ]
 
@@ -125,12 +141,24 @@ export const languageOperators: PredicateOperator[] = [
   {
     key: 'hasAnyLanguage',
     label: 'has any',
-    check: (source: string, target: RepoLanguage[]) => target.map(l => l.name).includes(source),
+    check: (source: string, target: RepoLanguage[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      return target.map(l => l.name).includes(source)
+    },
   },
   {
     key: 'hasNoneLanguage',
     label: 'has none',
-    check: (source: string, target: RepoLanguage[]) => !target.map(l => l.name).includes(source),
+    check: (source: string, target: RepoLanguage[]) => {
+      if (source === undefined) {
+        return false
+      }
+
+      return !target.map(l => l.name).includes(source)
+    },
   },
 ]
 

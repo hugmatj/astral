@@ -14,6 +14,7 @@ import {
   FetchDirection,
   StarMetaInput,
   TagEditorTag,
+  Tag,
 } from '@/types'
 import {
   PredicateGroup,
@@ -109,10 +110,19 @@ export const useStarsStore = defineStore({
               (p: Predicate) => {
                 const operator: Maybe<PredicateOperator> = operators.find(o => o.key === p.operator)
                 if (operator) {
-                  if (get(repo, p.selectedTarget)) {
-                    return operator.check(get(repo, p.selectedTarget), p.argument)
+                  if (p.selectedTarget === 'tags') {
+                    const userStar = this.userStarsByRepoId[repo.node.databaseId]
+                    if (!userStar) return false
+
+                    const tags = userStar.tags
+
+                    return operator.check(tags, p.argument as Tag[])
                   } else {
-                    return operator.check(get(repo, (p.argument as PredicateTarget).key))
+                    if (get(repo, p.selectedTarget)) {
+                      return operator.check(get(repo, p.selectedTarget), p.argument)
+                    } else {
+                      return operator.check(get(repo, (p.argument as PredicateTarget).key))
+                    }
                   }
                 } else {
                   return false
