@@ -1,7 +1,3 @@
-<template>
-  <TransitionGroup :css="false" @before-enter="beforeEnter" @enter="enter" @leave="leave"><slot /></TransitionGroup>
-</template>
-
 <script setup lang="ts">
 const randomIntFromRange = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -31,3 +27,7 @@ const leave = (el: Element, done: () => void) => {
   })
 }
 </script>
+
+<template>
+  <TransitionGroup :css="false" @before-enter="beforeEnter" @enter="enter" @leave="leave"><slot /></TransitionGroup>
+</template>

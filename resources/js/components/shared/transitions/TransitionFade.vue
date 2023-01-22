@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import { TransitionRoot } from '@headlessui/vue'
+</script>
+
 <template>
   <TransitionRoot
     enter="transition-opacity"
@@ -10,13 +14,3 @@
     <slot />
   </TransitionRoot>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { TransitionRoot } from '@headlessui/vue'
-export default defineComponent({
-  components: {
-    TransitionRoot,
-  },
-})
-</script>

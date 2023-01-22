@@ -1,3 +1,13 @@
+<script lang="ts" setup>
+import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
+const props = defineProps<{
+  isOpen: boolean
+  hide: () => void
+  modalClasses?: string | string[] | Record<string, string>
+}>()
+</script>
+
 <template>
   <TransitionRoot as="template" :show="isOpen">
     <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hide">
@@ -18,6 +28,7 @@
 
         <!-- This element is to trick the browser into centering the modal contents. -->
         <span class="hidden sm:inline-block sm:h-screen sm:align-middle" aria-hidden="true">&#8203;</span>
+
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -38,13 +49,3 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
-<script lang="ts" setup>
-import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headlessui/vue'
-
-const props = defineProps<{
-  isOpen: boolean
-  hide: () => void
-  modalClasses?: string | string[] | Record<string, string>
-}>()
-</script>

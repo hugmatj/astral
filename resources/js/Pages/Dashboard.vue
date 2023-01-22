@@ -1,118 +1,5 @@
-<template>
-  <div class="absolute top-0 left-0 h-screen w-screen overflow-hidden bg-gray-50">
-    <div class="dashboard-grid grid h-screen">
-      <!-- Nav -->
-      <div
-        class="col-span-full flex items-center bg-brand-600 px-4 transition-transform duration-300"
-        :class="{
-          'translate-x-8': isSidebarOpen,
-        }"
-      >
-        <div class="flex w-1/3 items-center sm:hidden">
-          <button
-            class="inline-flex h-6 w-6 items-center justify-center text-white"
-            @click="isSidebarOpen = !isSidebarOpen"
-          >
-            <MenuIcon />
-          </button>
-        </div>
-        <div class="flex w-1/3 flex-shrink-0 items-center justify-start">
-          <LogoSvg class="h-6 fill-current text-white sm:h-8" aria-label="Astral" />
-        </div>
-        <div class="flex w-1/3 justify-end sm:w-2/3">
-          <UserMenu @show-settings="showSettingsModal" />
-        </div>
-      </div>
-      <!-- Sidebar -->
-      <div
-        class="absolute inset-0 z-20 col-start-1 row-start-2 row-end-3 flex bg-gray-900 backdrop-filter transition-colors duration-300 ease-in-out sm:pointer-events-auto sm:relative"
-        :aria-hidden="!isSidebarOpen"
-        :class="{
-          'pointer-events-none bg-opacity-0': !isSidebarOpen,
-          'bg-opacity-75 backdrop-blur-sm': isSidebarOpen,
-        }"
-      >
-        <div
-          class="w-3/4 transform-gpu transition-transform duration-300 ease-in-out sm:w-full sm:translate-x-0"
-          :class="{
-            '-translate-x-full': !isSidebarOpen,
-            'translate-x-0': isSidebarOpen,
-          }"
-        >
-          <Sidebar
-            @all-stars-selected="onAllStarsSelected"
-            @untagged-selected="onUntaggedSelected"
-            @tag-selected="onTagSelected"
-            @smart-filter-selected="onSmartFilterSelected"
-            @language-selected="onLanguageSelected"
-          />
-        </div>
-        <button
-          v-show="isSidebarOpen"
-          class="flex flex-grow justify-center pt-5"
-          aria-label="Close Sidebar"
-          @click="isSidebarOpen = !isSidebarOpen"
-        >
-          <div class="inline-flex h-10 w-10 items-center justify-center text-4xl text-white" aria-hidden="true">
-            <CloseIcon />
-          </div>
-        </button>
-      </div>
-      <!-- Starred Repo List -->
-      <div
-        class="relative flex flex-col border-r border-gray-300 transition-transform duration-300 dark:border-gray-600"
-        :class="{
-          'translate-x-8': isSidebarOpen,
-        }"
-      >
-        <Galileo />
-        <StarredRepoList
-          v-slot="{ repo }"
-          class="focus:outline-none"
-          @focus="isStarsListFocused = true"
-          @blur="isStarsListFocused = false"
-        >
-          <StarredRepo
-            :repo="repo"
-            @selected="onRepoSelected"
-            @tag-selected="onTagSelected"
-            @language-selected="onLanguageSelected"
-          />
-        </StarredRepoList>
-      </div>
-      <!-- Selected Star Info -->
-      <div
-        class="pointer-events-auto absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transform-gpu bg-white transition-transform duration-300 ease-in-out dark:bg-gray-900 sm:relative sm:translate-x-0"
-        :class="{
-          'pointer-events-none translate-x-full': !isReadmeOpen,
-          'translate-x-0': isReadmeOpen,
-        }"
-      >
-        <button
-          class="absolute top-0 left-0 z-10 mt-20 ml-5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 text-gray-700 sm:hidden"
-          @click="isReadmeOpen = false"
-        >
-          <ArrowCircleLeftIcon />
-        </button>
-        <div class="relative flex h-full flex-col">
-          <RepoToolbar v-if="starsStore.isAnyRepoSelected" />
-          <Readme />
-          <NotesEditor v-if="starsStore.isAnyRepoSelected" :is-open="true" />
-        </div>
-      </div>
-    </div>
-    <SponsorshipDialog />
-    <RenameTagDialog />
-    <SettingsModal />
-    <UpgradeOAuthScopeDialog />
-    <SmartFiltersDialog />
-    <GlobalToast />
-    <ConfirmDialog />
-  </div>
-</template>
-
 <script lang="ts" setup>
-import { ref, watch, PropType, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { Errors } from '@inertiajs/core'
 import { useUserStore } from '@/store/useUserStore'
@@ -145,37 +32,18 @@ import { GitHubRepo, Tag, UserStar, User, Ability, Limits, Authorizations, Smart
 import { ArrowCircleLeftIcon, XCircleIcon as CloseIcon, MenuAlt1Icon as MenuIcon } from '@heroicons/vue/outline'
 import LogoSvg from '@/../img/logo.svg?component'
 
-const props = defineProps({
-  user: {
-    type: Object as PropType<User>,
-    required: true,
-  },
-  tags: {
-    type: Array as PropType<Tag[]>,
-    required: true,
-  },
-  stars: {
-    type: Array as PropType<UserStar[]>,
-    required: true,
-  },
-  smartFilters: {
-    type: Array as PropType<SmartFilter[]>,
-    required: true,
-  },
-  abilities: {
-    type: Object as PropType<Authorizations>,
-    required: true,
-  },
-  limits: {
-    type: Object as PropType<Limits>,
-    required: true,
-  },
-  errors: {
-    type: Object as PropType<Errors>,
-    default: () => {
-      return {}
-    },
-  },
+interface Props {
+  user: User
+  tags: Tag[]
+  stars: UserStar[]
+  smartFilters: SmartFilter[]
+  abilities: Authorizations
+  limits: Limits
+  errors: Errors
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  errors: () => ({} as Errors),
 })
 
 const userStore = useUserStore()
@@ -185,7 +53,7 @@ const starsStore = useStarsStore()
 const starsFilterStore = useStarsFilterStore()
 const smartFiltersStore = useSmartFiltersStore()
 const { show: showSponsorshipDialog } = useSponsorshipDialog()
-const { show: showSettingsModal } = useSettingsDialog()
+const { show: showSettingsDialog } = useSettingsDialog()
 const { params: urlParams, clearParams } = useUrlParams()
 
 useSyncValuesToStores(
@@ -278,6 +146,136 @@ watch(
   { immediate: true }
 )
 </script>
+
+<template>
+  <div class="absolute top-0 left-0 h-screen w-screen overflow-hidden bg-gray-50">
+    <div class="dashboard-grid grid h-screen">
+      <!-- Nav -->
+      <div
+        class="col-span-full flex items-center bg-brand-600 px-4 transition-transform duration-300"
+        :class="{
+          'translate-x-8': isSidebarOpen,
+        }"
+      >
+        <div class="flex w-1/3 items-center sm:hidden">
+          <button
+            class="inline-flex h-6 w-6 items-center justify-center text-white"
+            @click="isSidebarOpen = !isSidebarOpen"
+          >
+            <MenuIcon />
+          </button>
+        </div>
+
+        <div class="flex w-1/3 flex-shrink-0 items-center justify-start">
+          <LogoSvg class="h-6 fill-current text-white sm:h-8" aria-label="Astral" />
+        </div>
+
+        <div class="flex w-1/3 justify-end sm:w-2/3">
+          <UserMenu @show-settings="showSettingsDialog" />
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div
+        class="absolute inset-0 z-20 col-start-1 row-start-2 row-end-3 flex bg-gray-900 backdrop-filter transition-colors duration-300 ease-in-out sm:pointer-events-auto sm:relative"
+        :aria-hidden="!isSidebarOpen"
+        :class="{
+          'pointer-events-none bg-opacity-0': !isSidebarOpen,
+          'bg-opacity-75 backdrop-blur-sm': isSidebarOpen,
+        }"
+      >
+        <div
+          class="w-3/4 transform-gpu transition-transform duration-300 ease-in-out sm:w-full sm:translate-x-0"
+          :class="{
+            '-translate-x-full': !isSidebarOpen,
+            'translate-x-0': isSidebarOpen,
+          }"
+        >
+          <Sidebar
+            @all-stars-selected="onAllStarsSelected"
+            @untagged-selected="onUntaggedSelected"
+            @tag-selected="onTagSelected"
+            @smart-filter-selected="onSmartFilterSelected"
+            @language-selected="onLanguageSelected"
+          />
+        </div>
+
+        <button
+          v-show="isSidebarOpen"
+          class="flex flex-grow justify-center pt-5"
+          aria-label="Close Sidebar"
+          @click="isSidebarOpen = !isSidebarOpen"
+        >
+          <div class="inline-flex h-10 w-10 items-center justify-center text-4xl text-white" aria-hidden="true">
+            <CloseIcon />
+          </div>
+        </button>
+      </div>
+
+      <!-- Starred Repo List -->
+      <div
+        class="relative flex flex-col border-r border-gray-300 transition-transform duration-300 dark:border-gray-600"
+        :class="{
+          'translate-x-8': isSidebarOpen,
+        }"
+      >
+        <Galileo />
+
+        <StarredRepoList
+          v-slot="{ repo }"
+          class="focus:outline-none"
+          @focus="isStarsListFocused = true"
+          @blur="isStarsListFocused = false"
+        >
+          <StarredRepo
+            :repo="repo"
+            @selected="onRepoSelected"
+            @tag-selected="onTagSelected"
+            @language-selected="onLanguageSelected"
+          />
+        </StarredRepoList>
+      </div>
+
+      <!-- Selected Star Info -->
+      <div
+        class="pointer-events-auto absolute inset-0 z-10 col-start-3 row-start-2 row-end-3 transform-gpu bg-white transition-transform duration-300 ease-in-out dark:bg-gray-900 sm:relative sm:translate-x-0"
+        :class="{
+          'pointer-events-none translate-x-full': !isReadmeOpen,
+          'translate-x-0': isReadmeOpen,
+        }"
+      >
+        <button
+          class="absolute top-0 left-0 z-10 mt-20 ml-5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 text-gray-700 sm:hidden"
+          @click="isReadmeOpen = false"
+        >
+          <ArrowCircleLeftIcon />
+        </button>
+
+        <div class="relative flex h-full flex-col">
+          <RepoToolbar v-if="starsStore.isAnyRepoSelected" />
+
+          <Readme />
+
+          <NotesEditor v-if="starsStore.isAnyRepoSelected" is-open />
+        </div>
+      </div>
+    </div>
+
+    <SponsorshipDialog />
+
+    <RenameTagDialog />
+
+    <SettingsModal />
+
+    <UpgradeOAuthScopeDialog />
+
+    <SmartFiltersDialog />
+
+    <GlobalToast />
+
+    <ConfirmDialog />
+  </div>
+</template>
 
 <style>
 .dashboard-grid {

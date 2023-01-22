@@ -1,3 +1,19 @@
+<script lang="ts" setup>
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
+
+defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+  collapsible: {
+    type: Boolean,
+    default: false,
+  },
+})
+</script>
+
 <template>
   <Disclosure v-slot="{ open }" as="div" :default-open="true">
     <div class="flex w-full items-center">
@@ -14,11 +30,13 @@
             style="top: -1px"
             aria-hidden="true"
           />
+
           <span class="select-none text-xs font-bold uppercase tracking-wider">
             {{ title }}
           </span>
         </DisclosureButton>
       </div>
+
       <div
         class="ml-auto flex-shrink-0"
         :class="{
@@ -29,24 +47,9 @@
         <slot name="right-action"></slot>
       </div>
     </div>
+
     <DisclosurePanel v-show="open || !collapsible" static>
       <slot />
     </DisclosurePanel>
   </Disclosure>
 </template>
-
-<script lang="ts" setup>
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { ChevronRightIcon as CaretIcon } from '@heroicons/vue/solid'
-
-defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  collapsible: {
-    type: Boolean,
-    default: false,
-  },
-})
-</script>

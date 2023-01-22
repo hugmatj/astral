@@ -6,7 +6,7 @@ import svgLoader from 'vite-svg-loader'
 export default defineConfig({
   plugins: [
     vue({
-      reactivityTransform: true,
+      reactivityTransform: false,
       template: {
         transformAssetUrls: {
           base: null,

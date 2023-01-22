@@ -1,41 +1,3 @@
-<template>
-  <ActionDialog :is-open="isOpen" :hide="hide">
-    <template #icon>
-      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-        <UserGroupIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
-      </div>
-    </template>
-    <template #title>Sponsorship Required</template>
-    <template #body>
-      <p v-if="currentMessage" class="text-gray-500">
-        <span>{{ currentMessage }}</span> you must be an active
-        <a
-          href="https://github.com/sponsors"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-semibold text-brand-700 focus:outline-none"
-          >GitHub Sponsor</a
-        >
-        of the project. You can sponsor as little as $1 per month to get full access to all of Astral's features.
-      </p>
-    </template>
-    <template #actions>
-      <BaseButton class="w-full" @click="hide"> Nevermind </BaseButton>
-      <BaseButton
-        as="link"
-        kind="primary"
-        href="https://github.com/sponsors/syropian"
-        rel="noopener noreferrer"
-        target="_blank"
-        class="w-full"
-        @click="hide"
-      >
-        I'd like to be a sponsor!
-      </BaseButton>
-    </template>
-  </ActionDialog>
-</template>
-
 <script lang="ts" setup>
 import { computed, Ref } from 'vue'
 import { useSponsorshipDialog } from '@/composables/useSponsorshipDialog'
@@ -58,3 +20,46 @@ const currentMessage: Ref<string | null> = computed(() =>
   currentContext.value ? DIALOG_MESSAGES[currentContext.value] : null
 )
 </script>
+
+<template>
+  <ActionDialog :is-open="isOpen" :hide="hide">
+    <template #icon>
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+        <UserGroupIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
+      </div>
+    </template>
+
+    <template #title>Sponsorship Required</template>
+
+    <template #body>
+      <p v-if="currentMessage" class="text-gray-500">
+        <span>{{ currentMessage }}</span>
+        you must be an active
+        <a
+          href="https://github.com/sponsors"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-semibold text-brand-700 focus:outline-none"
+          >GitHub Sponsor</a
+        >
+        of the project. You can sponsor as little as $1 per month to get full access to all of Astral's features.
+      </p>
+    </template>
+
+    <template #actions>
+      <BaseButton class="w-full" @click="hide"> Nevermind </BaseButton>
+
+      <BaseButton
+        as="link"
+        kind="primary"
+        href="https://github.com/sponsors/syropian"
+        rel="noopener noreferrer"
+        target="_blank"
+        class="w-full"
+        @click="hide"
+      >
+        I'd like to be a sponsor!
+      </BaseButton>
+    </template>
+  </ActionDialog>
+</template>

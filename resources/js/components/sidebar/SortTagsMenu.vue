@@ -1,3 +1,17 @@
+<script lang="ts" setup>
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+import { SwitchVerticalIcon } from '@heroicons/vue/solid'
+import { FetchDirection, TagSortMethod } from '@/types'
+import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
+import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
+import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
+import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
+
+const emit = defineEmits<{
+  (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
+}>()
+</script>
+
 <template>
   <Menu v-slot="{ open }" as="div" class="relative">
     <MenuButton
@@ -5,8 +19,10 @@
       :class="{ 'text-gray-50': open }"
     >
       <span class="text-xs uppercase tracking-wider">Sort</span>
+
       <SwitchVerticalIcon class="ml-1 h-4 w-4" aria-hidden="true" />
     </MenuButton>
+
     <transition
       enter-active-class="transition duration-100 ease-out"
       enter-from-class="transform scale-95 opacity-0"
@@ -22,52 +38,51 @@
           <MenuItem v-slot="{ active }">
             <button
               type="button"
-              :class="[
-                active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex w-full items-center p-2 text-xs font-semibold',
-              ]"
+              class="group flex w-full items-center p-2 text-xs font-semibold"
+              :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'name', 'asc')"
             >
               <NameAZIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+
               <span>Alphabetical (A-Z)</span>
             </button>
           </MenuItem>
+
           <MenuItem v-slot="{ active }">
             <button
               type="button"
-              :class="[
-                active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex w-full items-center p-2 text-xs font-semibold',
-              ]"
+              class="group flex w-full items-center p-2 text-xs font-semibold"
+              :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'name', 'desc')"
             >
               <NameZAIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+
               <span>Alphabetical (Z-A)</span>
             </button>
           </MenuItem>
+
           <MenuItem v-slot="{ active }">
             <button
               type="button"
-              :class="[
-                active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex w-full items-center p-2 text-xs font-semibold',
-              ]"
+              class="group flex w-full items-center p-2 text-xs font-semibold"
+              :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'stars_count', 'desc')"
             >
               <StarsCountHighIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+
               <span>Most Stars</span>
             </button>
           </MenuItem>
+
           <MenuItem v-slot="{ active }">
             <button
               type="button"
-              :class="[
-                active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700',
-                'group flex w-full items-center p-2 text-xs font-semibold',
-              ]"
+              class="group flex w-full items-center p-2 text-xs font-semibold"
+              :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
               @click="emit('sortTags', 'stars_count', 'asc')"
             >
               <StarsCountLowIcon class="mr-1 h-4 w-4 text-gray-400 group-hover:text-indigo-500" aria-hidden="true" />
+
               <span>Fewest Stars</span>
             </button>
           </MenuItem>
@@ -76,16 +91,3 @@
     </transition>
   </Menu>
 </template>
-<script lang="ts" setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { SwitchVerticalIcon } from '@heroicons/vue/solid'
-import { FetchDirection, TagSortMethod } from '@/types'
-import NameAZIcon from '@/components/shared/icons/tag-sorting/NameAZIcon.vue'
-import NameZAIcon from '@/components/shared/icons/tag-sorting/NameZAIcon.vue'
-import StarsCountHighIcon from '@/components/shared/icons/tag-sorting/StarsCountHighIcon.vue'
-import StarsCountLowIcon from '@/components/shared/icons/tag-sorting/StarsCountLowIcon.vue'
-
-const emit = defineEmits<{
-  (e: 'sortTags', method: TagSortMethod, direction: Lowercase<FetchDirection>): void
-}>()
-</script>

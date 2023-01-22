@@ -1,23 +1,3 @@
-<template>
-  <VirtualScroller
-    v-if="starsStore.filteredRepos.length"
-    :default-size="156"
-    :items="starsStore.filteredRepos"
-    class="relative flex-grow bg-white"
-    role="listbox"
-    aria-label="Stars List"
-    aria-multiselectable="true"
-    tabindex="0"
-  >
-    <template #item="{ ref: item }">
-      <slot :repo="(item as GitHubRepo)" />
-    </template>
-  </VirtualScroller>
-  <div v-else class="flex h-full items-center justify-center">
-    <p class="text-center text-gray-500">No results found</p>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, watch, nextTick } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -60,3 +40,24 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
   }
 })
 </script>
+
+<template>
+  <VirtualScroller
+    v-if="starsStore.filteredRepos.length"
+    :default-size="156"
+    :items="starsStore.filteredRepos"
+    class="relative flex-grow bg-white"
+    role="listbox"
+    aria-label="Stars List"
+    aria-multiselectable="true"
+    tabindex="0"
+  >
+    <template #item="{ ref: item }">
+      <slot :repo="(item as GitHubRepo)" />
+    </template>
+  </VirtualScroller>
+
+  <div v-else class="flex h-full items-center justify-center">
+    <p class="text-center text-gray-500">No results found</p>
+  </div>
+</template>

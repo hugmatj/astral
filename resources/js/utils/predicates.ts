@@ -31,7 +31,7 @@ export interface PredicateTarget<T> {
   key: string
   type: PredicateTargetType
   operators: PredicateOperator[]
-  defaultValue?: T | (() => T)
+  defaultValue?: T
 }
 
 export const defaultPredicate: Predicate = {

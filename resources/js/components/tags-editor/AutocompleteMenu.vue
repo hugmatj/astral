@@ -1,43 +1,3 @@
-<template>
-  <teleport to="body">
-    <TransitionFade :show="shouldShow" as="div">
-      <ul
-        v-show="shouldShow"
-        class="absolute z-50 min-w-[150px] divide-y divide-gray-100 rounded-md border border-gray-200 bg-white py-1 shadow-lg"
-        role="combobox"
-        v-bind="$attrs"
-        :hidden="!shouldShow"
-      >
-        <li
-          v-for="(item, index) in visibleItems"
-          :key="item"
-          role="option"
-          :aria-selected="index === currentIndex"
-          class="cursor-pointer"
-          @click="selectActiveItem"
-          @mouseenter="currentIndex = index"
-          @mouseleave="currentIndex = -1"
-          @mousedown.prevent
-        >
-          <div
-            class="w-full px-4 py-2 text-xs"
-            :class="{
-              'font-medium text-gray-700': index !== currentIndex,
-              'bg-brand-500 font-semibold text-white': index === currentIndex,
-            }"
-          >
-            {{ item }}
-          </div>
-        </li>
-      </ul>
-      <span class="sr-only" role="status" aria-live="assertive" aria-atomic="true" hidden>
-        {{ visibleItems.length }}
-        {{ visibleItems.length === 1 ? 'result' : 'results' }} found
-      </span>
-    </TransitionFade>
-  </teleport>
-</template>
-
 <script lang="ts">
 export default {
   inheritAttrs: false,
@@ -118,3 +78,44 @@ onKeyStroke('Enter', e => {
 
 onKeyStroke('Escape', () => (isVisible.value = false))
 </script>
+
+<template>
+  <teleport to="body">
+    <TransitionFade :show="shouldShow" as="div">
+      <ul
+        v-show="shouldShow"
+        class="absolute z-50 min-w-[150px] divide-y divide-gray-100 rounded-md border border-gray-200 bg-white py-1 shadow-lg"
+        role="combobox"
+        v-bind="$attrs"
+        :hidden="!shouldShow"
+      >
+        <li
+          v-for="(item, index) in visibleItems"
+          :key="item"
+          role="option"
+          :aria-selected="index === currentIndex"
+          class="cursor-pointer"
+          @click="selectActiveItem"
+          @mouseenter="currentIndex = index"
+          @mouseleave="currentIndex = -1"
+          @mousedown.prevent
+        >
+          <div
+            class="w-full px-4 py-2 text-xs"
+            :class="{
+              'font-medium text-gray-700': index !== currentIndex,
+              'bg-brand-500 font-semibold text-white': index === currentIndex,
+            }"
+          >
+            {{ item }}
+          </div>
+        </li>
+      </ul>
+
+      <span class="sr-only" role="status" aria-live="assertive" aria-atomic="true" hidden>
+        {{ visibleItems.length }}
+        {{ visibleItems.length === 1 ? 'result' : 'results' }} found
+      </span>
+    </TransitionFade>
+  </teleport>
+</template>

@@ -1,3 +1,100 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import { router } from '@inertiajs/vue3'
+import { useEditor, EditorContent, Editor } from '@tiptap/vue-3'
+import { useNotesEditor } from '@/composables/useNotesEditor'
+import { useStarsStore } from '@/store/useStarsStore'
+import { useUserStore } from '@/store/useUserStore'
+import StarterKit from '@tiptap/starter-kit'
+import Typography from '@tiptap/extension-typography'
+import Placeholder from '@tiptap/extension-placeholder'
+import Underline from '@tiptap/extension-underline'
+import { TransitionChild, TransitionRoot } from '@headlessui/vue'
+import debounce from 'lodash/debounce'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
+import BoldIcon from '@/components/shared/icons/notes-editor/BoldIcon.vue'
+import ItalicsIcon from '@/components/shared/icons/notes-editor/ItalicsIcon.vue'
+import UnderlineIcon from '@/components/shared/icons/notes-editor/UnderlineIcon.vue'
+import CodeIcon from '@/components/shared/icons/notes-editor/CodeIcon.vue'
+import CodeBlockIcon from '@/components/shared/icons/notes-editor/CodeBlockIcon.vue'
+
+const starsStore = useStarsStore()
+const userStore = useUserStore()
+const { isOpen, hide } = useNotesEditor()
+const isSaving = ref(false)
+const isSaveToastVisible = ref(false)
+
+const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
+
+const initialNotes = JSON.parse(userStar.value?.notes || '{}')
+
+const editor = useEditor({
+  content: Object.keys(initialNotes).length ? initialNotes : '<p></p>',
+  extensions: [
+    StarterKit,
+    Typography,
+    Underline,
+    Placeholder.configure({
+      placeholder: 'Add some notes about this repo...',
+    }),
+  ],
+  onUpdate: debounce(({ editor }) => {
+    if (userStore.user?.settings.autosave_notes) {
+      saveNotes(editor)
+    }
+  }, 1000),
+  editorProps: {
+    attributes: {
+      class: 'prose focus:outline-none',
+    },
+  },
+})
+
+watch(
+  () => starsStore.selectedRepo,
+  () => {
+    const notes = JSON.parse(userStar.value?.notes || '{}')
+
+    editor.value?.commands.setContent(Object.keys(notes).length ? notes : '<p></p>')
+    editor.value?.commands.focus('end')
+  }
+)
+
+watch(isOpen, newVal => {
+  if (newVal) {
+    editor.value?.commands.focus('end')
+  }
+})
+
+watch(isSaving, newVal => {
+  if (newVal) {
+    isSaveToastVisible.value = true
+    setTimeout(() => {
+      isSaveToastVisible.value = false
+    }, 3000)
+  }
+})
+
+const saveNotes = (editor: Maybe<Editor>) => {
+  if (editor) {
+    isSaving.value = true
+    const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
+
+    router.put(
+      '/star/notes',
+      {
+        repoId: starsStore.selectedRepo.databaseId,
+        notes: notesData,
+      },
+      {
+        onFinish: () => (isSaving.value = false),
+        only: ['stars'],
+      }
+    )
+  }
+}
+</script>
+
 <template>
   <TransitionRoot as="template" :show="isOpen" appear>
     <div class="absolute inset-0 z-30 mt-16" aria-keyshortcuts="n">
@@ -10,6 +107,7 @@
       >
         <div class="absolute inset-0 bg-gray-500/75 transition-opacity duration-300" @click.self="hide"></div>
       </TransitionChild>
+
       <div class="relative h-full w-1/2 overflow-hidden py-8 lg:w-3/4">
         <TransitionChild
           as="template"
@@ -124,103 +222,6 @@
     </div>
   </TransitionRoot>
 </template>
-
-<script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { router } from '@inertiajs/vue3'
-import { useEditor, EditorContent, Editor } from '@tiptap/vue-3'
-import { useNotesEditor } from '@/composables/useNotesEditor'
-import { useStarsStore } from '@/store/useStarsStore'
-import { useUserStore } from '@/store/useUserStore'
-import StarterKit from '@tiptap/starter-kit'
-import Typography from '@tiptap/extension-typography'
-import Placeholder from '@tiptap/extension-placeholder'
-import Underline from '@tiptap/extension-underline'
-import { TransitionChild, TransitionRoot } from '@headlessui/vue'
-import debounce from 'lodash/debounce'
-import BaseButton from '@/components/shared/core/BaseButton.vue'
-import BoldIcon from '@/components/shared/icons/notes-editor/BoldIcon.vue'
-import ItalicsIcon from '@/components/shared/icons/notes-editor/ItalicsIcon.vue'
-import UnderlineIcon from '@/components/shared/icons/notes-editor/UnderlineIcon.vue'
-import CodeIcon from '@/components/shared/icons/notes-editor/CodeIcon.vue'
-import CodeBlockIcon from '@/components/shared/icons/notes-editor/CodeBlockIcon.vue'
-
-const starsStore = useStarsStore()
-const userStore = useUserStore()
-const { isOpen, hide } = useNotesEditor()
-const isSaving = ref(false)
-const isSaveToastVisible = ref(false)
-
-const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
-
-const initialNotes = JSON.parse(userStar.value?.notes || '{}')
-
-const editor = useEditor({
-  content: Object.keys(initialNotes).length ? initialNotes : '<p></p>',
-  extensions: [
-    StarterKit,
-    Typography,
-    Underline,
-    Placeholder.configure({
-      placeholder: 'Add some notes about this repo...',
-    }),
-  ],
-  onUpdate: debounce(({ editor }) => {
-    if (userStore.user?.settings.autosave_notes) {
-      saveNotes(editor)
-    }
-  }, 1000),
-  editorProps: {
-    attributes: {
-      class: 'prose focus:outline-none',
-    },
-  },
-})
-
-watch(
-  () => starsStore.selectedRepo,
-  () => {
-    const notes = JSON.parse(userStar.value?.notes || '{}')
-
-    editor.value?.commands.setContent(Object.keys(notes).length ? notes : '<p></p>')
-    editor.value?.commands.focus('end')
-  }
-)
-
-watch(isOpen, newVal => {
-  if (newVal) {
-    editor.value?.commands.focus('end')
-  }
-})
-
-watch(isSaving, newVal => {
-  if (newVal) {
-    isSaveToastVisible.value = true
-    setTimeout(() => {
-      isSaveToastVisible.value = false
-    }, 3000)
-  }
-})
-
-const saveNotes = (editor: Maybe<Editor>) => {
-  if (editor) {
-    isSaving.value = true
-    const notesData = editor.isEmpty ? null : JSON.stringify(editor.getJSON())
-
-    router.put(
-      '/star/notes',
-      {
-        repoId: starsStore.selectedRepo.databaseId,
-        notes: notesData,
-      },
-      {
-        onFinish: () => (isSaving.value = false),
-        only: ['stars'],
-      }
-    )
-  }
-}
-</script>
 
 <style lang="postcss">
 .ProseMirror {

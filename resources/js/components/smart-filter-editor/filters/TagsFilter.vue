@@ -1,12 +1,3 @@
-<template>
-  <TagsEditor
-    :tags="modelValue ?? []"
-    :can-create="false"
-    :autocomplete-options="autocompleteOptions"
-    class="flex-grow"
-    @change="emit('update:modelValue', $event)"
-  />
-</template>
 <script setup lang="ts">
 import { computed } from 'vue'
 import TagsEditor from '@/components/tags-editor/TagsEditor.vue'
@@ -29,3 +20,13 @@ const autocompleteOptions = computed(() => {
   return tagsStore.tags.map(tag => tag.name)
 })
 </script>
+
+<template>
+  <TagsEditor
+    :tags="modelValue ?? []"
+    :can-create="false"
+    :autocomplete-options="autocompleteOptions"
+    class="flex-grow"
+    @change="emit('update:modelValue', $event)"
+  />
+</template>

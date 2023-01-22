@@ -1,23 +1,20 @@
-<script lang="ts">
-import { defineComponent, watch } from 'vue'
-export default defineComponent({
-  props: {
-    value: {
-      required: true,
-      type: undefined,
-    },
-  },
-  emits: ['change'],
-  setup(props, { emit }) {
-    watch(
-      () => props.value,
-      val => {
-        emit('change', val)
-      }
-    )
-  },
-  render() {
-    return []
-  },
-})
+<script lang="ts" setup>
+import { watch } from 'vue'
+
+const props = defineProps<{
+  value: any
+}>()
+
+const emit = defineEmits<{
+  (e: 'change', value: any): void
+}>()
+
+watch(
+  () => props.value,
+  val => {
+    emit('change', val)
+  }
+)
 </script>
+
+<template><slot /></template>

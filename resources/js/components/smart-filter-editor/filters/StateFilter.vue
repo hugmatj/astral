@@ -1,8 +1,3 @@
-<template>
-  <BaseSelect :model-value="modelValue?.key" class="w-auto" @change="$emit('update:modelValue', modelValue?.key)">
-    <option v-for="state in stateOptions" :key="state.key" :value="state.key">{{ state.label }}</option>
-  </BaseSelect>
-</template>
 <script setup lang="ts">
 import BaseSelect from '@/components/shared/core/BaseSelect.vue'
 import { PredicateOperator } from '@/utils/predicates'
@@ -21,3 +16,9 @@ const emit = defineEmits<{
 
 const stateOptions = [{ key: 'node.isArchived', label: 'archived' }]
 </script>
+
+<template>
+  <BaseSelect :model-value="modelValue?.key" class="w-auto" @change="$emit('update:modelValue', modelValue?.key)">
+    <option v-for="state in stateOptions" :key="state.key" :value="state.key">{{ state.label }}</option>
+  </BaseSelect>
+</template>

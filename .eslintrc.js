@@ -1,37 +1,55 @@
 module.exports = {
-  root: true,
-  env: {
-    browser: true,
-    es2021: true,
-    node: true,
-  },
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: '@typescript-eslint/parser',
   },
-  extends: ['plugin:vue/strongly-recommended', 'eslint:recommended', '@vue/typescript/recommended', 'prettier'],
-  plugins: ['@typescript-eslint', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:vue/vue3-recommended',
+    'prettier',
+  ],
+  plugins: ['prettier'],
   rules: {
     'prettier/prettier': 'error',
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    '@typescript-eslint/no-unused-vars': ['off', { argsIgnorePattern: '^_' }],
-    'vue/no-v-html': 'off',
-    'vue/no-setup-props-destructure': 'off',
-    'vue/multi-word-component-names': 'off',
-  },
-  globals: {
-    defineProps: 'readonly',
-    defineEmits: 'readonly',
-    defineExpose: 'readonly',
-    withDefaults: 'readonly',
-  },
-  overrides: [
-    {
-      files: ['*.ts', '*.vue'],
-      rules: {
-        'no-undef': 'off',
+    'vue/component-tags-order': [
+      'error',
+      {
+        order: ['script', 'template', 'style'],
       },
-    },
-  ],
+    ],
+    'vue/no-reserved-component-names': 'off',
+    'vue/multi-word-component-names': 'off',
+    'vue/component-api-style': ['error', ['script-setup', 'composition']],
+    'vue/component-name-in-template-casing': 'error',
+    'vue/block-lang': [
+      'error',
+      {
+        script: { lang: 'ts' },
+      },
+    ],
+    'vue/define-macros-order': [
+      'warn',
+      {
+        order: ['defineProps', 'defineEmits'],
+      },
+    ],
+    'vue/define-emits-declaration': ['error', 'type-based'],
+    'vue/define-props-declaration': ['error', 'type-based'],
+    'vue/match-component-import-name': 'error',
+    'vue/no-ref-object-destructure': 'error',
+    'vue/no-unused-refs': 'error',
+    'vue/no-useless-v-bind': 'error',
+    'vue/padding-line-between-tags': 'warn',
+    'vue/padding-line-between-blocks': 'error',
+    'vue/prefer-separate-static-class': 'error',
+    'vue/prefer-true-attribute-shorthand': 'error',
+    'vue/no-v-html': 'off',
+
+    'no-undef': 'off',
+    'no-unused-vars': 'off',
+    'no-console': ['warn'],
+    'no-debugger': ['warn'],
+  },
+  ignorePatterns: ['*.d.ts'],
 }

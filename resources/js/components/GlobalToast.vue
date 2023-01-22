@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
+import { TransitionRoot } from '@headlessui/vue'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
+
+const { isVisible, currentMessage, currentType } = useGlobalToast()
+
+const toastClasses = computed(() => {
+  return {
+    [ToastType.Success]: 'bg-green-200 text-green-700',
+    [ToastType.Error]: 'bg-red-200 text-red-700',
+  }[currentType.value]
+})
+</script>
+
 <template>
   <TransitionRoot
     :show="isVisible"
@@ -14,25 +30,11 @@
       aria-live="assertive"
     >
       <CheckCircleIcon v-if="currentType === ToastType.Success" class="mr-1 h-5 w-5" aria-hidden="true" />
+
       <XCircleIcon v-if="currentType === ToastType.Error" class="mr-1 h-5 w-5" aria-hidden="true" />
+
       <span class="sr-only">{{ currentType === ToastType.Success ? 'Success: ' : 'Error: ' }}</span>
       {{ currentMessage }}
     </div>
   </TransitionRoot>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useGlobalToast, ToastType } from '@/composables/useGlobalToast'
-import { TransitionRoot } from '@headlessui/vue'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/solid'
-
-const { isVisible, currentMessage, currentType } = useGlobalToast()
-
-const toastClasses = computed(() => {
-  return {
-    [ToastType.Success]: 'bg-green-200 text-green-700',
-    [ToastType.Error]: 'bg-red-200 text-red-700',
-  }[currentType.value]
-})
-</script>

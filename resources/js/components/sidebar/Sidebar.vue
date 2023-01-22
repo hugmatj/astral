@@ -1,135 +1,3 @@
-<template>
-  <div class="h-full overflow-y-auto bg-gray-900 p-4 dark:border-r dark:border-gray-600">
-    <div class="mt-6 space-y-6">
-      <SidebarGroup title="Stars">
-        <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars" tabindex="0">
-          <SidebarItem
-            title="All Stars"
-            :is-active="starsFilterStore.isFilteringByAll"
-            :count="totalRepos"
-            @click="emit('all-stars-selected')"
-          >
-            <template #icon>
-              <InboxIcon />
-            </template>
-          </SidebarItem>
-          <SidebarItem
-            title="Untagged Stars"
-            :is-active="starsFilterStore.isFilteringByUntagged"
-            :count="totalUntaggedRepos"
-            @click="emit('untagged-selected')"
-          >
-            <template #icon>
-              <StarIcon />
-            </template>
-          </SidebarItem>
-        </ul>
-      </SidebarGroup>
-      <SidebarGroup title="Tags" collapsible class="relative">
-        <template #right-action>
-          <SortTagsMenu v-if="tags.length > 1" class="-mt-1" @sort-tags="tagsStore.sortTags" />
-        </template>
-        <template #default>
-          <div class="relative mt-2 flex h-10 items-center">
-            <button
-              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-none"
-              :class="{ 'pointer-events-none': isNewTagFormShowing }"
-              type="button"
-              @click="showNewTagForm"
-            >
-              <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-              <span class="ml-2">Add a tag...</span>
-            </button>
-            <form
-              class="pointer-events-none absolute top-0 left-0 w-full opacity-0 transition-opacity duration-150"
-              :class="{
-                'pointer-events-auto opacity-100': isNewTagFormShowing,
-              }"
-              @submit.prevent="doAddTag(newTag)"
-            >
-              <input
-                ref="newTagForm"
-                v-model="newTag"
-                type="text"
-                placeholder="Enter a tag name..."
-                class="w-full rounded-sm border-0 bg-white focus:ring-2 focus:ring-transparent dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 sm:text-sm"
-                @blur="isNewTagFormShowing = false"
-              />
-            </form>
-          </div>
-          <ul class="mt-2" role="listbox" aria-label="Tags" tabindex="0">
-            <Sortable
-              :list="tags"
-              item-key="id"
-              :options="{
-                ghostClass: 'sortable-ghost',
-                animation: 150,
-              }"
-              class="space-y-2"
-              @end="({ oldIndex, newIndex }) => tagsStore.syncTagOrder(oldIndex, newIndex)"
-            >
-              <template #item="{ element: tag }">
-                <SidebarTag
-                  :tag="tag"
-                  :is-active="tagIsSelected(tag)"
-                  @stars-dropped="onStarsDropped"
-                  @click="emit('tag-selected', tag)"
-                />
-              </template>
-            </Sortable>
-          </ul>
-        </template>
-      </SidebarGroup>
-      <SidebarGroup title="Smart Filters" collapsible class="group relative">
-        <template #right-action>
-          <button
-            class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-none group-hover:opacity-100"
-            type="button"
-            aria-label="Add Smart Filter"
-            @click="doShowSmartFilterDialog"
-          >
-            <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          </button>
-        </template>
-        <template #default>
-          <ul class="mt-2 space-y-2" role="listbox" aria-label="Smart Filters" tabindex="0">
-            <Sortable
-              :list="smartFilters"
-              item-key="id"
-              :options="{
-                ghostClass: 'sortable-ghost',
-                animation: 150,
-              }"
-              class="space-y-2"
-              @end="({ oldIndex, newIndex }) => smartFiltersStore.syncSmartFiltersOrder(oldIndex, newIndex)"
-            >
-              <template #item="{ element: smartFilter }">
-                <SidebarSmartFilter
-                  :smart-filter="smartFilter"
-                  :is-active="smartFilterIsSelected(smartFilter)"
-                  @click="emit('smart-filter-selected', smartFilter)"
-                />
-              </template>
-            </Sortable>
-          </ul>
-        </template>
-      </SidebarGroup>
-      <SidebarGroup title="Languages" collapsible>
-        <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages" tabindex="0">
-          <SidebarItem
-            v-for="language in starsStore.languages"
-            :key="language.name"
-            :title="language.name"
-            :count="language.count"
-            :is-active="languageIsSelected(language.name)"
-            @click="emit('language-selected', language.name)"
-          />
-        </ul>
-      </SidebarGroup>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { Errors } from '@inertiajs/core'
@@ -230,6 +98,147 @@ const smartFilters = computed({
 const totalRepos = computed(() => starsStore.totalRepos || starsStore.starredRepos.length)
 const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
 </script>
+
+<template>
+  <div class="h-full overflow-y-auto bg-gray-900 p-4 dark:border-r dark:border-gray-600">
+    <div class="mt-6 space-y-6">
+      <SidebarGroup title="Stars">
+        <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars" tabindex="0">
+          <SidebarItem
+            title="All Stars"
+            :is-active="starsFilterStore.isFilteringByAll"
+            :count="totalRepos"
+            @click="emit('all-stars-selected')"
+          >
+            <template #icon>
+              <InboxIcon />
+            </template>
+          </SidebarItem>
+
+          <SidebarItem
+            title="Untagged Stars"
+            :is-active="starsFilterStore.isFilteringByUntagged"
+            :count="totalUntaggedRepos"
+            @click="emit('untagged-selected')"
+          >
+            <template #icon>
+              <StarIcon />
+            </template>
+          </SidebarItem>
+        </ul>
+      </SidebarGroup>
+
+      <SidebarGroup title="Tags" collapsible class="relative">
+        <template #right-action>
+          <SortTagsMenu v-if="tags.length > 1" class="-mt-1" @sort-tags="tagsStore.sortTags" />
+        </template>
+
+        <template #default>
+          <div class="relative mt-2 flex h-10 items-center">
+            <button
+              class="inline-flex w-full items-center text-sm font-semibold text-gray-500 transition-colors hover:text-gray-400 focus:text-gray-400 focus:outline-none"
+              :class="{ 'pointer-events-none': isNewTagFormShowing }"
+              type="button"
+              @click="showNewTagForm"
+            >
+              <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+
+              <span class="ml-2">Add a tag...</span>
+            </button>
+
+            <form
+              class="pointer-events-none absolute top-0 left-0 w-full opacity-0 transition-opacity duration-150"
+              :class="{
+                'pointer-events-auto opacity-100': isNewTagFormShowing,
+              }"
+              @submit.prevent="doAddTag(newTag)"
+            >
+              <input
+                ref="newTagForm"
+                v-model="newTag"
+                type="text"
+                placeholder="Enter a tag name..."
+                class="w-full rounded-sm border-0 bg-white focus:ring-2 focus:ring-transparent dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 sm:text-sm"
+                @blur="isNewTagFormShowing = false"
+              />
+            </form>
+          </div>
+
+          <ul class="mt-2" role="listbox" aria-label="Tags" tabindex="0">
+            <Sortable
+              :list="tags"
+              item-key="id"
+              :options="{
+                ghostClass: 'sortable-ghost',
+                animation: 150,
+              }"
+              class="space-y-2"
+              @end="({ oldIndex, newIndex }) => tagsStore.syncTagOrder(oldIndex, newIndex)"
+            >
+              <template #item="{ element: tag }">
+                <SidebarTag
+                  :tag="tag"
+                  :is-active="tagIsSelected(tag)"
+                  @stars-dropped="onStarsDropped"
+                  @click="emit('tag-selected', tag)"
+                />
+              </template>
+            </Sortable>
+          </ul>
+        </template>
+      </SidebarGroup>
+
+      <SidebarGroup title="Smart Filters" collapsible class="group relative">
+        <template #right-action>
+          <button
+            class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-none group-hover:opacity-100"
+            type="button"
+            aria-label="Add Smart Filter"
+            @click="doShowSmartFilterDialog"
+          >
+            <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+          </button>
+        </template>
+
+        <template #default>
+          <ul class="mt-2 space-y-2" role="listbox" aria-label="Smart Filters" tabindex="0">
+            <Sortable
+              :list="smartFilters"
+              item-key="id"
+              :options="{
+                ghostClass: 'sortable-ghost',
+                animation: 150,
+              }"
+              class="space-y-2"
+              @end="({ oldIndex, newIndex }) => smartFiltersStore.syncSmartFiltersOrder(oldIndex, newIndex)"
+            >
+              <template #item="{ element: smartFilter }">
+                <SidebarSmartFilter
+                  :smart-filter="smartFilter"
+                  :is-active="smartFilterIsSelected(smartFilter)"
+                  @click="emit('smart-filter-selected', smartFilter)"
+                />
+              </template>
+            </Sortable>
+          </ul>
+        </template>
+      </SidebarGroup>
+
+      <SidebarGroup title="Languages" collapsible>
+        <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages" tabindex="0">
+          <SidebarItem
+            v-for="language in starsStore.languages"
+            :key="language.name"
+            :title="language.name"
+            :count="language.count"
+            :is-active="languageIsSelected(language.name)"
+            @click="emit('language-selected', language.name)"
+          />
+        </ul>
+      </SidebarGroup>
+    </div>
+  </div>
+</template>
 
 <style>
 .sortable-ghost {

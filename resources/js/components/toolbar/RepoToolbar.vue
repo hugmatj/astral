@@ -1,21 +1,3 @@
-<template>
-  <div
-    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-600 dark:bg-gray-800"
-  >
-    <BaseButton size="sm" @click="handleToggleNotesEditor()">
-      <component :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon" class="-ml-2 h-4" />
-      <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} Notes</span>
-    </BaseButton>
-    <BaseButton size="sm" class="ml-2" @click="removeSelectedStar">
-      <StarIcon class="-ml-1 h-4" />
-      <span class="ml-1">Unstar</span>
-    </BaseButton>
-    <div class="ml-auto flex-shrink-0">
-      <CloneUrlInput />
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { computed } from 'vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
@@ -75,3 +57,25 @@ onKeyStroke('n', e => {
   }
 })
 </script>
+
+<template>
+  <div
+    class="flex h-16 flex-shrink-0 items-center border-b border-gray-300 bg-gray-50 px-4 dark:border-gray-600 dark:bg-gray-800"
+  >
+    <BaseButton size="sm" @click="handleToggleNotesEditor()">
+      <component :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon" class="-ml-2 h-4" />
+
+      <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} Notes</span>
+    </BaseButton>
+
+    <BaseButton size="sm" class="ml-2" @click="removeSelectedStar">
+      <StarIcon class="-ml-1 h-4" />
+
+      <span class="ml-1">Unstar</span>
+    </BaseButton>
+
+    <div class="ml-auto flex-shrink-0">
+      <CloneUrlInput />
+    </div>
+  </div>
+</template>

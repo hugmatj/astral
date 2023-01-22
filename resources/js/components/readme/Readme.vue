@@ -1,50 +1,3 @@
-<template>
-  <div ref="readmeContainerEl" class="relative flex-grow overflow-y-auto">
-    <div
-      v-show="noRepoSelected"
-      class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-50 p-4 text-center text-gray-500 dark:bg-gray-900"
-    >
-      <ReadmeNotSelectedSvg aria-label="No Readme Selected" class="w-full max-w-sm" />
-    </div>
-    <div
-      v-show="contents"
-      as="div"
-      class="relative z-20 h-full w-full transition-colors"
-      :class="{ 'grid place-items-center bg-gray-100': selectedRepoCount > 1 }"
-    >
-      <!-- TODO: These don't actually animate for some reason... -->
-      <TransitionCards>
-        <div
-          v-for="{ index } in extraStacks"
-          :key="index"
-          :data-index="index"
-          :style="{ zIndex: extraStacks.length - index }"
-          class="pointer-events-none absolute h-[85vh] w-full max-w-none scale-90 overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl"
-          aria-hidden="true"
-        ></div>
-      </TransitionCards>
-      <div class="relative" :style="{ zIndex: extraStacks.length + 1 }">
-        <div
-          ref="readmeEl"
-          class="prose max-w-none bg-white p-4 transition-transform dark:bg-gray-900 dark:prose-invert sm:mx-auto sm:max-w-2xl 2xl:max-w-4xl"
-          :class="{
-            'pointer-events-none h-[85vh] scale-90 overflow-hidden rounded-lg p-12 shadow-lg': selectedRepoCount > 1,
-          }"
-          v-html="contents"
-        ></div>
-        <div v-show="selectedRepoCount > 1" class="sr-only">{{ selectedRepoCount }} Stars Selected</div>
-      </div>
-    </div>
-    <TransitionFade
-      :show="isReadmeLoading"
-      as="div"
-      class="absolute inset-0 z-30 flex h-full w-full items-center justify-center bg-white text-center text-gray-500 dark:bg-gray-900"
-    >
-      <LoadingSpinner />
-    </TransitionFade>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, computed, nextTick, watch } from 'vue'
 import { useStarsStore } from '@/store/useStarsStore'
@@ -155,6 +108,57 @@ const patchReadmeImages = () => {
   })
 }
 </script>
+
+<template>
+  <div ref="readmeContainerEl" class="relative flex-grow overflow-y-auto">
+    <div
+      v-show="noRepoSelected"
+      class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-50 p-4 text-center text-gray-500 dark:bg-gray-900"
+    >
+      <ReadmeNotSelectedSvg aria-label="No Readme Selected" class="w-full max-w-sm" />
+    </div>
+
+    <div
+      v-show="contents"
+      as="div"
+      class="relative z-20 h-full w-full transition-colors"
+      :class="{ 'grid place-items-center bg-gray-100': selectedRepoCount > 1 }"
+    >
+      <!-- TODO: These don't actually animate for some reason... -->
+      <TransitionCards>
+        <div
+          v-for="{ index } in extraStacks"
+          :key="index"
+          :data-index="index"
+          :style="{ zIndex: extraStacks.length - index }"
+          class="pointer-events-none absolute h-[85vh] w-full max-w-none scale-90 overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl"
+          aria-hidden="true"
+        ></div>
+      </TransitionCards>
+
+      <div class="relative" :style="{ zIndex: extraStacks.length + 1 }">
+        <div
+          ref="readmeEl"
+          class="prose max-w-none bg-white p-4 transition-transform dark:bg-gray-900 dark:prose-invert sm:mx-auto sm:max-w-2xl 2xl:max-w-4xl"
+          :class="{
+            'pointer-events-none h-[85vh] scale-90 overflow-hidden rounded-lg p-12 shadow-lg': selectedRepoCount > 1,
+          }"
+          v-html="contents"
+        ></div>
+
+        <div v-show="selectedRepoCount > 1" class="sr-only">{{ selectedRepoCount }} Stars Selected</div>
+      </div>
+    </div>
+
+    <TransitionFade
+      :show="isReadmeLoading"
+      as="div"
+      class="absolute inset-0 z-30 flex h-full w-full items-center justify-center bg-white text-center text-gray-500 dark:bg-gray-900"
+    >
+      <LoadingSpinner />
+    </TransitionFade>
+  </div>
+</template>
 
 <style lang="postcss">
 .entry-content {

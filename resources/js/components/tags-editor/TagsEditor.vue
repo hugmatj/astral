@@ -1,59 +1,3 @@
-<template>
-  <div
-    class="flex cursor-text items-center rounded-md border border-gray-300 bg-white px-1 pt-2 pb-0 shadow-sm ring-2 ring-transparent focus-within:border-indigo-500 focus-within:ring-indigo-100"
-    @click.stop
-  >
-    <ul class="relative flex w-full flex-wrap items-center">
-      <li
-        v-for="(tag, i) in mutableTags"
-        :key="tag.name"
-        class="mx-1 mb-2 flex items-center rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800"
-      >
-        <span>{{ tag.name }}</span>
-        <button
-          class="delete-star-tag cursor-pointer pl-1"
-          :aria-label="`Delete tag ${tag.name}`"
-          @mousedown.prevent
-          @click.stop="deleteTagAtIndex(i)"
-        >
-          <XIcon class="h-3 w-3 fill-current" />
-        </button>
-      </li>
-      <li class="relative isolate mx-1 mb-2 flex-grow leading-none" style="flex-basis: 82px">
-        <input
-          ref="input"
-          v-model="tagText"
-          type="text"
-          class="w-full min-w-0 border-0 bg-transparent p-0 text-base leading-none focus:border-0 focus:outline-none focus:ring-0 sm:text-sm"
-          :placeholder="placeholder"
-          role="combobox"
-          :aria-activedescendant="autocompleteUUID"
-          autocomplete="off"
-          :aria-owns="autocompleteUUID"
-          @keydown.,.prevent="addTagFromInput"
-          @keydown.delete="deleteLastTag"
-          @blur="onBlur"
-          @keydown.enter="onEnter"
-        />
-
-        <!-- Autocomplete Menu -->
-        <AutocompleteMenu
-          :id="autocompleteUUID"
-          :style="{
-            left: inputRect.left + 'px',
-            top: inputRect.top + inputRect.height + 'px',
-          }"
-          :source="visibleAutocompleteOptions"
-          :search="tagText"
-          @select="addTagWithName($event)"
-          @show="autocompleteShowing = true"
-          @hide="autocompleteShowing = false"
-        />
-      </li>
-    </ul>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { computed, nextTick, reactive, ref, unref, watch } from 'vue'
 import { useTagsStore } from '@/store/useTagsStore'
@@ -70,7 +14,12 @@ interface Props {
   autocompleteOptions?: string[]
 }
 
-const { tags = [], canCreate = true, placeholder = 'Add a tag...', autocompleteOptions = [] } = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  tags: () => [] as TagEditorTag[],
+  canCreate: true,
+  placeholder: 'Add a tag',
+  autocompleteOptions: () => [] as string[],
+})
 
 const emit = defineEmits<{
   (e: 'change', value: TagEditorTag[]): void
@@ -81,7 +30,7 @@ const tagsStore = useTagsStore()
 const autocompleteUUID = nanoid()
 const tagText = ref('')
 const input = ref<HTMLInputElement | null>(null)
-const normalizedTags = Array.isArray(tags) ? tags : []
+const normalizedTags = Array.isArray(props.tags) ? props.tags : []
 const mutableTags = ref<TagEditorTag[]>(normalizedTags.map(tag => ({ id: tag.id, name: tag.name })))
 let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'height'>>({
   top: 0,
@@ -92,7 +41,7 @@ let inputRect = reactive<Pick<Record<keyof DOMRect, number>, 'top' | 'left' | 'h
 const autocompleteShowing = ref(false)
 
 const visibleAutocompleteOptions = computed(() => {
-  return autocompleteOptions.filter(option => {
+  return props.autocompleteOptions.filter(option => {
     return !mutableTags.value.map(tag => tag.name).includes(option)
   })
 })
@@ -101,7 +50,7 @@ whenever(input, () => {
   positionAutocompleteMenu()
 })
 
-watch(tags, newValue => {
+watch(props.tags, newValue => {
   if (Array.isArray(newValue)) {
     mutableTags.value = newValue.map(tag => ({ id: tag.id, name: tag.name }))
   }
@@ -109,11 +58,15 @@ watch(tags, newValue => {
   mutableTags.value = []
 })
 
-watch(mutableTags.value, () => {
-  setTimeout(() => {
-    positionAutocompleteMenu()
-  }, 10)
-})
+watch(
+  mutableTags,
+  () => {
+    setTimeout(() => {
+      positionAutocompleteMenu()
+    }, 10)
+  },
+  { deep: true }
+)
 
 const positionAutocompleteMenu = () => {
   if (input.value) {
@@ -129,8 +82,8 @@ const tagsHasTag = (tag: string) => {
 
 const tagsHaveChanged = computed(() => {
   return !(
-    tags.length === mutableTags.value.length &&
-    tags
+    props.tags.length === mutableTags.value.length &&
+    props.tags
       .map(tag => tag.name)
       .every(tag => {
         return mutableTags.value.map(tag => tag.name).includes(tag)
@@ -148,7 +101,7 @@ const addTagWithName = (name: string) => {
   }
 }
 const addTagFromInput = () => {
-  if (canCreate) {
+  if (props.canCreate) {
     addTagWithName(tagText.value.trim())
   }
 }
@@ -184,5 +137,63 @@ nextTick(() => {
   input.value?.focus()
 })
 </script>
+
+<template>
+  <div
+    class="flex cursor-text items-center rounded-md border border-gray-300 bg-white px-1 pt-2 pb-0 shadow-sm ring-2 ring-transparent focus-within:border-indigo-500 focus-within:ring-indigo-100"
+    @click.stop
+  >
+    <ul class="relative flex w-full flex-wrap items-center">
+      <li
+        v-for="(tag, i) in mutableTags"
+        :key="tag.name"
+        class="mx-1 mb-2 flex items-center rounded-sm bg-indigo-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-indigo-800"
+      >
+        <span>{{ tag.name }}</span>
+
+        <button
+          class="delete-star-tag cursor-pointer pl-1"
+          :aria-label="`Delete tag ${tag.name}`"
+          @mousedown.prevent
+          @click.stop="deleteTagAtIndex(i)"
+        >
+          <XIcon class="h-3 w-3 fill-current" />
+        </button>
+      </li>
+
+      <li class="relative isolate mx-1 mb-2 flex-grow leading-none" style="flex-basis: 82px">
+        <input
+          ref="input"
+          v-model="tagText"
+          type="text"
+          class="w-full min-w-0 border-0 bg-transparent p-0 text-base leading-none focus:border-0 focus:outline-none focus:ring-0 sm:text-sm"
+          :placeholder="placeholder"
+          role="combobox"
+          :aria-activedescendant="autocompleteUUID"
+          autocomplete="off"
+          :aria-owns="autocompleteUUID"
+          @keydown.,.prevent="addTagFromInput"
+          @keydown.delete="deleteLastTag"
+          @blur="onBlur"
+          @keydown.enter="onEnter"
+        />
+
+        <!-- Autocomplete Menu -->
+        <AutocompleteMenu
+          :id="autocompleteUUID"
+          :style="{
+            left: inputRect.left + 'px',
+            top: inputRect.top + inputRect.height + 'px',
+          }"
+          :source="visibleAutocompleteOptions"
+          :search="tagText"
+          @select="addTagWithName($event)"
+          @show="autocompleteShowing = true"
+          @hide="autocompleteShowing = false"
+        />
+      </li>
+    </ul>
+  </div>
+</template>
 
 <style scoped></style>

@@ -1,4 +1,3 @@
-<template><BaseTextInput v-model="value" type="number" /></template>
 <script setup lang="ts">
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
 import { useVModel } from '@vueuse/core'
@@ -17,3 +16,5 @@ const emit = defineEmits<{
 
 const value = useVModel(props, 'modelValue', emit)
 </script>
+
+<template><BaseTextInput v-model="value" type="number" /></template>
