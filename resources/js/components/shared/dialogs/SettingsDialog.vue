@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, nextTick } from 'vue'
+import { router } from '@inertiajs/vue3'
 import { DialogTitle } from '@headlessui/vue'
 import BaseDialog from '@/components/shared/core/BaseDialog.vue'
 import BaseTextInput from '@/components/shared/core/BaseTextInput.vue'
@@ -7,7 +8,6 @@ import BaseToggle from '@/components/shared/core/BaseToggle.vue'
 import BaseButton from '@/components/shared/core/BaseButton.vue'
 import { useSettingsDialog } from '@/composables/useSettingsDialog'
 import { useUserStore } from '@/store/useUserStore'
-import { router } from '@inertiajs/vue3'
 
 const { isOpen, hide } = useSettingsDialog()
 const userStore = useUserStore()
@@ -16,7 +16,7 @@ const usernameConfirmation = ref('')
 const confirmInput = ref<typeof BaseTextInput | null>()
 
 const deleteButtonLabel = computed(() =>
-  isRequestingDeleteConfirmation.value ? 'Confirm Deletion' : 'Delete My Account'
+  isRequestingDeleteConfirmation.value ? 'Confirm deletion' : 'Delete my account'
 )
 
 const deleteButtonIsDisabled = computed(() => {
@@ -53,7 +53,7 @@ const deleteUser = async () => {
     <div class="divide-y divide-gray-300">
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="text-sm font-bold text-gray-600">Show Language Tags</p>
+          <p class="text-sm font-bold text-gray-600">Show language tags</p>
 
           <BaseToggle
             class="ml-auto"
@@ -65,7 +65,7 @@ const deleteUser = async () => {
 
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="text-sm font-bold text-gray-600">Auto-Save Notes</p>
+          <p class="text-sm font-bold text-gray-600">Auto-save notes</p>
 
           <BaseToggle
             class="ml-auto"
@@ -77,10 +77,10 @@ const deleteUser = async () => {
 
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="text-sm font-bold text-gray-600">GitHub Access</p>
+          <p class="text-sm font-bold text-gray-600">GitHub access</p>
 
           <BaseButton class="ml-auto" kind="danger" size="sm" @click="router.post('/revoke-grant')"
-            >Revoke Access</BaseButton
+            >Revoke access</BaseButton
           >
         </div>
 
@@ -92,7 +92,7 @@ const deleteUser = async () => {
 
       <div class="px-4 py-5">
         <div class="flex items-center">
-          <p class="text-sm font-bold text-gray-600">Delete Account</p>
+          <p class="text-sm font-bold text-gray-600">Delete account</p>
 
           <div class="ml-auto flex items-center space-x-3">
             <div v-show="isRequestingDeleteConfirmation">

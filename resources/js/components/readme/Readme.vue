@@ -60,9 +60,7 @@ debouncedWatch(
 )
 
 const patchReadmeAnchors = () => {
-  if (!readmeEl.value) {
-    return false
-  }
+  if (!readmeEl.value) return
 
   Array.from(readmeEl.value.querySelectorAll('a')).forEach(anchor => {
     if (anchor.href.replace(location.href, '').startsWith('#')) {
@@ -93,9 +91,7 @@ const patchReadmeAnchors = () => {
 }
 
 const patchReadmeImages = () => {
-  if (!readmeEl.value) {
-    return false
-  }
+  if (!readmeEl.value) return
 
   Array.from(readmeEl.value.querySelectorAll('img')).forEach(img => {
     const repoName = starsStore.selectedRepo.nameWithOwner
@@ -146,7 +142,7 @@ const patchReadmeImages = () => {
           v-html="contents"
         ></div>
 
-        <div v-show="selectedRepoCount > 1" class="sr-only">{{ selectedRepoCount }} Stars Selected</div>
+        <div v-show="selectedRepoCount > 1" class="sr-only">{{ selectedRepoCount }} Stars selected</div>
       </div>
     </div>
 

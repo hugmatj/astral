@@ -65,7 +65,7 @@ onKeyStroke('n', e => {
     <BaseButton size="sm" @click="handleToggleNotesEditor()">
       <component :is="currentStarHasNotes ? ExistingNoteIcon : EmptyNoteIcon" class="-ml-2 h-4" />
 
-      <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} Notes</span>
+      <span class="ml-0.5">{{ isNotesEditorOpen ? 'Hide' : 'Show' }} notes</span>
     </BaseButton>
 
     <BaseButton size="sm" class="ml-2" @click="removeSelectedStar">

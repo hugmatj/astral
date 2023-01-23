@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { useUpgradeAuthScopeDialog } from '@/composables/useUpgradeAuthScopeDialog'
 import { ExclamationIcon } from '@heroicons/vue/outline'
 import ActionDialog from '@/components/shared/core/ActionDialog.vue'
-import BaseButton from '@/components/shared//core/BaseButton.vue'
+import BaseButton from '@/components/shared/core/BaseButton.vue'
 
 const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
 </script>
@@ -14,7 +14,7 @@ const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
         <ExclamationIcon class="h-6 w-6 text-yellow-800" aria-hidden="true" /></div
     ></template>
 
-    <template #title>Elevated Privileges Required</template>
+    <template #title>Elevated privileges required</template>
 
     <template #body>
       <p class="leading-relaxed text-gray-500">
@@ -42,7 +42,7 @@ const { isOpen, hide, redirectToGitHub } = useUpgradeAuthScopeDialog()
     <template #actions>
       <BaseButton class="w-full" @click="hide"> Nevermind </BaseButton>
 
-      <BaseButton kind="warning" class="w-full" @click="redirectToGitHub">Grant Access</BaseButton>
+      <BaseButton kind="warning" class="w-full" @click="redirectToGitHub">Grant access</BaseButton>
     </template>
   </ActionDialog>
 </template>

@@ -11,7 +11,9 @@ import {
 import GitHubLogoIcon from '@/components/shared/icons/GitHubLogoIcon.vue'
 import { useUserStore } from '@/store/useUserStore'
 
-defineEmits(['showSettings'])
+const emit = defineEmits<{
+  (e: 'showSettings'): void
+}>()
 
 const userStore = useUserStore()
 </script>
@@ -52,7 +54,7 @@ const userStore = useUserStore()
               type="button"
               class="group flex w-full items-center px-4 py-2 text-sm"
               :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700']"
-              @click="$emit('showSettings')"
+              @click="emit('showSettings')"
             >
               <CogIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
 
@@ -70,7 +72,7 @@ const userStore = useUserStore()
             >
               <UserGroupIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
 
-              <span>Become a Sponsor</span>
+              <span>Become a sponsor</span>
             </a>
           </MenuItem>
         </div>
@@ -114,7 +116,7 @@ const userStore = useUserStore()
             >
               <ExclamationCircleIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
 
-              <span>File an Issue</span>
+              <span>File an issue</span>
             </a>
           </MenuItem>
         </div>
@@ -128,7 +130,7 @@ const userStore = useUserStore()
             >
               <LogoutIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
 
-              <span>Sign Out</span>
+              <span>Sign out</span>
             </a>
           </MenuItem>
         </div>

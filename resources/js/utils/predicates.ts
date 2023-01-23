@@ -190,7 +190,7 @@ export const predicateTargets: PredicateTarget<string | Tag[] | RepoLanguage[] |
     defaultValue: '',
   },
   {
-    label: 'Star Count',
+    label: 'Star count',
     key: 'node.stargazers.totalCount',
     type: 'Number',
     operators: numberOperators,
@@ -218,7 +218,7 @@ export const predicateTargets: PredicateTarget<string | Tag[] | RepoLanguage[] |
     defaultValue: { key: 'node.isArchived', label: 'archived' },
   },
   {
-    label: 'Updated At',
+    label: 'Updated at',
     type: 'Date',
     key: 'node.pushedAt',
     operators: dateOperators,

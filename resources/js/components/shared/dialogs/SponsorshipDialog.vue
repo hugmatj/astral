@@ -29,7 +29,7 @@ const currentMessage: Ref<string | null> = computed(() =>
       </div>
     </template>
 
-    <template #title>Sponsorship Required</template>
+    <template #title>Sponsorship required</template>
 
     <template #body>
       <p v-if="currentMessage" class="text-gray-500">
@@ -42,7 +42,7 @@ const currentMessage: Ref<string | null> = computed(() =>
           class="font-semibold text-brand-700 focus:outline-none"
           >GitHub Sponsor</a
         >
-        of the project. You can sponsor as little as $1 per month to get full access to all of Astral's features.
+        of the project. You can sponsor for as little as $1/month to get full access to all of Astral's features.
       </p>
     </template>
 

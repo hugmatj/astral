@@ -131,7 +131,7 @@ const removeGroup = (index: number) => {
         >
           <MinusCircleIcon class="h-4 w-4" aria-hidden="true" />
 
-          <span>Remove Group</span></BaseButton
+          <span>Remove group</span></BaseButton
         >
       </div>
 
@@ -176,7 +176,7 @@ const removeGroup = (index: number) => {
           <button
             type="button"
             class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200"
-            aria-label="Add Row"
+            aria-label="Add row"
             @click="appendRow(i)"
           >
             <PlusIcon class="h-5 w-5" />
@@ -186,7 +186,7 @@ const removeGroup = (index: number) => {
             v-if="group.predicates.length > 1"
             type="button"
             class="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-400 bg-gray-100 text-lg font-semibold text-gray-400 shadow-md transition-colors hover:border-gray-500 hover:text-gray-500 active:bg-gray-200"
-            aria-label="Remove Row"
+            aria-label="Remove row"
             @click="removeRow(i, j)"
           >
             <MinusIcon class="h-5 w-5" />
@@ -199,7 +199,7 @@ const removeGroup = (index: number) => {
       <BaseButton class="btn btn-grey space-x-1 hover:bg-brand-50" kind="primary-borderless" @click="appendGroup">
         <PlusIcon class="h-5 w-5" aria-hidden="true" />
 
-        <span>Add Group</span>
+        <span>Add group</span>
       </BaseButton>
     </div>
   </div>

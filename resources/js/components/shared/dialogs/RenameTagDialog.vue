@@ -44,7 +44,7 @@ const renameTag = () => {
           <p class="-mt-3 text-center text-gray-500 sm:-mt-5">Enter a new name for your tag</p>
 
           <div class="mt-3 text-center sm:mt-5">
-            <label for="tagName" class="sr-only">Tag Name</label>
+            <label for="tagName" class="sr-only">Tag name</label>
 
             <BaseTextInput
               id="tagName"
@@ -67,7 +67,7 @@ const renameTag = () => {
             <BaseButton class="w-full" @click="hide">Cancel</BaseButton>
 
             <BaseButton button-type="submit" kind="primary" class="w-full" :disabled="form.processing">
-              Save Tag</BaseButton
+              Save tag</BaseButton
             >
           </div>
         </div>

@@ -94,12 +94,12 @@ const resetForm = () => {
   <BaseDialog :is-open="isOpen" :hide="hideDialog" modal-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
     <div>
       <DialogTitle class="rounded bg-gray-50 px-4 py-3 text-center text-xl font-bold text-gray-700"
-        >{{ currentSmartFilter ? 'Update' : 'Create' }} Filter</DialogTitle
+        >{{ currentSmartFilter ? 'Update' : 'Create' }} smart filter</DialogTitle
       >
 
       <form @submit.prevent="currentSmartFilter ? updateSmartFilter() : addSmartFilter()">
         <div class="mt-6 flex w-1/2 flex-col items-start pt-2 pb-8">
-          <label for="smart-filter-name" class="inline-block text-sm">Filter Name</label>
+          <label for="smart-filter-name" class="inline-block text-sm">Filter name</label>
 
           <BaseTextInput
             id="smart-filter-name"
@@ -109,7 +109,7 @@ const resetForm = () => {
           ></BaseTextInput>
         </div>
 
-        <div ref="smartFiltersContainer" class="max-h-[62vh] overflow-y-auto border-t border-gray-200">
+        <div class="max-h-[62vh] overflow-y-auto border-t border-gray-200">
           <SmartFilterEditor v-model="form.body" />
 
           <div ref="scrollTarget" class="scroll-target" aria-hidden="true"></div>
@@ -118,7 +118,7 @@ const resetForm = () => {
         <div class="mt-4 flex items-center justify-end space-x-2 rounded bg-gray-50 px-4 py-3">
           <BaseButton kind="base" @click="hideDialog">Cancel</BaseButton>
 
-          <BaseButton kind="primary" type="submit">Save Filter</BaseButton>
+          <BaseButton kind="primary" type="submit">{{ currentSmartFilter ? 'Save' : 'Create' }}</BaseButton>
         </div>
       </form>
     </div>
