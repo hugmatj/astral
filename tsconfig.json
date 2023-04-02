@@ -14,7 +14,7 @@
         "baseUrl": ".",
         "paths": {
             "@/*": [
-                "resources/js/*"
+                "resources/*"
             ]
         },
         "types": [
@@ -24,12 +24,12 @@
             "esnext",
             "dom",
             "dom.iterable",
-            "scripthost",
+            "scripthost"
         ]
     },
     "include": [
-        "resources/js/**/*.ts",
-        "resources/js/**/*.vue",
+        "resources/scripts/**/*.ts",
+        "resources/views/**/*.vue",
         "vite.config.ts"
     ],
     "exclude": [

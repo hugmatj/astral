@@ -16,10 +16,10 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(StarsJanitor::class, function () {
-            return new StarsJanitor();
+            return new StarsJanitor(auth()->user());
         });
         $this->app->bind(Sponsorship::class, function () {
-            return new Sponsorship();
+            return new Sponsorship(auth()->user());
         });
     }
 

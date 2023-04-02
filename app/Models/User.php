@@ -32,6 +32,8 @@ class User extends Authenticatable
         'is_sponsor' => 'boolean',
     ];
 
+    protected $with = ['flags'];
+
     public const AVAILABLE_SETTINGS = ['show_language_tags', 'autosave_notes'];
 
     protected $attributes = [
@@ -120,7 +122,7 @@ class User extends Authenticatable
         return ! (bool) $this->is_sponsor;
     }
 
-    public function setSponsorshipStatus(boolean $isSponsor): self
+    public function setSponsorshipStatus(bool $isSponsor): self
     {
         $this->update(['is_sponsor' => $isSponsor ? now() : null]);
 
@@ -157,5 +159,10 @@ class User extends Authenticatable
     public function getFlag($key): bool
     {
         return (bool) optional($this->flags()->where('key', $key)->first())->value ?? false;
+    }
+
+    public function setFlag($key, bool $value)
+    {
+        return $this->flags()->updateOrCreate(['key' => $key], ['value' => $value]);
     }
 }

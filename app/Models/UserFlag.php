@@ -14,6 +14,12 @@ class UserFlag extends Model
         'value',
     ];
 
+    protected $casts = [
+        'value' => 'boolean',
+    ];
+
+    protected $visible = ['key', 'value'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

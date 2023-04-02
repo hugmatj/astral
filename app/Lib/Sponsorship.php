@@ -2,23 +2,28 @@
 
 namespace App\Lib;
 
+use App\Models\User;
 use GitHub;
 
 class Sponsorship
 {
+    public function __construct(public User $user)
+    {
+    }
+
     public function updateUserSponsorshipStatus()
     {
-        throw_unless(auth()->check(), \Exception::class);
+        throw_unless($this->user);
 
-        $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "'.auth()->user()->username.'") }}';
+        $query = '{user(login: "syropian") { isSponsoredBy(accountLogin: "'.$this->user->username.'") }}';
 
         $client = GitHub::getFactory()->make([
-            'token' => auth()->user()->access_token,
+            'token' => $this->user->access_token,
             'method' => 'token',
         ]);
 
         $result = $client->api('graphql')->execute($query);
 
-        auth()->user()->setSponsorshipStatus((bool) $result['data']['user']['isSponsoredBy']);
+        $this->user->setSponsorshipStatus((bool) $result['data']['user']['isSponsoredBy']);
     }
 }

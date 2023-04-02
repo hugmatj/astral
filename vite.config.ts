@@ -4,6 +4,11 @@ import laravel from 'laravel-vite-plugin'
 import svgLoader from 'vite-svg-loader'
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': '/resources',
+    },
+  },
   plugins: [
     vue({
       reactivityTransform: false,
@@ -15,7 +20,7 @@ export default defineConfig({
       },
     }),
     laravel({
-      input: ['resources/js/app.ts'],
+      input: ['resources/scripts/app.ts'],
       valetTls: 'astral.test',
     }),
     svgLoader({ svgo: false }),

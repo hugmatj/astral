@@ -14,6 +14,9 @@ class Star extends Model
         'repo_id',
         'notes',
         'meta',
+        'meta->nameWithOwner',
+        'meta->url',
+        'meta->description',
     ];
 
     protected $casts = [
@@ -45,7 +48,7 @@ class Star extends Model
 
     public function isOrphan(): bool
     {
-        return ! (bool) $this->notes && ! $this->tags()->count();
+        return ! (bool) $this->notes && $this->tags()->count() < 1;
     }
 
     public function removeAllTags()

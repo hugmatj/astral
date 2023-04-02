@@ -31,12 +31,11 @@ Route::get('auth/github/callback', [AuthController::class, 'handleProviderCallba
 
 Route::redirect('/login', '/auth/github')->name('login');
 
-Route::get('/migrate', [MigrationController::class, 'index'])
-    ->middleware('auth')
-    ->name('migrate.index');
-
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    Route::get('/migrate', [MigrationController::class, 'index'])->name('migrate.index');
+    Route::put('/migrate', [MigrationController::class, 'update'])->name('migrate.update');
 
     Route::post('tags', [TagsController::class, 'store'])->name('tags.store');
     Route::delete('tags/{tag}', [TagsController::class, 'destroy'])->name('tags.destroy');
