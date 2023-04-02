@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { ref, computed, nextTick, watch } from 'vue'
+import { ref, computed, nextTick, watch, onMounted } from 'vue'
 import { useStarsStore } from '@/scripts/store/useStarsStore'
 import { debouncedWatch } from '@vueuse/core'
 import TransitionFade from '@/views/components/shared/transitions/TransitionFade.vue'
-import TransitionCards from '@/views/components/shared/transitions/TransitionCards.vue'
 import LoadingSpinner from '@/views/components/readme/LoadingSpinner.vue'
 import ReadmeNotSelectedSvg from '../../../img/readme-not-selected.svg?component'
+import { randomIntFromRange } from '@/scripts/utils'
 
 const starsStore = useStarsStore()
 
@@ -18,15 +18,15 @@ const readmeContainerEl = ref<HTMLElement>()
 const selectedRepoCount = computed(() => starsStore.selectedRepos.length)
 const noRepoSelected = computed(() => !selectedRepoCount.value)
 
-const extraStacks = ref<{ id: string; index: number }[]>([])
+const extraStacks = ref<{ transform: string }[]>(Array(5).fill(0).map((_, index) => {
+  const direction = index % 2 === 0 ? 1 : -1
+  const tilt = randomIntFromRange(2, 7) * direction
+  const translateX = randomIntFromRange(15, 25) * direction
+  const translateY = randomIntFromRange(0.5, 2) * direction
 
-watch(
-  () => starsStore.selectedRepos,
-  selectedRepos => {
-    extraStacks.value = selectedRepos.slice(1, 5).map(({ id }, index) => ({ id, index }))
-  },
-  { deep: true }
-)
+  return { transform: `rotate(${tilt}deg) scale(0.9) translate3d(${translateX}%, ${translateY}%, 0)` }
+}))
+const visibleStacks = computed(() => extraStacks.value.slice(0, Math.min(5, selectedRepoCount.value - 1)))
 
 watch(
   () => starsStore.selectedRepo,
@@ -117,22 +117,18 @@ const patchReadmeImages = () => {
     <div
       v-show="contents"
       as="div"
-      class="relative z-20 h-full w-full transition-colors"
+      class="relative z-20 h-full w-full transition-colors overflow-hidden"
       :class="{ 'grid place-items-center bg-gray-100': selectedRepoCount > 1 }"
     >
-      <!-- TODO: These don't actually animate for some reason... -->
-      <TransitionCards>
         <div
-          v-for="{ index } in extraStacks"
-          :key="index"
-          :data-index="index"
-          :style="{ zIndex: extraStacks.length - index }"
-          class="pointer-events-none absolute h-[85vh] w-full max-w-none scale-90 overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl"
+          v-for="(stack, $index) in visibleStacks"
+          :key="$index"
+          :style="{ zIndex: visibleStacks.length - $index, transform: stack.transform }"
+          class="pointer-events-none absolute h-[85vh] w-full max-w-none overflow-hidden rounded-lg bg-white p-12 shadow-lg sm:max-w-2xl"
           aria-hidden="true"
         ></div>
-      </TransitionCards>
 
-      <div class="relative" :style="{ zIndex: extraStacks.length + 1 }">
+      <div class="relative h-full overflow-auto" :style="{ zIndex: visibleStacks.length + 1 }">
         <div
           ref="readmeEl"
           class="prose max-w-none bg-white p-4 transition-transform dark:prose-invert dark:bg-gray-900 sm:mx-auto sm:max-w-2xl 2xl:max-w-4xl"

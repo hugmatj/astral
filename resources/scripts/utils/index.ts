@@ -29,3 +29,7 @@ export const moveSort = <T>(array: T[], oldIndex: number, newIndex: number): T[]
     ...itemRemovedArray.slice(newIndex, itemRemovedArray.length),
   ]
 }
+
+export const randomIntFromRange = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}

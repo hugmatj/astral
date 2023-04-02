@@ -55,7 +55,7 @@ const onDragStart = (e: DragEvent) => {
     if (isSelected.value) {
       starsStore.draggingRepos = [...starsStore.selectedRepos]
     } else {
-      starsStore.draggingRepos = [props.repo.node, ...starsStore.selectedRepos]
+      starsStore.draggingRepos = [props.repo.node]
     }
   } else {
     starsStore.draggingRepos = [props.repo.node]

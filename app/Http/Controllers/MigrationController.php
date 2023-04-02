@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class MigrationController extends Controller
@@ -39,6 +40,13 @@ class MigrationController extends Controller
                     'description' => $star['description'],
                 ]
             ]);
+
+            if (!is_null($userStar['notes']) && is_null(json_decode($userStar['notes'], true)))
+            {
+                $userStar->update([
+                    'notes' => Str::markdown($userStar['notes']),
+                ]);
+            }
         }
 
         auth()->user()->setFlag('2023-migration', true);

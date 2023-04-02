@@ -7,12 +7,15 @@ import { useStarsStore } from '@/scripts/store/useStarsStore'
 import { useUserStore } from '@/scripts/store/useUserStore'
 import StarterKit from '@tiptap/starter-kit'
 import Typography from '@tiptap/extension-typography'
+import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
 import { TransitionChild, TransitionRoot } from '@headlessui/vue'
 import debounce from 'lodash/debounce'
 import BaseButton from '@/views/components/shared/core/BaseButton.vue'
 import BoldIcon from '@/views/components/shared/icons/notes-editor/BoldIcon.vue'
+import BulletListIcon from '@/views/components/shared/icons/notes-editor/BulletListIcon.vue'
+import OrderedListIcon from '@/views/components/shared/icons/notes-editor/OrderedListIcon.vue'
 import ItalicsIcon from '@/views/components/shared/icons/notes-editor/ItalicsIcon.vue'
 import UnderlineIcon from '@/views/components/shared/icons/notes-editor/UnderlineIcon.vue'
 import CodeIcon from '@/views/components/shared/icons/notes-editor/CodeIcon.vue'
@@ -25,13 +28,24 @@ const isSaving = ref(false)
 const isSaveToastVisible = ref(false)
 
 const userStar = computed(() => starsStore.userStarsByRepoId[starsStore.selectedRepo.databaseId])
-const initialNotes = JSON.parse(unref(userStar)?.notes || '{}')
+
+const initialNotes = unref(userStar)?.notes ?? ''
+let initialEditorValue = ''
+
+try {
+  initialEditorValue = JSON.parse(initialNotes || '{"type":"doc","content":[]}')
+} catch (e) {
+  initialEditorValue = initialNotes
+}
+
+console.log(initialEditorValue)
 
 const editor = useEditor({
-  content: Object.keys(initialNotes).length ? initialNotes : '<p></p>',
+  content: initialEditorValue || '<p></p>',
   extensions: [
     StarterKit,
     Typography,
+    Link,
     Underline,
     Placeholder.configure({
       placeholder: 'Add some notes about this repo...',
@@ -52,8 +66,16 @@ const editor = useEditor({
 watch(
   () => starsStore.selectedRepo,
   () => {
-    const notes = JSON.parse(userStar.value?.notes || '{}')
-    editor.value?.commands.setContent(Object.keys(notes).length ? notes : '<p></p>')
+    const initialNotes = userStar.value?.notes ?? ''
+    let initialEditorValue = ''
+
+    try {
+      initialEditorValue = JSON.parse(initialNotes || '{}')
+    } catch (e) {
+      initialEditorValue = initialNotes
+    }
+
+    editor.value?.commands.setContent(initialEditorValue || '<p></p>')
     editor.value?.commands.focus('end')
   },
   { immediate: true }
@@ -159,6 +181,34 @@ const saveNotes = (editor: Maybe<Editor>) => {
 
               <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
 
+              <!-- BulletList Button -->
+              <button
+                class="rounded p-1 hover:bg-gray-200"
+                :class="{
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('bulletList'),
+                }"
+                aria-label="Bullet list"
+                @click="editor?.chain().focus().toggleBulletList().run()"
+              >
+                <BulletListIcon class="h-5" />
+              </button>
+
+              <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
+
+              <!-- OrderedList Button -->
+              <button
+                class="rounded p-1 hover:bg-gray-200"
+                :class="{
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('orderedList'),
+                }"
+                aria-label="Ordered list"
+                @click="editor?.chain().focus().toggleOrderedList().run()"
+              >
+                <OrderedListIcon class="h-5" />
+              </button>
+
+              <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
+
               <!-- Code Button -->
               <button
                 class="rounded p-1 hover:bg-gray-200"
@@ -190,7 +240,7 @@ const saveNotes = (editor: Maybe<Editor>) => {
                 v-if="editor"
                 size="sm"
                 kind="primary"
-                class="ml-auto"
+                class="ml-auto flex-shrink-0"
                 :disabled="isSaving"
                 @click="saveNotes(editor)"
                 >{{ isSaving ? 'Saving' : 'Save' }}</BaseButton
@@ -233,5 +283,9 @@ const saveNotes = (editor: Maybe<Editor>) => {
   color: #ced4da;
   pointer-events: none;
   height: 0;
+}
+
+.ProseMirror li > p {
+  margin: 0;
 }
 </style>
