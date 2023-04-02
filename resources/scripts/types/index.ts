@@ -11,6 +11,9 @@ export interface User {
   settings: {
     autosave_notes: boolean
     show_language_tags: boolean
+    sidebar_tags_collapsed: boolean
+    sidebar_smart_filters_collapsed: boolean
+    sidebar_languages_collapsed: boolean
   }
   created_at: Date
   updated_at: Date
@@ -127,3 +130,7 @@ export interface BaseDialogReturnType {
 }
 
 export type StarMetaInput = Pick<GitHubRepoNode, 'databaseId' | 'nameWithOwner' | 'url' | 'description'>
+
+export interface SharedData {
+  user: User
+}

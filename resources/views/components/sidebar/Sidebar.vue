@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, mergeProps, reactive, nextTick } from 'vue'
 import { Errors } from '@inertiajs/core'
+import { usePage, router } from '@inertiajs/vue3'
 import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
 import { Sortable } from 'sortablejs-vue3'
 
@@ -22,7 +23,9 @@ import { useStarsFilterStore } from '@/scripts/store/useStarsFilterStore'
 import { useSmartFiltersStore } from '@/scripts/store/useSmartFiltersStore'
 import { useAuthorizationsStore } from '@/scripts/store/useAuthorizationsStore'
 
-import { Tag, StarDragDataTransferData, Ability, SmartFilter } from '@/scripts/types'
+import { Tag, StarDragDataTransferData, Ability, SmartFilter, SharedData, User } from '@/scripts/types'
+
+type SidebarGroup = Exclude<keyof User['settings'], 'autosave_notes' | 'show_language_tags'>
 
 const emit = defineEmits<{
   (e: 'tag-selected', tag: Tag): void
@@ -31,6 +34,7 @@ const emit = defineEmits<{
   (e: 'all-stars-selected'): void
   (e: 'untagged-selected'): void
 }>()
+const user = computed(() => usePage<SharedData>().props.user)
 
 const starsFilterStore = useStarsFilterStore()
 const tagsStore = useTagsStore()
@@ -49,6 +53,12 @@ const showNewTagForm = () => {
   isNewTagFormShowing.value = true
   newTagForm.value?.focus()
 }
+
+const sidebarGroupCollapsedState = reactive<Record<SidebarGroup, boolean>>({
+  'sidebar_tags_collapsed': user.value.settings.sidebar_tags_collapsed,
+  'sidebar_smart_filters_collapsed': user.value.settings.sidebar_smart_filters_collapsed,
+  'sidebar_languages_collapsed': user.value.settings.sidebar_languages_collapsed,
+})
 
 const doAddTag = async (tagName: string) => {
   try {
@@ -79,6 +89,22 @@ const doShowSmartFilterDialog = () => {
   } else {
     showSponsorshipDialog(Ability.CREATE_SMART_FILTER)
   }
+}
+
+const toggleSidebarGroupCollapsedState = async (
+  key: SidebarGroup
+) => {
+  sidebarGroupCollapsedState[key] = !sidebarGroupCollapsedState[key]
+
+  await nextTick()
+
+  router.put(
+    '/settings',
+    { key: key, enabled: sidebarGroupCollapsedState[key] },
+    {
+      only: ['user'],
+    }
+  )
 }
 
 const tags = computed({
@@ -128,7 +154,13 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
         </ul>
       </SidebarGroup>
 
-      <SidebarGroup title="Tags" collapsible class="relative">
+      <SidebarGroup
+        title="Tags"
+        collapsible
+        class="relative"
+        :is-open="!sidebarGroupCollapsedState.sidebar_tags_collapsed"
+        :close="() => toggleSidebarGroupCollapsedState('sidebar_tags_collapsed')"
+      >
         <template #right-action>
           <SortTagsMenu v-if="tags.length > 1" class="-mt-1" @sort-tags="tagsStore.sortTags" />
         </template>
@@ -147,7 +179,7 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
             </button>
 
             <form
-              class="pointer-events-none absolute top-0 left-0 w-full opacity-0 transition-opacity duration-150"
+              class="pointer-events-none absolute left-0 top-0 w-full opacity-0 transition-opacity duration-150"
               :class="{
                 'pointer-events-auto opacity-100': isNewTagFormShowing,
               }"
@@ -188,7 +220,13 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
         </template>
       </SidebarGroup>
 
-      <SidebarGroup title="Smart Filters" collapsible class="group relative">
+      <SidebarGroup
+        title="Smart Filters"
+        collapsible
+        class="group relative"
+        :is-open="!sidebarGroupCollapsedState.sidebar_smart_filters_collapsed"
+        :close="() => toggleSidebarGroupCollapsedState('sidebar_smart_filters_collapsed')"
+      >
         <template #right-action>
           <button
             class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-none group-hover:opacity-100"
@@ -224,7 +262,12 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
         </template>
       </SidebarGroup>
 
-      <SidebarGroup title="Languages" collapsible>
+      <SidebarGroup
+        title="Languages"
+        collapsible
+        :is-open="!sidebarGroupCollapsedState.sidebar_languages_collapsed"
+        :close="() => toggleSidebarGroupCollapsedState('sidebar_languages_collapsed')"
+      >
         <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages" tabindex="0">
           <SidebarItem
             v-for="language in starsStore.languages"

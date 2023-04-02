@@ -2,7 +2,7 @@
 import BaseDialog from '@/views/components/shared/core/BaseDialog.vue'
 import { DialogTitle } from '@headlessui/vue'
 
-const props = defineProps<{
+defineProps<{
   isOpen: boolean
   hide: () => void
 }>()
