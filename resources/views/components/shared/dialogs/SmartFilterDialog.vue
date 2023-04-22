@@ -91,14 +91,14 @@ const resetForm = () => {
 </script>
 
 <template>
-  <BaseDialog :is-open="isOpen" :hide="hideDialog" modal-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
+  <BaseDialog :is-open="isOpen" :hide="hideDialog" dialog-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
     <div>
       <DialogTitle class="rounded bg-gray-50 px-4 py-3 text-center text-xl font-bold text-gray-700"
         >{{ currentSmartFilter ? 'Update' : 'Create' }} smart filter</DialogTitle
       >
 
       <form @submit.prevent="currentSmartFilter ? updateSmartFilter() : addSmartFilter()">
-        <div class="mt-6 flex w-1/2 flex-col items-start pt-2 pb-8">
+        <div class="mt-6 flex w-1/2 flex-col items-start pb-8 pt-2">
           <label for="smart-filter-name" class="inline-block text-sm">Filter name</label>
 
           <BaseTextInput

@@ -4,7 +4,8 @@ import { Dialog, DialogOverlay, TransitionChild, TransitionRoot } from '@headles
 defineProps<{
   isOpen: boolean
   hide: () => void
-  modalClasses?: string | string[] | Record<string, string>
+  dialogClasses?: string | string[] | Record<string, string>
+  wrapperClasses?: string | string[] | Record<string, string>
 }>()
 </script>
 
@@ -12,7 +13,11 @@ defineProps<{
   <TransitionRoot as="template" :show="isOpen">
     <Dialog as="div" static class="fixed inset-0 z-20 overflow-y-auto" :open="isOpen" @close="hide">
       <div
-        class="flex min-h-screen items-start justify-center px-4 pb-20 pt-4 text-center sm:block sm:items-center sm:p-0"
+        class="flex min-h-screen justify-center p-4 text-center sm:block sm:items-center sm:p-0"
+        :class="{
+          [(wrapperClasses ?? '') as string]: true,
+          'items-center': wrapperClasses === undefined,
+        }"
       >
         <TransitionChild
           as="template"
@@ -40,7 +45,7 @@ defineProps<{
         >
           <div
             class="inline-block w-full transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle"
-            :class="modalClasses"
+            :class="dialogClasses"
           >
             <slot />
           </div>

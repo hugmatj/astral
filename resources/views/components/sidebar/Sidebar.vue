@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { ref, computed, mergeProps, reactive, nextTick } from 'vue'
+import { ref, computed, reactive, nextTick } from 'vue'
 import { Errors } from '@inertiajs/core'
-import { usePage, router } from '@inertiajs/vue3'
-import { InboxIcon, StarIcon, PlusCircleIcon } from '@heroicons/vue/outline'
+import { router } from '@inertiajs/vue3'
+import { InboxIcon, StarIcon, PlusCircleIcon, RefreshIcon } from '@heroicons/vue/outline'
 import { Sortable } from 'sortablejs-vue3'
 
 import SidebarGroup from '@/views/components/sidebar/SidebarGroup.vue'
@@ -23,9 +23,11 @@ import { useStarsFilterStore } from '@/scripts/store/useStarsFilterStore'
 import { useSmartFiltersStore } from '@/scripts/store/useSmartFiltersStore'
 import { useAuthorizationsStore } from '@/scripts/store/useAuthorizationsStore'
 
-import { Tag, StarDragDataTransferData, Ability, SmartFilter, SharedData, User } from '@/scripts/types'
+import { Tag, StarDragDataTransferData, Ability, SmartFilter, User } from '@/scripts/types'
+import { useMe } from '@/scripts/composables/useMe'
 
-type SidebarGroup = Exclude<keyof User['settings'], 'autosave_notes' | 'show_language_tags'>
+type CollapsibleSidebarSettingsKey = Extract<keyof User['settings'], `sidebar_${string}`>
+type SidebarGroupCollapsedState = { [K in CollapsibleSidebarSettingsKey]: boolean }
 
 const emit = defineEmits<{
   (e: 'tag-selected', tag: Tag): void
@@ -33,8 +35,10 @@ const emit = defineEmits<{
   (e: 'language-selected', value: string): void
   (e: 'all-stars-selected'): void
   (e: 'untagged-selected'): void
+  (e: 'reload-stars'): void
 }>()
-const user = computed(() => usePage<SharedData>().props.user)
+
+const { me } = useMe()
 
 const starsFilterStore = useStarsFilterStore()
 const tagsStore = useTagsStore()
@@ -49,63 +53,11 @@ const newTagForm = ref<HTMLElement>()
 const newTag = ref('')
 const isNewTagFormShowing = ref(false)
 
-const showNewTagForm = () => {
-  isNewTagFormShowing.value = true
-  newTagForm.value?.focus()
-}
-
-const sidebarGroupCollapsedState = reactive<Record<SidebarGroup, boolean>>({
-  'sidebar_tags_collapsed': user.value.settings.sidebar_tags_collapsed,
-  'sidebar_smart_filters_collapsed': user.value.settings.sidebar_smart_filters_collapsed,
-  'sidebar_languages_collapsed': user.value.settings.sidebar_languages_collapsed,
+const sidebarGroupCollapsedState: SidebarGroupCollapsedState = reactive({
+  sidebar_tags_collapsed: me.value.settings.sidebar_tags_collapsed,
+  sidebar_smart_filters_collapsed: me.value.settings.sidebar_smart_filters_collapsed,
+  sidebar_languages_collapsed: me.value.settings.sidebar_languages_collapsed,
 })
-
-const doAddTag = async (tagName: string) => {
-  try {
-    await tagsStore.addTag(tagName)
-    showToast(`The '${tagName}' tag was added.`)
-
-    newTag.value = ''
-  } catch (e) {
-    const errors = e as Errors
-    if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
-      showToast(errors[Object.keys(errors)[0]], ToastType.Error)
-    }
-  }
-}
-
-const tagIsSelected = (tag: Tag): boolean => tag.id === starsFilterStore.selectedTag?.id
-
-const smartFilterIsSelected = (smartFilter: SmartFilter): boolean =>
-  smartFilter.id === starsFilterStore.selectedSmartFilter?.id
-
-const languageIsSelected = (language: string): boolean => language === starsFilterStore.selectedLanguage
-
-const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
-
-const doShowSmartFilterDialog = () => {
-  if (authorizationsStore.abilities[Ability.CREATE_SMART_FILTER]) {
-    showSmartFilterDialog()
-  } else {
-    showSponsorshipDialog(Ability.CREATE_SMART_FILTER)
-  }
-}
-
-const toggleSidebarGroupCollapsedState = async (
-  key: SidebarGroup
-) => {
-  sidebarGroupCollapsedState[key] = !sidebarGroupCollapsedState[key]
-
-  await nextTick()
-
-  router.put(
-    '/settings',
-    { key: key, enabled: sidebarGroupCollapsedState[key] },
-    {
-      only: ['user'],
-    }
-  )
-}
 
 const tags = computed({
   get: () => tagsStore.tags,
@@ -123,13 +75,83 @@ const smartFilters = computed({
 
 const totalRepos = computed(() => starsStore.totalRepos || starsStore.starredRepos.length)
 const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
+
+const showNewTagForm = () => {
+  isNewTagFormShowing.value = true
+  newTagForm.value?.focus()
+}
+
+const doAddTag = async (tagName: string) => {
+  try {
+    await tagsStore.addTag(tagName)
+    showToast(`The '${tagName}' tag was added.`)
+
+    newTag.value = ''
+  } catch (e) {
+    const errors = e as Errors
+    if (!errors[SPONSORSHIP_REQUIRED_ERROR]) {
+      showToast(errors[Object.keys(errors)[0]], ToastType.Error)
+    }
+  }
+}
+
+const tagIsSelected = (tag: Tag): boolean => tag.id === starsFilterStore.selectedTag?.id
+const smartFilterIsSelected = (smartFilter: SmartFilter): boolean =>
+  smartFilter.id === starsFilterStore.selectedSmartFilter?.id
+const languageIsSelected = (language: string): boolean => language === starsFilterStore.selectedLanguage
+
+const onStarsDropped = (data: StarDragDataTransferData) => starsStore.addTagToStars(data.tag.id, data.repos)
+
+const doShowSmartFilterDialog = () => {
+  if (authorizationsStore.abilities[Ability.CREATE_SMART_FILTER]) {
+    showSmartFilterDialog()
+  } else {
+    showSponsorshipDialog(Ability.CREATE_SMART_FILTER)
+  }
+}
+
+const toggleSidebarGroupCollapsedState = async (key: CollapsibleSidebarSettingsKey) => {
+  sidebarGroupCollapsedState[key] = !sidebarGroupCollapsedState[key]
+
+  await nextTick()
+
+  router.put(
+    '/settings',
+    { key: key, enabled: sidebarGroupCollapsedState[key] },
+    {
+      only: ['user'],
+    }
+  )
+}
 </script>
 
 <template>
   <div class="h-full overflow-y-auto bg-gray-900 p-4 dark:border-r dark:border-gray-600">
     <div class="mt-6 space-y-6">
       <SidebarGroup title="Stars">
-        <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars" tabindex="0">
+        <template #right-action>
+          <div class="pb-1">
+            <button
+              aria-label="Reload stars"
+              :aria-busy="starsStore.isFetchingStars"
+              :disabled="starsStore.isFetchingStars"
+              class="rounded p-1 text-gray-400 transition-colors"
+              :class="{
+                'hover:bg-gray-700 hover:text-white': !starsStore.isFetchingStars,
+              }"
+              @click="emit('reload-stars')"
+            >
+              <RefreshIcon
+                class="h-4 w-4"
+                :class="{
+                  'animate-spin': starsStore.isFetchingStars,
+                }"
+              />
+            </button>
+          </div>
+        </template>
+
+        <ul class="mt-2 space-y-2" role="listbox" aria-label="Stars">
           <SidebarItem
             title="All Stars"
             :is-active="starsFilterStore.isFilteringByAll"
@@ -196,7 +218,7 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
             </form>
           </div>
 
-          <ul class="mt-2" role="listbox" aria-label="Tags" tabindex="0">
+          <ul class="mt-2" role="listbox" aria-label="Tags">
             <Sortable
               :list="tags"
               item-key="id"
@@ -223,7 +245,7 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
       <SidebarGroup
         title="Smart Filters"
         collapsible
-        class="group relative"
+        class="relative"
         :is-open="!sidebarGroupCollapsedState.sidebar_smart_filters_collapsed"
         :close="() => toggleSidebarGroupCollapsedState('sidebar_smart_filters_collapsed')"
       >
@@ -231,7 +253,7 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
           <button
             class="inline-flex w-full items-center text-sm font-semibold text-gray-400 opacity-0 transition hover:text-gray-200 focus:outline-none group-hover:opacity-100"
             type="button"
-            aria-label="Add Smart Filter"
+            aria-label="Add smart filter"
             @click="doShowSmartFilterDialog"
           >
             <PlusCircleIcon class="h-5 w-5 flex-shrink-0" aria-hidden="true" />
@@ -239,7 +261,7 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
         </template>
 
         <template #default>
-          <ul class="mt-2 space-y-2" role="listbox" aria-label="Smart Filters" tabindex="0">
+          <ul class="mt-2 space-y-2" role="listbox" aria-label="Smart Filters">
             <Sortable
               :list="smartFilters"
               item-key="id"
@@ -268,7 +290,7 @@ const totalUntaggedRepos = computed(() => starsStore.untaggedStars.length)
         :is-open="!sidebarGroupCollapsedState.sidebar_languages_collapsed"
         :close="() => toggleSidebarGroupCollapsedState('sidebar_languages_collapsed')"
       >
-        <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages" tabindex="0">
+        <ul class="mt-2 space-y-2" role="listbox" aria-label="Languages">
           <SidebarItem
             v-for="language in starsStore.languages"
             :key="language.name"

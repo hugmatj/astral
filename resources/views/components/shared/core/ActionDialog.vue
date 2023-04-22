@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <BaseDialog :is-open="isOpen" :hide="hide" modal-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-lg">
+  <BaseDialog :is-open="isOpen" :hide="hide" dialog-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-lg">
     <div>
       <slot name="icon" />
 
@@ -26,7 +26,7 @@ defineProps<{
 
     <div
       v-if="$slots.actions"
-      class="mt-6 flex flex-col-reverse items-center justify-center space-y-3 space-y-reverse sm:flex-row sm:space-y-0 sm:space-x-3"
+      class="mt-6 flex flex-col-reverse items-center justify-center space-y-3 space-y-reverse sm:flex-row sm:space-x-3 sm:space-y-0"
     >
       <slot name="actions" />
     </div>

@@ -53,19 +53,19 @@ const checkSponsorshipStatus = () => {
 </script>
 
 <template>
-  <BaseDialog :is-open="isOpen" :hide="hide" modal-classes="sm:max-w-xl px-0 pt-0 pb-0 sm:p-0">
+  <BaseDialog :is-open="isOpen" :hide="hide" dialog-classes="sm:max-w-xl px-0 pt-0 pb-0 sm:p-0">
     <DialogTitle class="w-full rounded-t-lg border-b border-gray-200 bg-gray-100 p-4 text-xl font-bold text-gray-700"
       >Settings</DialogTitle
     >
 
-    <div class="divide-y divide-gray-300">
+    <div class="divide-y divide-gray-100">
       <div class="px-4 py-5">
         <div class="flex items-center">
           <div>
             <p class="font-bold text-gray-600">Sponsorship status</p>
 
             <div class="mt-2">
-              <p v-show="isSponsor" class="flex items-center gap-x-2">
+              <p v-show="isSponsor" class="flex items-center gap-x-1">
                 <span class="flex h-5 w-5 items-center justify-center rounded-full bg-green-600 text-green-200">
                   <CheckCircleIcon class="h-5 w-5" />
                 </span>
@@ -73,12 +73,12 @@ const checkSponsorshipStatus = () => {
                 <span class="text-sm font-bold text-green-800">You're a sponsor and you're awesome!</span>
               </p>
 
-              <p v-show="!isSponsor" class="flex items-center gap-x-2">
-                <span class="flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-red-200">
+              <p v-show="!isSponsor" class="flex items-center gap-x-1">
+                <span class="flex h-5 w-5 items-center justify-center rounded-full bg-yellow-600 text-yellow-200">
                   <XCircleIcon class="h-5 w-5" />
                 </span>
 
-                <span class="text-sm font-bold text-red-800">Not sponsoring.</span>
+                <span class="text-sm font-bold text-yellow-600">Not sponsoring.</span>
               </p>
             </div>
           </div>

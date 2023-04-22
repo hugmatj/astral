@@ -14,7 +14,7 @@ defineProps<Props>()
 
 <template>
   <Disclosure as="div">
-    <div class="flex w-full items-center">
+    <div class="group flex w-full items-center">
       <div class="flex items-center">
         <DisclosureButton
           class="flex items-center text-gray-500"

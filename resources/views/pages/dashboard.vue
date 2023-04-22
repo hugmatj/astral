@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, nextTick } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { Errors } from '@inertiajs/core'
 import { useUserStore } from '@/scripts/store/useUserStore'
@@ -33,6 +33,7 @@ import { GitHubRepo, Tag, UserStar, User, Ability, Limits, Authorizations, Smart
 import { ArrowCircleLeftIcon, XCircleIcon as CloseIcon, MenuAlt1Icon as MenuIcon } from '@heroicons/vue/outline'
 import LogoSvg from '../../img/logo.svg?component'
 import { tryOnMounted } from '@vueuse/core'
+import localForage from 'localforage'
 
 interface Props {
   user: User
@@ -126,6 +127,25 @@ const onRepoSelected = (repo: GitHubRepo) => {
   selectItem(repo.node)
 }
 
+const onReloadStars = async () => {
+  await localForage.clear()
+  starsStore.resetPageInfo()
+  starsStore.clearStarredRepos()
+
+  await nextTick()
+
+  while (starsStore.pageInfo.hasNextPage) {
+    const { viewer } = await starsStore.fetchStars(starsStore.pageInfo.endCursor)
+
+    starsStore.totalRepos = viewer.starredRepositories.totalCount
+    starsStore.pageInfo = viewer.starredRepositories.pageInfo
+
+    starsStore.starredRepos = starsStore.starredRepos.concat(viewer.starredRepositories.edges)
+  }
+
+  starsStore.isFetchingStars = false
+}
+
 watch(selectedItems, repos => {
   starsStore.selectedRepos = repos
 })
@@ -205,6 +225,7 @@ tryOnMounted(() => {
             @tag-selected="onTagSelected"
             @smart-filter-selected="onSmartFilterSelected"
             @language-selected="onLanguageSelected"
+            @reload-stars="onReloadStars"
           />
         </div>
 

@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { ref, computed, Ref } from 'vue'
+import { ref, computed, Ref, watch } from 'vue'
+import { router } from '@inertiajs/vue3'
 import { useStarsStore } from '@/scripts/store/useStarsStore'
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue'
 import BaseTextInput from '@/views/components/shared/core/BaseTextInput.vue'
 import { onKeyStroke } from '@vueuse/core'
 import { isFocusedElementEditable } from '@/scripts/utils'
+import { useMe } from '@/scripts/composables/useMe'
 
 type CloneUrlType = 'ssh' | 'https'
 
+const { me } = useMe();
 const starsStore = useStarsStore()
 
-const currentUrlType: Ref<CloneUrlType> = ref('ssh')
+const currentUrlType: Ref<CloneUrlType> = ref(me.value.settings.clone_https_url ? 'https' : 'ssh')
 const input = ref<typeof BaseTextInput | null>(null)
 
 const cloneUrl = computed(() => {
@@ -22,6 +25,10 @@ const cloneUrl = computed(() => {
 const selectUrlText = (e: FocusEvent) => {
   ;(e?.currentTarget as HTMLInputElement)?.select()
 }
+
+watch(currentUrlType, (newValue) => {
+  router.put('/settings', { key: 'clone_https_url', enabled: newValue === 'https' })
+})
 
 onKeyStroke('c', e => {
   const inputEl: HTMLInputElement = input.value?.$el

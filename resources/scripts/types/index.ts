@@ -10,10 +10,11 @@ export interface User {
   flags: UserFlag[]
   settings: {
     autosave_notes: boolean
+    clone_https_url: boolean
     show_language_tags: boolean
-    sidebar_tags_collapsed: boolean
-    sidebar_smart_filters_collapsed: boolean
     sidebar_languages_collapsed: boolean
+    sidebar_smart_filters_collapsed: boolean
+    sidebar_tags_collapsed: boolean
   }
   created_at: Date
   updated_at: Date

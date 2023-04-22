@@ -90,12 +90,12 @@ const deleteTag = async () => {
     </template>
 
     <template #contextMenu>
-      <div :class="[tag.stars_count && 'absolute top-0 right-0']">
+      <div :class="[tag.stars_count && 'absolute right-0 top-0']">
         <Menu v-slot="{ open }" as="div" class="relative">
           <WatchValue :value="open" @change="isContextMenuActive = !!$event" />
 
           <MenuButton
-            class="top-0 right-0 h-5 w-5 text-gray-300 opacity-0 transition-opacity hover:text-gray-200 group-hover:opacity-100"
+            class="right-0 top-0 h-5 w-5 text-gray-300 opacity-0 transition-opacity hover:text-gray-200 group-hover:opacity-100"
             :class="[open && 'opacity-100']"
             @click.stop
           >
@@ -135,7 +135,10 @@ const deleteTag = async () => {
                     :class="[active ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700']"
                     @click.stop="deleteTag"
                   >
-                    <TrashIcon class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500" aria-hidden="true" />
+                    <TrashIcon
+                      class="mr-1 h-4 w-4 text-gray-400 group-hover/menu-item:text-indigo-500"
+                      aria-hidden="true"
+                    />
 
                     <span>Delete</span>
                   </button>

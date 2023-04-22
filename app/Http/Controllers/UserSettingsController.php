@@ -14,7 +14,7 @@ class UserSettingsController extends Controller
             'key' => ['required', Rule::in(User::AVAILABLE_SETTINGS)],
             'enabled' => 'required|boolean',
         ]);
-        info("Writing to setting {$request->input('key')} with value {$request->input('enabled')}");
+
         auth()->user()->writeSetting($request->input('key'), (bool) $request->input('enabled'));
 
         return redirect()->route('dashboard.index');

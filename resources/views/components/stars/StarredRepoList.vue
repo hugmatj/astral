@@ -57,7 +57,17 @@ watch([reposHaveSynced, pageInfoHasSynced], async syncChecks => {
     </template>
   </VirtualScroller>
 
-  <div v-else class="flex h-full items-center justify-center">
+  <div
+    v-if="starsStore.isFetchingStars && !starsStore.filteredRepos.length"
+    class="flex h-full items-center justify-center"
+  >
+    <p class="text-center text-gray-500">Loading starred repositories...</p>
+  </div>
+
+  <div
+    v-if="!starsStore.filteredRepos.length && !starsStore.isFetchingStars"
+    class="flex h-full items-center justify-center"
+  >
     <p class="text-center text-gray-500">No results found</p>
   </div>
 </template>

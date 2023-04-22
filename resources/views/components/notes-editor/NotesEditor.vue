@@ -20,6 +20,7 @@ import ItalicsIcon from '@/views/components/shared/icons/notes-editor/ItalicsIco
 import UnderlineIcon from '@/views/components/shared/icons/notes-editor/UnderlineIcon.vue'
 import CodeIcon from '@/views/components/shared/icons/notes-editor/CodeIcon.vue'
 import CodeBlockIcon from '@/views/components/shared/icons/notes-editor/CodeBlockIcon.vue'
+import LinkIcon from '@/views/components/shared/icons/notes-editor/LinkIcon.vue'
 
 const starsStore = useStarsStore()
 const userStore = useUserStore()
@@ -38,14 +39,14 @@ try {
   initialEditorValue = initialNotes
 }
 
-console.log(initialEditorValue)
-
 const editor = useEditor({
   content: initialEditorValue || '<p></p>',
   extensions: [
     StarterKit,
     Typography,
-    Link,
+    Link.configure({
+      openOnClick: false,
+    }),
     Underline,
     Placeholder.configure({
       placeholder: 'Add some notes about this repo...',
@@ -58,7 +59,7 @@ const editor = useEditor({
   }, 1000),
   editorProps: {
     attributes: {
-      class: 'prose focus:outline-none',
+      class: 'prose focus:outline-none prose-a:text-brand-600',
     },
   },
 })
@@ -95,6 +96,25 @@ watch(isSaving, newVal => {
     }, 3000)
   }
 })
+
+const setLink = () => {
+  const previousUrl = editor.value?.getAttributes('link').href
+
+  const url = window.prompt('URL', previousUrl)
+
+  if (url === null) {
+    return
+  }
+
+  if (url === '') {
+    editor.value?.chain().focus().extendMarkRange('link').unsetLink().run()
+
+    return
+  }
+
+  // update link
+  editor.value?.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+}
 
 const saveNotes = (editor: Maybe<Editor>) => {
   if (editor) {
@@ -205,6 +225,20 @@ const saveNotes = (editor: Maybe<Editor>) => {
                 @click="editor?.chain().focus().toggleOrderedList().run()"
               >
                 <OrderedListIcon class="h-5" />
+              </button>
+
+              <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>
+
+              <!-- Link Button -->
+              <button
+                class="rounded p-1 hover:bg-gray-200"
+                :class="{
+                  'bg-brand-100 text-brand-800 hover:bg-brand-200': editor.isActive('link'),
+                }"
+                aria-label="Link"
+                @click="setLink"
+              >
+                <LinkIcon class="h-5" />
               </button>
 
               <span class="mx-2 inline-block text-xs font-bold text-gray-300">|</span>

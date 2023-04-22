@@ -47,6 +47,7 @@ export const useStarsStore = defineStore({
       selectedRepos: [] as GitHubRepoNode[],
       draggingRepos: [] as GitHubRepoNode[],
       hasFetchedFromStorage: false,
+      isFetchingStars: false,
     }
   },
   getters: {
@@ -109,8 +110,6 @@ export const useStarsStore = defineStore({
               group.predicates,
               (p: Predicate) => {
                 const operator: Maybe<PredicateOperator> = operators.find(o => o.key === p.operator)
-                console.log(operator)
-                console.log(p.selectedTarget)
                 if (operator) {
                   if (p.selectedTarget === 'tags') {
                     const userStar = this.userStarsByRepoId[repo.node.databaseId]
@@ -191,6 +190,8 @@ export const useStarsStore = defineStore({
   },
   actions: {
     async fetchStars(cursor: Nullable<string> = null, direction: FetchDirection = FetchDirection.DESC) {
+      this.isFetchingStars = true
+
       const userStore = useUserStore()
       const result = await (
         await fetch('https://api.github.com/graphql', {

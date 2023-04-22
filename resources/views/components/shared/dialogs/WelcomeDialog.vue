@@ -23,7 +23,7 @@ const noop = () => {}
 </script>
 
 <template>
-  <BaseDialog :is-open="isOpen" :hide="noop" modal-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
+  <BaseDialog :is-open="isOpen" :hide="noop" dialog-classes="px-4 pt-5 pb-4 sm:p-6 sm:max-w-3xl">
     <div>
       <p>Welcum!!!!!!!!!!!!!!!!!! 🎉🎉🎉🎉🎉</p>
     </div>

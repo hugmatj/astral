@@ -11,7 +11,8 @@ const { confirmConfig } = useConfirm()
   <ActionDialog
     :is-open="confirmConfig.isOpen"
     :hide="confirmConfig.cancel"
-    modal-classes="sm:max-w-md px-4 pt-5 pb-4 sm:p-6"
+    dialog-classes="sm:max-w-md px-4 pt-5 pb-4 sm:p-6"
+    wrapper-classes="items-end"
   >
     <template #icon>
       <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
